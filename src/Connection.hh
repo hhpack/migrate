@@ -2,8 +2,8 @@
 
 namespace hhpack\migrate;
 
-interface Connection<T>
+interface Connection
 {
-    public function query(string $query): Awaitable<T>;
+    public function query(string $query): Awaitable<QueryResult>;
     public function close(): void;
 }
