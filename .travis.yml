@@ -1,8 +1,6 @@
 language: generic
 sudo: required
 dist: trusty
-services:
-  - mysql
 before_install:
   - sudo apt-get install software-properties-common
   - sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
@@ -12,6 +10,7 @@ before_install:
   - sudo mv composer.phar /usr/local/bin/composer
 install:
   - sudo apt-get install hhvm
+  - sudo apt-get install mysql-server
 before_script:
   - mysql --version
   - mysql -e "create database IF NOT EXISTS migrate;" -uroot
