@@ -1,6 +1,8 @@
 language: generic
 sudo: required
 dist: trusty
+services:
+  - mysql
 before_install:
   - sudo apt-get install software-properties-common
   - sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
@@ -11,6 +13,9 @@ before_install:
 install:
   - sudo apt-get install hhvm
 before_script:
+  - mysql --version
+  - mysql -e "create database IF NOT EXISTS migrate;" -uroot
+  - mysql -Dmigrate -uroot < spec/sql/travis.sql
   - travis_retry composer install --no-interaction
   - touch .hhconfig
 script:

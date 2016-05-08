@@ -22,6 +22,11 @@
       "hhpack\\migrate\\": "src/"
     }
   },
+  "autoload-dev": {
+    "files": [
+      "spec/helper/db.hh"
+    ]
+  },
   "scripts": {
     "test": "vendor/bin/peridot --grep *Spec.hh -c peridot.hh spec",
     "check": "./typecheck"
