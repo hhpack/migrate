@@ -2,8 +2,21 @@
 
 namespace hhpack\migrate;
 
-interface Migrator
+final class Migrator implements Migratable
 {
-    public function up(): Awaitable<void>;
-    public function down(): Awaitable<void>;
+
+    public function __construct(
+        private Connection $connection
+    )
+    {
+    }
+
+    public async function up(): Awaitable<void>
+    {
+    }
+
+    public async function down(): Awaitable<void>
+    {
+    }
+
 }
