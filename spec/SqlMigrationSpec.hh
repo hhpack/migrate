@@ -10,7 +10,7 @@ use AsyncMysqlClient;
 
 describe(SqlMigration::class, function() {
   beforeEach(function() {
-    $this->sql = SqlMigration::fromFile(realpath(__DIR__ . './sql/show_tables.sql'));
+    $this->sql = SqlMigration::fromFile(realpath(__DIR__ . '/sql/show_tables.sql'));
     $this->connection = new MySqlConnection(helper\connect());
     $this->agent = new MigratorAgent($this->connection);
   });
@@ -19,7 +19,7 @@ describe(SqlMigration::class, function() {
       $this->result = \HH\Asio\join( $this->sql->change($this->agent) );
     });
     it('return QueryResult', function () {
-      expect($this->result->sql())->toBe('show tables;');
+      expect($this->result->sql())->toBe("show tables;\n");
     });
   });
 });
