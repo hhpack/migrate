@@ -16,14 +16,14 @@ describe(Migrator::class, function() {
 
     $this->migrator = new Migrator($loader, $conn);
 
-    \HH\Asio\join( $conn->query('DROP TABLE IF EXISTS users') );
+    \HH\Asio\join( $this->migrator->downgrade() );
   });
   describe('#upgrade', function() {
     beforeEach(function() {
       $this->result = \HH\Asio\join( $this->migrator->upgrade() );
     });
     it('return MigrationResult', function () {
-      expect($this->result->results())->toHaveLength(1);
+      expect($this->result->results())->toHaveLength(2);
     });
   });
 });

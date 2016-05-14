@@ -14,7 +14,7 @@ describe(SqlMigrationLoader::class, function() {
       $this->migrations = $this->loader->loadUpMigration();
     });
     it('return migrations', function () {
-      expect($this->migrations->count())->toBe(1);
+      expect($this->migrations->count())->toBe(2);
     });
   });
 });

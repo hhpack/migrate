@@ -13,8 +13,11 @@ final class SqlMigrationLoader implements MigrationLoadable
 
     public function loadUpMigration(): ImmVector<Migration>
     {
-        $pattern = realpath($this->directory) . '/*_up.sql';
+        $pattern = realpath($this->directory) . '/*.up.sql';
         $files = $this->findFiles($pattern);
+
+        $files = ImmSet::fromItems($files)->toValuesArray();
+        asort($files);
 
         return ImmVector::fromItems($files)
             ->map(($file) ==> SqlMigration::fromFile($file));
@@ -22,8 +25,11 @@ final class SqlMigrationLoader implements MigrationLoadable
 
     public function loadDownMigration(): ImmVector<Migration>
     {
-        $pattern = realpath($this->directory) . '/*_down.sql';
+        $pattern = realpath($this->directory) . '/*.down.sql';
         $files = $this->findFiles($pattern);
+
+        $files = ImmSet::fromItems($files)->toValuesArray();
+        arsort($files);
 
         return ImmVector::fromItems( $files )
             ->map(($file) ==> SqlMigration::fromFile($file));
