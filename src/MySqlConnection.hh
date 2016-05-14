@@ -22,7 +22,11 @@ final class MySqlConnection implements Connection
     public async function query(string $query): Awaitable<QueryResult>
     {
         $result = await $this->connection->query($query);
-        return new QueryResult($query, $result->startTime(), $result->endTime());
+        $rows = $result->mapRowsTyped()
+            ->map(($row) ==> $row->toImmMap())
+            ->toImmVector();
+
+        return new QueryResult($query, $rows, $result->startTime(), $result->endTime());
     }
 
     public function close(): void
