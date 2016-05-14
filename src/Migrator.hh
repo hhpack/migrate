@@ -5,11 +5,16 @@ namespace hhpack\migrate;
 final class Migrator implements Migratable
 {
 
+    private MigratorAgent $agent;
+    private EventPublisher $publisher;
+
     public function __construct(
         private MigrationLoadable $loader,
-        private QueryProxy $proxy
+        Connection $connection
     )
     {
+        $this->publisher = new EventPublisher();
+        $this->agent = new MigratorAgent($connection, $this->publisher);
     }
 
     public async function upgrade(): Awaitable<MigrationResult>
@@ -18,7 +23,7 @@ final class Migrator implements Migratable
         $migrations = $this->loader->loadUpMigration();
 
         foreach ($migrations->items() as $migration) {
-            $result = await $migration->change($this->proxy);
+            $result = await $migration->change($this->agent);
             $results->add($result);
         }
 
@@ -31,7 +36,7 @@ final class Migrator implements Migratable
         $migrations = $this->loader->loadDownMigration();
 
         foreach ($migrations->items() as $migration) {
-            $result = await $migration->change($this->proxy);
+            $result = await $migration->change($this->agent);
             $results->add($result);
         }
 
