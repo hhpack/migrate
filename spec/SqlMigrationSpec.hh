@@ -11,9 +11,14 @@ use AsyncMysqlClient;
 
 describe(SqlMigration::class, function() {
   beforeEach(function() {
-    $this->sql = SqlMigration::fromFile(realpath(__DIR__ . '/sql/show_tables.sql'));
+    $this->sql = SqlMigration::fromFile(realpath(__DIR__ . '/sql/20150824010439_show_tables.sql'));
     $this->connection = new MySqlConnection(helper\connect());
     $this->agent = new MigratorAgent($this->connection, new EventPublisher());
+  });
+  describe('#version', function() {
+    it('return version', function () {
+      expect($this->sql->version())->toBe('20150824010439');
+    });
   });
   describe('#change', function() {
     beforeEach(function() {
