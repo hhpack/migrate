@@ -13,9 +13,9 @@ final class MigrationSuccessEvent implements Message
     {
     }
 
-    public function sql(): string
+    public function query(): string
     {
-        return $this->result->sql();
+        return $this->result->query();
     }
 
     public function startTime(): float

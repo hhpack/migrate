@@ -22,6 +22,11 @@ final class SqlMigration implements Migration
         return preg_replace("/^(\d+)\-.+/", "$1", $this->name);
     }
 
+    public function query(): string
+    {
+        return $this->query;
+    }
+
     public async function change(QueryProxy $proxy): Awaitable<QueryResult>
     {
         return await $proxy->query($this->query);

@@ -30,7 +30,7 @@ describe(SqlMigration::class, function() {
       $this->result = \HH\Asio\join( $this->sql->change($this->agent) );
     });
     it('return QueryResult', function () {
-      expect($this->result->sql())->toBe("show tables;\n");
+      expect($this->result->query())->toBe("show tables;\n");
     });
   });
 });

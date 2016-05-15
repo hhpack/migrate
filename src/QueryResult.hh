@@ -6,7 +6,7 @@ final class QueryResult
 {
 
     public function __construct(
-        private string $sql,
+        private string $query,
         private ImmVector<ImmMap<string, mixed>> $rows,
         private float $startTime,
         private float $endTime
@@ -14,9 +14,9 @@ final class QueryResult
     {
     }
 
-    public function sql(): string
+    public function query(): string
     {
-        return $this->sql;
+        return $this->query;
     }
 
     public function rows(): ImmVector<ImmMap<string, mixed>>

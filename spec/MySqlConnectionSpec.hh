@@ -15,7 +15,7 @@ describe(MySqlConnection::class, function() {
       $this->result = \HH\Asio\join($this->connection->query('show tables'));
     });
     it('return QueryResult', function () {
-      expect($this->result->sql())->toBe('show tables');
+      expect($this->result->query())->toBe('show tables');
     });
   });
 });
