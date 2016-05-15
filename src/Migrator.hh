@@ -6,6 +6,7 @@ final class Migrator implements Migratable
 {
 
     private MigratorAgent $agent;
+    private MigrationManager $manager;
     private EventPublisher $publisher;
 
     public function __construct(
@@ -14,15 +15,20 @@ final class Migrator implements Migratable
     )
     {
         $this->publisher = new EventPublisher();
+        $this->manager = new MigrationManager($connection);
         $this->agent = new MigratorAgent($connection, $this->publisher);
     }
 
     public async function upgrade(): Awaitable<MigrationResult>
     {
         $results = Vector {};
+
         $migrations = $this->loader->loadUpMigration();
 
-        foreach ($migrations->items() as $migration) {
+        await $this->manager->setUp();
+        $diffMigrations = await $this->manager->diff($migrations);
+
+        foreach ($diffMigrations->items() as $migration) {
             $result = await $migration->change($this->agent);
             $results->add($result);
         }
@@ -33,6 +39,7 @@ final class Migrator implements Migratable
     public async function downgrade(): Awaitable<MigrationResult>
     {
         $results = Vector {};
+
         $migrations = $this->loader->loadDownMigration();
 
         foreach ($migrations->items() as $migration) {
