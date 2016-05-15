@@ -14,7 +14,9 @@ final class Migrator implements Migratable
         Connection $connection
     )
     {
-        $this->publisher = new EventPublisher();
+        $this->publisher = new EventPublisher([
+            new MigrationLogger()
+        ]);
         $this->manager = new MigrationManager($connection);
         $this->agent = new MigratorAgent($connection, $this->publisher);
     }

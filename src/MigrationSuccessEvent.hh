@@ -28,4 +28,9 @@ final class MigrationSuccessEvent implements Message
         return $this->result->endTime();
     }
 
+    public function totalTime(): float
+    {
+        return $this->endTime() - $this->startTime();
+    }
+
 }

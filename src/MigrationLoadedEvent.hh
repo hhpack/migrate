@@ -18,7 +18,7 @@ final class MigrationLoadedEvent implements Message
         return $this->migrations->map(($migration) ==> $migration->query());
     }
 
-    public function migrationCount(): ImmVector<string>
+    public function migrationCount(): int
     {
         return $this->migrations->count();
     }

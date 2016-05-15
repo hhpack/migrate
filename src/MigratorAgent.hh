@@ -14,7 +14,7 @@ final class MigratorAgent implements QueryProxy
 
     public async function query(string $query): Awaitable<QueryResult>
     {
-        await $this->publisher->migrationStart();
+        await $this->publisher->migrationStart($query);
         $result = await $this->connection->query($query);
         await $this->publisher->migrationSuccess($result);
 

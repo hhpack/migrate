@@ -23,9 +23,9 @@ final class EventPublisher
         await $this->publisher->publish(new MigrationLoadedEvent($migrations));
     }
 
-    public async function migrationStart(): Awaitable<void>
+    public async function migrationStart(string $query): Awaitable<void>
     {
-        await $this->publisher->publish(new MigrationStartEvent());
+        await $this->publisher->publish(new MigrationStartEvent($query));
     }
 
     public async function migrationSuccess(QueryResult $result): Awaitable<void>
