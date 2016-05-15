@@ -32,7 +32,7 @@ final class MigrationManager
     public async function diff(ImmVector<Migration> $migrations): Awaitable<ImmVector<Migration>>
     {
         $appliedMigrations = await $this->loadMigrations();
-        $filter = ($migration) ==> $appliedMigrations->contains($migration->version());
+        $filter = ($migration) ==> !$appliedMigrations->contains($migration->version());
 
         $diffMigrations = $migrations->filter($filter);
 
