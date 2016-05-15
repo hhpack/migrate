@@ -21,32 +21,42 @@ final class Migrator implements Migratable
 
     public async function upgrade(): Awaitable<MigrationResult>
     {
-        $results = Vector {};
-
         $migrations = $this->loader->loadUpMigration();
 
         await $this->manager->setUp();
         $diffMigrations = await $this->manager->diff($migrations);
 
-        foreach ($diffMigrations->items() as $migration) {
+        return await $this->upgradeScheme($diffMigrations);
+    }
+
+    public async function downgrade(): Awaitable<MigrationResult>
+    {
+        $appliedMigrations = await $this->manager->loadMigrations();
+        $migrations = $this->loader->loadDownMigration($appliedMigrations);
+
+        return await $this->downgradeScheme($migrations);
+    }
+
+    private async function downgradeScheme(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
+    {
+        $results = Vector {};
+
+        foreach ($migrations->items() as $migration) {
             $result = await $migration->change($this->agent);
-            await $this->manager->save($migration);
+            await $this->manager->remove($migration);
             $results->add($result);
         }
 
         return new MigrationResult( $results->toImmVector() );
     }
 
-    public async function downgrade(): Awaitable<MigrationResult>
+    private async function upgradeScheme(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
     {
         $results = Vector {};
 
-        $appliedMigrations = await $this->manager->loadMigrations();
-        $migrations = $this->loader->loadDownMigration($appliedMigrations);
-
         foreach ($migrations->items() as $migration) {
             $result = await $migration->change($this->agent);
-            await $this->manager->remove($migration);
+            await $this->manager->save($migration);
             $results->add($result);
         }
 
