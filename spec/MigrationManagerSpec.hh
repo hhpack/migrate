@@ -29,6 +29,7 @@ describe(MigrationManager::class, function() {
       \HH\Asio\join( $this->conn->query("INSERT INTO scheme_migrations (name, run_at) VALUES ('20150824010439.up.sql', CURRENT_TIMESTAMP)") );
       \HH\Asio\join( $this->conn->query("INSERT INTO scheme_migrations (name, run_at) VALUES ('20150825102100.up.sql', CURRENT_TIMESTAMP)") );
       $this->result = \HH\Asio\join( $this->manager->loadMigrations() );
+      \HH\Asio\join( $this->conn->query("DELETE FROM scheme_migrations") );
     });
     it('load migration logs', function () {
       expect($this->result->count())->toBe(2);

@@ -23,8 +23,10 @@ final class SqlMigrationLoader implements MigrationLoadable
             ->map(($file) ==> SqlMigration::fromFile($file));
     }
 
-    public function loadDownMigration(): ImmVector<Migration>
+    public function loadDownMigration(Traversable<string> $migrations): ImmVector<Migration>
     {
+        $appliedMigrations = ImmSet::fromItems($migrations);
+
         $pattern = realpath($this->directory) . '/*.down.sql';
         $files = $this->findFiles($pattern);
 
@@ -32,7 +34,8 @@ final class SqlMigrationLoader implements MigrationLoadable
         arsort($files);
 
         return ImmVector::fromItems( $files )
-            ->map(($file) ==> SqlMigration::fromFile($file));
+            ->map(($file) ==> SqlMigration::fromFile($file))
+            ->filter(($migration) ==> $appliedMigrations->contains( $migration->name() ) );
     }
 
     private function findFiles(string $pattern) : Iterator<string>

@@ -16,9 +16,9 @@ final class MigrationLoader implements MigrationLoadable
         return $this->loader->loadUpMigration();
     }
 
-    public function loadDownMigration(): ImmVector<Migration>
+    public function loadDownMigration(Traversable<string> $migrations): ImmVector<Migration>
     {
-        return $this->loader->loadDownMigration();
+        return $this->loader->loadDownMigration($migrations);
     }
 
 }

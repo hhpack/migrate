@@ -16,7 +16,9 @@ describe(Migrator::class, function() {
 
     $this->migrator = new Migrator($loader, $conn);
 
-    \HH\Asio\join( $this->migrator->downgrade() );
+    \HH\Asio\join( $this->conn->query("DROP TABLE scheme_migrations") );
+    \HH\Asio\join( $this->conn->query("DROP TABLE users") );
+    \HH\Asio\join( $this->conn->query("DROP TABLE posts") );
   });
   describe('#upgrade', function() {
     beforeEach(function() {

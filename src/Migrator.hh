@@ -41,7 +41,8 @@ final class Migrator implements Migratable
     {
         $results = Vector {};
 
-        $migrations = $this->loader->loadDownMigration();
+        $appliedMigrations = await $this->manager->loadMigrations();
+        $migrations = $this->loader->loadDownMigration($appliedMigrations);
 
         foreach ($migrations->items() as $migration) {
             $result = await $migration->change($this->agent);

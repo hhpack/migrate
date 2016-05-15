@@ -32,7 +32,7 @@ final class MigrationManager
     public async function diff(ImmVector<Migration> $migrations): Awaitable<ImmVector<Migration>>
     {
         $appliedMigrations = await $this->loadMigrations();
-        $filter = ($migration) ==> !$appliedMigrations->contains($migration->version());
+        $filter = ($migration) ==> !$appliedMigrations->contains($migration->name());
 
         $diffMigrations = $migrations->filter($filter);
 
@@ -42,7 +42,7 @@ final class MigrationManager
     public async function save(Migration $migration): Awaitable<QueryResult>
     {
         $sql = sprintf(
-            "INSERT INTO scheme_migrations (name) VALUES ('%s')",
+            "INSERT INTO scheme_migrations (name, run_at) VALUES ('%s', CURRENT_TIMESTAMP)",
             $this->connection->escapeString($migration->name())
         );
 
