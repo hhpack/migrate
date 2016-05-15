@@ -6,15 +6,20 @@ final class SqlMigration implements Migration
 {
 
     public function __construct(
-        private string $version,
+        private string $name,
         private string $query
     )
     {
     }
 
+    public function name(): string
+    {
+        return $this->name;
+    }
+
     public function version(): string
     {
-        return $this->version;
+        return preg_replace("/^(\d+)\-.+/", "$1", $this->name);
     }
 
     public async function change(QueryProxy $proxy): Awaitable<QueryResult>
@@ -24,10 +29,10 @@ final class SqlMigration implements Migration
 
     public static function fromFile(string $file): this
     {
-        $version = preg_replace("/^(\d+)\_.+/", "$1", basename($file));
+        $name = preg_replace("/\.(down|up)\..+$/", "", basename($file));
         $sql = file_get_contents($file);
 
-        return new SqlMigration($version, $sql);
+        return new SqlMigration($name, $sql);
     }
 
 }
