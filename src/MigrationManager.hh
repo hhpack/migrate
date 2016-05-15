@@ -5,7 +5,7 @@ namespace hhpack\migrate;
 final class MigrationManager
 {
 
-    const LOG_TABLE = "CREATE TABLE IF NOT EXISTS scheme_migrations (`id` int(11) NOT NULL, `name` varchar(255), `run_at` datetime NOT NULL)";
+    const LOG_TABLE = "CREATE TABLE IF NOT EXISTS scheme_migrations (`id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(255), `run_at` datetime NOT NULL, PRIMARY KEY (`id`))";
     const MIGRATIONS_SQL = "SELECT name FROM scheme_migrations ORDER BY run_at DESC";
 
     public function __construct(
