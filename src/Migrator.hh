@@ -45,6 +45,7 @@ final class Migrator implements Migratable
 
         foreach ($migrations->items() as $migration) {
             $result = await $migration->change($this->agent);
+            await $this->manager->remove($migration);
             $results->add($result);
         }
 

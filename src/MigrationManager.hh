@@ -49,4 +49,14 @@ final class MigrationManager
         return await $this->connection->query($sql);
     }
 
+    public async function remove(Migration $migration): Awaitable<QueryResult>
+    {
+        $sql = sprintf(
+            "DELETE FROM scheme_migrations WHERE name = '%s'",
+            $this->connection->escapeString($migration->name())
+        );
+
+        return await $this->connection->query($sql);
+    }
+
 }
