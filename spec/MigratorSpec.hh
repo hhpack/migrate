@@ -16,9 +16,9 @@ describe(Migrator::class, function() {
 
     $this->migrator = new Migrator($loader, $conn);
 
-    \HH\Asio\join( $this->conn->query("DROP TABLE scheme_migrations") );
-    \HH\Asio\join( $this->conn->query("DROP TABLE users") );
-    \HH\Asio\join( $this->conn->query("DROP TABLE posts") );
+    \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS scheme_migrations") );
+    \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS users") );
+    \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS posts") );
   });
   describe('#upgrade', function() {
     beforeEach(function() {
