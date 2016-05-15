@@ -30,6 +30,7 @@ final class Migrator implements Migratable
 
         foreach ($diffMigrations->items() as $migration) {
             $result = await $migration->change($this->agent);
+            await $this->manager->save($migration);
             $results->add($result);
         }
 

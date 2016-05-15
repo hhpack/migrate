@@ -39,4 +39,14 @@ final class MigrationManager
         return $diffMigrations;
     }
 
+    public async function save(Migration $migration): Awaitable<QueryResult>
+    {
+        $sql = sprintf(
+            "INSERT INTO scheme_migrations (name) VALUES ('%s')",
+            $this->connection->escapeString($migration->name())
+        );
+
+        return await $this->connection->query($sql);
+    }
+
 }
