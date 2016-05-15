@@ -26,6 +26,8 @@ final class Migrator implements Migratable
         await $this->manager->setUp();
         $diffMigrations = await $this->manager->diff($migrations);
 
+        await $this->publisher->migrationLoaded($diffMigrations);
+
         return await $this->upgradeScheme($diffMigrations);
     }
 
@@ -33,6 +35,8 @@ final class Migrator implements Migratable
     {
         $appliedMigrations = await $this->manager->loadMigrations();
         $migrations = $this->loader->loadDownMigration($appliedMigrations);
+
+        await $this->publisher->migrationLoaded($migrations);
 
         return await $this->downgradeScheme($migrations);
     }

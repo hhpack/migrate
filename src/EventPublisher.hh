@@ -18,6 +18,11 @@ final class EventPublisher
         $this->publisher = new MessagePublisher($subscribers);
     }
 
+    public async function migrationLoaded(ImmVector<Migration> $migrations): Awaitable<void>
+    {
+        await $this->publisher->publish(new MigrationLoadedEvent($migrations));
+    }
+
     public async function migrationStart(): Awaitable<void>
     {
         await $this->publisher->publish(new MigrationStartEvent());
