@@ -6,6 +6,7 @@ use hhpack\migrate\SqlMigration;
 use hhpack\migrate\EventPublisher;
 use hhpack\migrate\MySqlConnection;
 use hhpack\migrate\MigratorAgent;
+use hhpack\migrate\FileNotFoundException;
 use hhpack\migrate\spec\helper;
 use AsyncMysqlClient;
 
@@ -31,6 +32,13 @@ describe(SqlMigration::class, function() {
     });
     it('return QueryResult', function () {
       expect($this->result->query())->toBe("show tables;\n");
+    });
+  });
+  describe('#fromFile', function() {
+    it('throw FileNotFoundException', function () {
+      expect(function() {
+        $sql = SqlMigration::fromFile(__DIR__ . '/sql/not_found.up.sql');
+      })->toThrow(FileNotFoundException::class);
     });
   });
 });
