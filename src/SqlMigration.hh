@@ -34,8 +34,14 @@ final class SqlMigration implements Migration
 
     public static function fromFile(string $file): this
     {
-        $name = preg_replace("/\.(down|up)\..+$/", "", basename($file));
-        $sql = file_get_contents($file);
+        if (!file_exists($file)) {
+            throw new FileNotFoundException("$file is not found");
+        }
+
+        $absolutePath = realpath($file);
+
+        $name = preg_replace("/\.(down|up)\..+$/", "", basename($absolutePath));
+        $sql = file_get_contents($absolutePath);
 
         return new SqlMigration($name, $sql);
     }

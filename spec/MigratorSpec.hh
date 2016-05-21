@@ -28,4 +28,16 @@ describe(Migrator::class, function() {
       expect($this->result->results())->toHaveLength(2);
     });
   });
+  describe('#downgrade', function() {
+    beforeEach(function() {
+      \HH\Asio\join( $this->migrator->upgrade() );
+      $this->result = \HH\Asio\join( $this->migrator->downgrade('20150824010439-create-users') );
+    });
+    it('downgrade to version', function () {
+      expect($this->result->resultCount())->toBe(1);
+
+      $result = $this->result->at(0);
+      expect($result->query())->toBe("DROP TABLE IF EXISTS `posts`;\n");
+    });
+  });
 });
