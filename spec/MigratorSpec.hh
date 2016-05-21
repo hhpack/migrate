@@ -28,10 +28,10 @@ describe(Migrator::class, function() {
       expect($this->result->results())->toHaveLength(2);
     });
   });
-  describe('#downgradeTo', function() {
+  describe('#downgrade', function() {
     beforeEach(function() {
       \HH\Asio\join( $this->migrator->upgrade() );
-      $this->result = \HH\Asio\join( $this->migrator->downgradeTo('20150824010439-create-users') );
+      $this->result = \HH\Asio\join( $this->migrator->downgrade('20150824010439-create-users') );
     });
     it('downgrade to version', function () {
       expect($this->result->resultCount())->toBe(1);

@@ -21,19 +21,26 @@ final class Migrator implements Migratable
         $this->agent = new MigratorAgent($connection, $this->publisher);
     }
 
-    public async function upgrade(): Awaitable<MigrationResult>
+    public async function upgrade(?MigrationName $name = null): Awaitable<MigrationResult>
     {
         $migrations = $this->loader->loadUpMigration();
 
         await $this->manager->setUp();
         $diffMigrations = await $this->manager->diff($migrations);
+        $takeHandler = $migration ==> true;
 
-        await $this->publisher->migrationLoaded($diffMigrations);
+        if ($name !== null) {
+            $takeHandler = $migration ==> $migration->name() === $name;
+        }
 
-        return await $this->upgradeScheme($diffMigrations);
+        $upgradeMigrations = $diffMigrations->takeWhile($takeHandler);
+
+        await $this->publisher->migrationLoaded($upgradeMigrations);
+
+        return await $this->upgradeScheme($upgradeMigrations);
     }
 
-    public async function downgradeTo(MigrationName $name): Awaitable<MigrationResult>
+    public async function downgrade(MigrationName $name): Awaitable<MigrationResult>
     {
         $appliedMigrations = await $this->manager->loadMigrations();
         $downgradeMigrations = $this->loader->loadDownMigration($appliedMigrations);
