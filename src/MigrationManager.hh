@@ -28,7 +28,7 @@ final class MigrationManager
         return await $this->connection->query(static::LOG_TABLE);
     }
 
-    public async function loadMigrations(): Awaitable<ImmSet<string>>
+    public async function loadMigrations(): Awaitable<ImmSet<MigrationName>>
     {
         $result = await $this->connection->query(static::MIGRATIONS_SQL);
         $migrations = $result->rows()
