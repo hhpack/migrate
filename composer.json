@@ -22,7 +22,10 @@
   "autoload": {
     "psr-4": {
       "hhpack\\migrate\\": "src/"
-    }
+    },
+    "files": [
+      "src/bootstrap.hh"
+    ]
   },
   "autoload-dev": {
     "files": [
