@@ -2,4 +2,4 @@
 
 namespace hhpack\migrate;
 
-newtype MigrationName = string;
+newtype MigrationName as string = string;

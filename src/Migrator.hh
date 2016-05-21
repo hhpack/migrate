@@ -33,10 +33,13 @@ final class Migrator implements Migratable
         return await $this->upgradeScheme($diffMigrations);
     }
 
-    public async function downgrade(): Awaitable<MigrationResult>
+    public async function downgradeTo(MigrationName $name): Awaitable<MigrationResult>
     {
         $appliedMigrations = await $this->manager->loadMigrations();
-        $migrations = $this->loader->loadDownMigration($appliedMigrations);
+        $downgradeMigrations = $this->loader->loadDownMigration($appliedMigrations);
+
+        $takeHandler = $migration ==> $migration->name() !== $name;
+        $migrations = $downgradeMigrations->takeWhile($takeHandler);
 
         await $this->publisher->migrationLoaded($migrations);
 
