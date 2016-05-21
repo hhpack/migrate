@@ -19,7 +19,7 @@ final class Migrator implements Migratable
     private EventPublisher $publisher;
 
     public function __construct(
-        private MigrationLoadable $loader,
+        private MigrationLoader $loader,
         Connection $connection
     )
     {
@@ -32,7 +32,7 @@ final class Migrator implements Migratable
 
     public async function upgrade(?MigrationName $name = null): Awaitable<MigrationResult>
     {
-        $migrations = $this->loader->loadUpMigration();
+        $migrations = $this->loader->loadUpgradeMigrations();
 
         await $this->manager->setUp();
         $diffMigrations = await $this->manager->diff($migrations);
@@ -52,7 +52,7 @@ final class Migrator implements Migratable
     public async function downgrade(MigrationName $name): Awaitable<MigrationResult>
     {
         $appliedMigrations = await $this->manager->loadMigrations();
-        $downgradeMigrations = $this->loader->loadDownMigration($appliedMigrations);
+        $downgradeMigrations = $this->loader->loadDowngradeMigrations($appliedMigrations);
 
         $takeHandler = $migration ==> $migration->name() !== $name;
         $migrations = $downgradeMigrations->takeWhile($takeHandler);

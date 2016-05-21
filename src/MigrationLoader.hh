@@ -11,23 +11,15 @@
 
 namespace hhpack\migrate;
 
-final class MigrationLoader implements MigrationLoadable
+interface MigrationLoader
 {
+    /**
+     * Load the migration for the upgrade
+     */
+    public function loadUpgradeMigrations(): ImmVector<Migration>;
 
-    public function __construct(
-        private MigrationLoadable $loader
-    )
-    {
-    }
-
-    public function loadUpMigration(): ImmVector<Migration>
-    {
-        return $this->loader->loadUpMigration();
-    }
-
-    public function loadDownMigration(Traversable<string> $migrations): ImmVector<Migration>
-    {
-        return $this->loader->loadDownMigration($migrations);
-    }
-
+    /**
+     * Load the migration for the downgrade
+     */
+    public function loadDowngradeMigrations(Traversable<MigrationName> $migrations): ImmVector<Migration>;
 }

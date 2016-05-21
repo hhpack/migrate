@@ -11,7 +11,7 @@ describe(SqlMigrationLoader::class, function() {
   });
   describe('#loadUpMigration', function() {
     beforeEach(function() {
-      $this->migrations = $this->loader->loadUpMigration();
+      $this->migrations = $this->loader->loadUpgradeMigrations();
     });
     it('return migrations', function () {
       expect($this->migrations->count())->toBe(2);

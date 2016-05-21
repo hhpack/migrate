@@ -11,7 +11,7 @@
 
 namespace hhpack\migrate;
 
-final class SqlMigrationLoader implements MigrationLoadable
+final class SqlMigrationLoader implements MigrationLoader
 {
 
     public function __construct(
@@ -20,7 +20,7 @@ final class SqlMigrationLoader implements MigrationLoadable
     {
     }
 
-    public function loadUpMigration(): ImmVector<Migration>
+    public function loadUpgradeMigrations(): ImmVector<Migration>
     {
         $pattern = realpath($this->directory) . '/*.up.sql';
         $files = $this->findFiles($pattern);
@@ -32,7 +32,7 @@ final class SqlMigrationLoader implements MigrationLoadable
             ->map(($file) ==> SqlMigration::fromFile($file));
     }
 
-    public function loadDownMigration(Traversable<string> $migrations): ImmVector<Migration>
+    public function loadDowngradeMigrations(Traversable<MigrationName> $migrations): ImmVector<Migration>
     {
         $appliedMigrations = ImmSet::fromItems($migrations);
 
