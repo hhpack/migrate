@@ -13,6 +13,10 @@ namespace hhpack\migrate;
 
 final class DataSourceName
 {
+    /**
+     * Default host name of database
+     */
+    const DEFAULT_HOST = '127.0.0.1';
 
     public function __construct(
         private ImmMap<string, mixed> $options
@@ -28,6 +32,17 @@ final class DataSourceName
     public function name(): string
     {
         return (string) $this->options->at('dbname');
+    }
+
+    public function host(): string
+    {
+        $host = $this->options->get('host');
+
+        if ($host === null) {
+            return static::DEFAULT_HOST;
+        }
+
+        return (string) $host;
     }
 
     public function port(): ?int
