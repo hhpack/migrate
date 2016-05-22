@@ -9,7 +9,7 @@ use hhpack\migrate\Migrator;
 use hhpack\migrate\SqlMigrationLoader;
 use hhpack\migrate\DatabaseClient;
 
-$mysql = \HH\Asio\join(DatabaseClient::createConnection('mysql:dbname=migrate;port=3306', 'migrate', 'migrate'));
+$mysql = await DatabaseClient::createConnection('mysql:dbname=migrate;port=3306', 'migrate', 'migrate');
 $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
 
 $migrator = new Migrator($loader, $mysql);
@@ -24,7 +24,7 @@ use hhpack\migrate\Migrator;
 use hhpack\migrate\SqlMigrationLoader;
 use hhpack\migrate\DatabaseClient;
 
-$mysql = \HH\Asio\join(DatabaseClient::createConnection('mysql:dbname=migrate;port=3306', 'migrate', 'migrate'));
+$mysql = await DatabaseClient::createConnection('mysql:dbname=migrate;port=3306', 'migrate', 'migrate');
 $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
 
 $migrator = new Migrator($loader, $mysql);
