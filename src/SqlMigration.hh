@@ -14,11 +14,14 @@ namespace hhpack\migrate;
 final class SqlMigration implements Migration
 {
 
+    private ImmSet<string> $queries;
+
     public function __construct(
         private string $name,
-        private string $query
+        Traversable<string> $queries
     )
     {
+        $this->queries = ImmSet::fromItems($queries);
     }
 
     public function name(): string
@@ -31,14 +34,21 @@ final class SqlMigration implements Migration
         return preg_replace("/^(\d+)\-.+/", "$1", $this->name);
     }
 
-    public function query(): string
+    public function queries(): ImmSet<string>
     {
-        return $this->query;
+        return $this->queries;
     }
 
-    public async function change(QueryProxy $proxy): Awaitable<QueryResult>
+    public async function change(QueryProxy $proxy): Awaitable<ImmVector<QueryResult>>
     {
-        return await $proxy->query($this->query);
+        $results = Vector {};
+
+        foreach ($this->queries as $query) {
+            $result = await $proxy->query($query);
+            $results->add($result);
+        }
+
+        return $results->toImmVector();
     }
 
     public static function fromFile(string $file): this
@@ -52,7 +62,9 @@ final class SqlMigration implements Migration
         $name = preg_replace("/\.(down|up)\..+$/", "", basename($absolutePath));
         $sql = file_get_contents($absolutePath);
 
-        return new SqlMigration($name, $sql);
+        $queries = explode(';', $sql);
+
+        return new SqlMigration($name, $queries);
     }
 
 }
