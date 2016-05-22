@@ -30,9 +30,9 @@ final class DataSourceName
         return (string) $this->options->at('dbname');
     }
 
-    public function port(): int
+    public function port(): ?int
     {
-        return (int) $this->options->at('port');
+        return (int) $this->options->get('port');
     }
 
     public static function fromString(string $dsn): this
