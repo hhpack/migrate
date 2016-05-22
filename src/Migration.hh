@@ -15,6 +15,6 @@ interface Migration
 {
     public function name(): string;
     public function version(): string;
-    public function query(): string;
-    public function change(QueryProxy $proxy): Awaitable<QueryResult>;
+    public function queries(): ImmSet<string>;
+    public function change(QueryProxy $proxy): Awaitable<ImmVector<QueryResult>>;
 }

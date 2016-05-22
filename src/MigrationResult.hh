@@ -15,19 +15,19 @@ final class MigrationResult
 {
 
     public function __construct(
-        private ImmVector<QueryResult> $results
+        private ImmMap<MigrationName, ImmVector<QueryResult>> $results
     )
     {
     }
 
-    public function results(): ImmVector<QueryResult>
+    public function results(): ImmVector<Pair<MigrationName, ImmVector<QueryResult>>>
     {
-        return $this->results;
+        return ImmVector::fromItems( $this->results->items() );
     }
 
-    public function at(int $index): QueryResult
+    public function at(MigrationName $key): ImmVector<QueryResult>
     {
-        return $this->results->at($index);
+        return $this->results->at($key);
     }
 
     public function resultCount(): int

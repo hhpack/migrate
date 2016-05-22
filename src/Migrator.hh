@@ -64,28 +64,28 @@ final class Migrator implements Migratable
 
     private async function downgradeScheme(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
     {
-        $results = Vector {};
+        $results = Map {};
 
         foreach ($migrations->items() as $migration) {
-            $result = await $migration->change($this->agent);
+            $changeResults = await $migration->change($this->agent);
             await $this->manager->remove($migration);
-            $results->add($result);
+            $results->set($migration->name(), $changeResults);
         }
 
-        return new MigrationResult( $results->toImmVector() );
+        return new MigrationResult( $results->toImmMap() );
     }
 
     private async function upgradeScheme(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
     {
-        $results = Vector {};
+        $results = Map {};
 
         foreach ($migrations->items() as $migration) {
-            $result = await $migration->change($this->agent);
+            $changeResults = await $migration->change($this->agent);
             await $this->manager->save($migration);
-            $results->add($result);
+            $results->set($migration->name(), $changeResults);
         }
 
-        return new MigrationResult( $results->toImmVector() );
+        return new MigrationResult( $results->toImmMap() );
     }
 
 }
