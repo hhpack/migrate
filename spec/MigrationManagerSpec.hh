@@ -4,11 +4,10 @@ namespace hhpack\migrate\spec;
 
 use hhpack\migrate\spec\helper;
 use hhpack\migrate\MigrationManager;
-use hhpack\migrate\MySqlConnection;
 
 describe(MigrationManager::class, function() {
   beforeEach(function() {
-    $this->conn = new MySqlConnection(helper\connect());
+    $this->conn = helper\connect();
     $this->manager = new MigrationManager($this->conn);
 
     \HH\Asio\join( $this->conn->query('DROP TABLE IF EXISTS scheme_migrations') );

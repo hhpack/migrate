@@ -8,12 +8,11 @@ use hhpack\migrate\MySqlConnection;
 use hhpack\migrate\MigratorAgent;
 use hhpack\migrate\FileNotFoundException;
 use hhpack\migrate\spec\helper;
-use AsyncMysqlClient;
 
 describe(SqlMigration::class, function() {
   beforeEach(function() {
     $this->sql = SqlMigration::fromFile(realpath(__DIR__ . '/sql/20150824010439-show-tables.up.sql'));
-    $this->connection = new MySqlConnection(helper\connect());
+    $this->connection = helper\connect();
     $this->agent = new MigratorAgent($this->connection, new EventPublisher());
   });
   describe('#version', function() {

@@ -11,18 +11,7 @@
 
 namespace hhpack\migrate;
 
-/**
- * name of migration
- * 
- * example:
- *   20150824010439-create-users
- *   20150825102100-create-posts
- */
-type MigrationName = string;
-
-/**
- * string value of data source name
- * 
- *   mysql:dbname=test;port=3306
- */
-type DSNString = string;
+enum DataSourceType: string
+{
+    MySql = 'mysql';
+}

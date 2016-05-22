@@ -11,6 +11,7 @@
 
 namespace hhpack\migrate;
 
+use AsyncMysqlClient;
 use AsyncMysqlConnection;
 use AsyncMysqlQueryResult;
 
@@ -46,6 +47,24 @@ final class MySqlConnection implements Connection
     public function __destruct()
     {
         $this->close();
+    }
+
+    public static async function create(DSNString $value, string $username, string $password): Awaitable<this>
+    {
+        $dsn = DataSourceName::fromString($value);
+
+        $port = $dsn->port();
+        $port = $port === null ? 3306 : $port;
+
+        $connection = await AsyncMysqlClient::connect(
+            $dsn->host(),
+            $port,
+            $dsn->name(),
+            $username,
+            $password
+        );
+
+        return new static($connection);
     }
 
 }
