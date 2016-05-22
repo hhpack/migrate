@@ -8,11 +8,8 @@
 use hhpack\migrate\Migrator;
 use hhpack\migrate\SqlMigrationLoader;
 use hhpack\migrate\MySqlConnection;
-use AsyncMysqlClient;
 
-$conn = \HH\Asio\join(AsyncMysqlClient::connect('127.0.0.1', 3306, 'migrate', 'migrate', 'migrate'));
-
-$mysql = new MySqlConnection($conn);
+$mysql = \HH\Asio\join(MySqlConnection::create('mysql:dbname=migrate;port=3306', 'migrate', 'migrate'));
 $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
 
 $migrator = new Migrator($loader, $mysql);
@@ -26,11 +23,8 @@ await $migrator->upgrade();
 use hhpack\migrate\Migrator;
 use hhpack\migrate\SqlMigrationLoader;
 use hhpack\migrate\MySqlConnection;
-use AsyncMysqlClient;
 
-$conn = \HH\Asio\join(AsyncMysqlClient::connect('127.0.0.1', 3306, 'migrate', 'migrate', 'migrate'));
-
-$mysql = new MySqlConnection($conn);
+$mysql = \HH\Asio\join(MySqlConnection::create('mysql:dbname=migrate;port=3306', 'migrate', 'migrate'));
 $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
 
 $migrator = new Migrator($loader, $mysql);
