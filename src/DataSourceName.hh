@@ -50,7 +50,7 @@ final class DataSourceName
         return (int) $this->options->get('port');
     }
 
-    public static function fromString(string $dsn): this
+    public static function fromString(DSNString $dsn): this
     {
         $options = Map {};
         $parts = explode(':', $dsn);

@@ -49,7 +49,7 @@ final class MySqlConnection implements Connection
         $this->close();
     }
 
-    public static async function create(string $value, string $username, string $password): Awaitable<this>
+    public static async function create(DSNString $value, string $username, string $password): Awaitable<this>
     {
         $dsn = DataSourceName::fromString($value);
 
