@@ -27,10 +27,10 @@ describe(SqlMigration::class, function() {
   });
   describe('#change', function() {
     beforeEach(function() {
-      $this->result = \HH\Asio\join( $this->sql->change($this->agent) );
+      $this->results = \HH\Asio\join( $this->sql->change($this->agent) );
     });
-    it('return QueryResult', function () {
-      expect($this->result->query())->toBe("show tables;\n");
+    it('return results', function () {
+      expect($this->results)->toHaveLength(1);
     });
   });
   describe('#fromFile', function() {

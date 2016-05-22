@@ -62,7 +62,8 @@ final class SqlMigration implements Migration
         $name = preg_replace("/\.(down|up)\..+$/", "", basename($absolutePath));
         $sql = file_get_contents($absolutePath);
 
-        $queries = explode(';', $sql);
+        $queries = explode(';', trim($sql));
+        $queries = array_slice($queries, 0, count($queries) - 1);
 
         return new SqlMigration($name, $queries);
     }

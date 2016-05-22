@@ -33,8 +33,8 @@ describe(Migrator::class, function() {
     it('downgrade to version', function () {
       expect($this->result->resultCount())->toBe(1);
 
-      $result = $this->result->at(0);
-      expect($result->query())->toBe("DROP TABLE IF EXISTS `posts`;\n");
+      $results = $this->result->at('20150825102100-create-posts');
+      expect($results->at(0)->query())->toBe("DROP TABLE IF EXISTS `posts`");
     });
   });
 });
