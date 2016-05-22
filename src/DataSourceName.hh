@@ -24,9 +24,12 @@ final class DataSourceName
     {
     }
 
-    public function type(): string
+    public function type(): DataSourceType
     {
-        return (string) $this->options->at('type');
+        $type = $this->options->at('type');
+        $dataSourceType = DataSourceType::assert($type);
+
+        return $dataSourceType;
     }
 
     public function name(): string

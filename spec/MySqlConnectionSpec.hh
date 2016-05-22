@@ -4,11 +4,10 @@ namespace hhpack\migrate\spec;
 
 use hhpack\migrate\MySqlConnection;
 use hhpack\migrate\spec\helper;
-use AsyncMysqlClient;
 
 describe(MySqlConnection::class, function() {
   beforeEach(function() {
-    $this->connection = new MySqlConnection(helper\connect());
+    $this->connection = helper\connect();
   });
   describe('#query', function() {
     beforeEach(function() {

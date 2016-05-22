@@ -2,9 +2,13 @@
 
 namespace hhpack\migrate\spec\helper;
 
-use AsyncMysqlClient;
-use AsyncMysqlConnection;
+use hhpack\migrate\Connection;
+use hhpack\migrate\DatabaseClient;
 
-function connect(): AsyncMysqlConnection {
-  return \HH\Asio\join(AsyncMysqlClient::connect('127.0.0.1', 3306, 'migrate', 'migrate', 'migrate'));
+function connect(): Connection {
+  return \HH\Asio\join(DatabaseClient::createConnection(
+    'mysql:host=127.0.0.1;port=3306;dbname=migrate',
+    'migrate',
+    'migrate'
+  ));
 }

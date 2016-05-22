@@ -2,15 +2,13 @@
 
 namespace hhpack\migrate\spec;
 
-use hhpack\migrate\spec\helper;
 use hhpack\migrate\Migrator;
 use hhpack\migrate\SqlMigrationLoader;
-use hhpack\migrate\MySqlConnection;
-use AsyncMysqlClient;
+use hhpack\migrate\spec\helper;
 
 describe(Migrator::class, function() {
   beforeEach(function() {
-    $conn = new MySqlConnection(helper\connect());
+    $conn = helper\connect();
     $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
 
     $this->migrator = new Migrator($loader, $conn);
