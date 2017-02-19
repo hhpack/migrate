@@ -1,9 +1,9 @@
 <?hh //strict
 
-namespace hhpack\migrate\spec\helper;
+namespace HHPack\Migrate\spec\helper;
 
-use hhpack\migrate\Connection;
-use hhpack\migrate\DatabaseClient;
+use HHPack\Migrate\Connection;
+use HHPack\Migrate\DatabaseClient;
 
 function connect(): Connection {
   return \HH\Asio\join(DatabaseClient::createConnection(

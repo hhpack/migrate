@@ -5,9 +5,9 @@
 ## Basic usage
 
 ```hack
-use hhpack\migrate\Migrator;
-use hhpack\migrate\SqlMigrationLoader;
-use hhpack\migrate\DatabaseClient;
+use HHPack\Migrate\Migrator;
+use HHPack\Migrate\SqlMigrationLoader;
+use HHPack\Migrate\DatabaseClient;
 
 $mysql = await DatabaseClient::createConnection('mysql:dbname=migrate;port=3306', 'migrate', 'migrate');
 $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
@@ -20,9 +20,9 @@ await $migrator->upgrade();
 ### Downgrade of schema
 
 ```hack
-use hhpack\migrate\Migrator;
-use hhpack\migrate\SqlMigrationLoader;
-use hhpack\migrate\DatabaseClient;
+use HHPack\Migrate\Migrator;
+use HHPack\Migrate\SqlMigrationLoader;
+use HHPack\Migrate\DatabaseClient;
 
 $mysql = await DatabaseClient::createConnection('mysql:dbname=migrate;port=3306', 'migrate', 'migrate');
 $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');

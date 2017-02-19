@@ -1,9 +1,9 @@
 <?hh //partial
 
-namespace hhpack\migrate\spec;
+namespace HHPack\Migrate\spec;
 
-use hhpack\migrate\MySqlConnection;
-use hhpack\migrate\spec\helper;
+use HHPack\Migrate\MySqlConnection;
+use HHPack\Migrate\spec\helper;
 
 describe(MySqlConnection::class, function() {
   beforeEach(function() {

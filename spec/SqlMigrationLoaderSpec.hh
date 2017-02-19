@@ -1,8 +1,8 @@
 <?hh //partial
 
-namespace hhpack\migrate\spec;
+namespace HHPack\Migrate\spec;
 
-use hhpack\migrate\SqlMigrationLoader;
+use HHPack\Migrate\SqlMigrationLoader;
 
 describe(SqlMigrationLoader::class, function() {
   beforeEach(function() {

@@ -1,7 +1,7 @@
 <?hh //strict
 
 /**
- * This file is part of hhpack\migrate.
+ * This file is part of hhpack/migrate.
  *
  * (c) Noritaka Horio <holy.shared.design@gmail.com>
  *
@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace hhpack\migrate;
+namespace HHPack\Migrate;
 
-use hhpack\publisher\Message;
+use HHPack\Publisher\Message;
 
 final class MigrationSuccessEvent implements Message
 {

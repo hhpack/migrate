@@ -1,9 +1,9 @@
 <?hh //partial
 
-namespace hhpack\migrate\spec;
+namespace HHPack\Migrate\spec;
 
-use hhpack\migrate\spec\helper;
-use hhpack\migrate\MigrationManager;
+use HHPack\Migrate\spec\helper;
+use HHPack\Migrate\MigrationManager;
 
 describe(MigrationManager::class, function() {
   beforeEach(function() {
