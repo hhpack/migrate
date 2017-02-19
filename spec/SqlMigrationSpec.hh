@@ -1,13 +1,13 @@
 <?hh //partial
 
-namespace hhpack\migrate\spec;
+namespace HHPack\Migrate\spec;
 
-use hhpack\migrate\SqlMigration;
-use hhpack\migrate\EventPublisher;
-use hhpack\migrate\MySqlConnection;
-use hhpack\migrate\MigratorAgent;
-use hhpack\migrate\FileNotFoundException;
-use hhpack\migrate\spec\helper;
+use HHPack\Migrate\SqlMigration;
+use HHPack\Migrate\EventPublisher;
+use HHPack\Migrate\MySqlConnection;
+use HHPack\Migrate\MigratorAgent;
+use HHPack\Migrate\FileNotFoundException;
+use HHPack\Migrate\spec\helper;
 
 describe(SqlMigration::class, function() {
   beforeEach(function() {

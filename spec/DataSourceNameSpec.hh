@@ -1,8 +1,8 @@
 <?hh //partial
 
-namespace hhpack\migrate\spec;
+namespace HHPack\Migrate\spec;
 
-use hhpack\migrate\DataSourceName;
+use HHPack\Migrate\DataSourceName;
 
 describe(DataSourceName::class, function() {
   beforeEach(function() {

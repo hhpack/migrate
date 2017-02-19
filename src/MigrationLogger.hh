@@ -1,7 +1,7 @@
 <?hh //strict
 
 /**
- * This file is part of hhpack\migrate.
+ * This file is part of hhpack/migrate.
  *
  * (c) Noritaka Horio <holy.shared.design@gmail.com>
  *
@@ -9,11 +9,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace hhpack\migrate;
+namespace HHPack\Migrate;
 
-use hhpack\color;
-use hhpack\publisher\Message;
-use hhpack\publisher\Subscribable;
+use HHPack\Color as color;
+use HHPack\Publisher\Message;
+use HHPack\Publisher\Subscribable;
 
 final class MigrationLogger implements Subscribable<Message>
 {

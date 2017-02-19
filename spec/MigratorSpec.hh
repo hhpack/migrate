@@ -1,10 +1,10 @@
 <?hh //partial
 
-namespace hhpack\migrate\spec;
+namespace HHPack\Migrate\spec;
 
-use hhpack\migrate\Migrator;
-use hhpack\migrate\SqlMigrationLoader;
-use hhpack\migrate\spec\helper;
+use HHPack\Migrate\Migrator;
+use HHPack\Migrate\SqlMigrationLoader;
+use HHPack\Migrate\spec\helper;
 
 describe(Migrator::class, function() {
   beforeEach(function() {
