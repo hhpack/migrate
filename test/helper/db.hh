@@ -6,9 +6,14 @@ use HHPack\Migrate\Connection;
 use HHPack\Migrate\DatabaseClient;
 
 function connect(): Connection {
-  return \HH\Asio\join(DatabaseClient::createConnection(
-    'mysql:host=127.0.0.1;port=3306;dbname=migrate',
-    'migrate',
-    'migrate'
-  ));
+    $host = getenv('DB_HOSTNAME');
+    $name = getenv('DB_DATABASE');
+    $user = getenv('DB_USER');
+    $password = getenv('DB_PASSWORD');
+
+    return \HH\Asio\join(DatabaseClient::createConnection(
+        'mysql:host=' . $host . ';port=3306;dbname=' . $name,
+        $user,
+        $password
+    ));
 }
