@@ -14,7 +14,7 @@ install:
 before_script:
   - mysql --version
   - mysql -e "create database IF NOT EXISTS migrate;" -uroot
-  - mysql -Dmigrate -uroot < spec/sql/travis.sql
+  - mysql -Dmigrate -uroot < test/sql/travis.sql
   - travis_retry composer install --no-interaction
   - touch .hhconfig
 script:

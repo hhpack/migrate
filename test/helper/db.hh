@@ -1,6 +1,6 @@
 <?hh //strict
 
-namespace HHPack\Migrate\spec\helper;
+namespace HHPack\Migrate\test\helper;
 
 use HHPack\Migrate\Connection;
 use HHPack\Migrate\DatabaseClient;

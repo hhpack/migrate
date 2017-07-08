@@ -17,6 +17,7 @@ final class DataSourceName
      * Default host name of database
      */
     const DEFAULT_HOST = '127.0.0.1';
+    const DEFAULT_PORT = 3306;
 
     public function __construct(
         private ImmMap<string, mixed> $options
@@ -48,9 +49,10 @@ final class DataSourceName
         return (string) $host;
     }
 
-    public function port(): ?int
+    public function port(): int
     {
-        return (int) $this->options->get('port');
+        $port = $this->options->get('port');
+        return ($port !== null) ? (int) $port : static::DEFAULT_PORT;
     }
 
     public static function fromString(DSNString $dsn): this
