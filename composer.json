@@ -10,14 +10,12 @@
   ],
   "license": "MIT",
   "require": {
-    "hhvm": ">= 3.12.0",
+    "hhvm": ">= 3.18.0",
     "hhpack/publisher": "^1.0",
     "hhpack/color": "^1.0"
   },
   "require-dev": {
-    "expect/peridot-expect-plugin": "~3.0",
-    "peridot-php/peridot": "~1.18",
-    "peridot-php/peridot-dot-reporter": "~1.0"
+    "hackpack/hackunit": "^1.1"
   },
   "autoload": {
     "psr-4": {
@@ -29,11 +27,11 @@
   },
   "autoload-dev": {
     "files": [
-      "spec/helper/db.hh"
+      "test/helper/db.hh"
     ]
   },
   "scripts": {
-    "test": "vendor/bin/peridot --grep *Spec.hh -c peridot.hh spec",
+    "test": "vendor/bin/hackunit test",
     "check": "./typecheck"
   },
   "minimum-stability": "stable"
