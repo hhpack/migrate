@@ -2,12 +2,8 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\test\helper;
-use HHPack\Migrate\SqlMigration;
-use HHPack\Migrate\EventPublisher;
-use HHPack\Migrate\MySqlConnection;
-use HHPack\Migrate\MigratorAgent;
-use HHPack\Migrate\FileNotFoundException;
+use HHPack\Migrate\Test\Helper;
+use HHPack\Migrate\{ SqlMigration, EventPublisher, MySqlConnection, MigratorAgent, FileNotFoundException };
 use HackPack\HackUnit\Contract\Assert;
 
 final class SqlMigrationTest
@@ -22,7 +18,7 @@ final class SqlMigrationTest
     <<SuiteProvider('Db')>>
     public static function create() : this
     {
-        $conn = helper\connect();
+        $conn = Helper\connect();
         $agent = new MigratorAgent($conn, new EventPublisher());
 
         return new static($agent);

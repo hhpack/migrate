@@ -12,8 +12,7 @@
 namespace HHPack\Migrate;
 
 use HHPack\Color as color;
-use HHPack\Publisher\Message;
-use HHPack\Publisher\Subscribable;
+use HHPack\Publisher\{ Message, Subscribable };
 
 final class MigrationLogger implements Subscribable<Message>
 {
