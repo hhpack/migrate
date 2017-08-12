@@ -2,9 +2,8 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\test\helper;
-use HHPack\Migrate\Connection;
-use HHPack\Migrate\MigrationManager;
+use HHPack\Migrate\Test\Helper;
+use HHPack\Migrate\{ Connection, MigrationManager };
 use HackPack\HackUnit\Contract\Assert;
 
 
@@ -20,7 +19,7 @@ final class MigrationManagerTest
     <<SuiteProvider('Db')>>
     public static function create() : this
     {
-        $conn = helper\connect();
+        $conn = Helper\connect();
         $manager = new MigrationManager($conn);
 
         return new static($conn, $manager);

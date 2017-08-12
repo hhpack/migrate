@@ -1,0 +1,8 @@
+{
+  "roots": [
+    "src/"
+  ],
+  "extraFiles": [
+    "test/Helper/Db.hh"
+  ]
+}

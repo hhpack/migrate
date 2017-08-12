@@ -10,9 +10,10 @@
   ],
   "license": "MIT",
   "require": {
-    "hhvm": ">= 3.18.0",
-    "hhpack/publisher": "^1.0",
-    "hhpack/color": "^1.0"
+    "hhvm": ">= 3.21.0",
+    "facebook/hhvm-autoload": "^1.4",
+    "hhpack/publisher": "^1.1",
+    "hhpack/color": "^1.1"
   },
   "require-dev": {
     "hackpack/hackunit": "^1.1"
@@ -27,7 +28,7 @@
   },
   "autoload-dev": {
     "files": [
-      "test/helper/db.hh"
+      "test/Helper/Db.hh"
     ]
   },
   "scripts": {
