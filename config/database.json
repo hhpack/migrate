@@ -1,0 +1,20 @@
+{
+  "type": "sql",
+  "path": "db/migrate",
+  "enviroments": {
+    "development": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "migrate",
+      "user": "DB_USERNAME",
+      "password": "DB_PASSWORD"
+    },
+    "test": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "migrate",
+      "user": "DB_USERNAME",
+      "password": "DB_PASSWORD"
+    }
+  }
+}

@@ -19,12 +19,16 @@
   "require-dev": {
     "hackpack/hackunit": "^1.1"
   },
+  "bin": [
+    "bin/migrate"
+  ],
   "autoload": {
     "psr-4": {
       "HHPack\\Migrate\\": "src/"
     },
     "files": [
-      "src/bootstrap.hh"
+      "src/types.hh",
+      "src/Application/Configuration/types.hh"
     ]
   },
   "autoload-dev": {
