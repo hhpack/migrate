@@ -11,7 +11,7 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ MigrationType };
+use HHPack\Migrate\{ File, MigrationType };
 use HHPack\Migrate\Application\Configuration\{ Configuration, Migration, Server, Loadable };
 use RuntimeException;
 
@@ -26,12 +26,21 @@ final class ConfigurationLoader implements Loadable
 
     public function load(string $env = 'development') : Configuration
     {
-        $json = file_get_contents($this->path);
-        $setting = json_decode($json, true);
+        $setting = File\readJsonFile($this->path);
+
+        if (!is_null($setting['enviroments'])) {
+            throw new RuntimeException('key enviroments not found');
+        }
+
+        $enviroments = $setting['enviroments'];
+
+        if (!is_array($enviroments)) {
+            throw new RuntimeException('enviroments is not object');
+        }
 
         return new Configuration(
             $this->loadMigration($setting),
-            $this->loadDatabaseServer($env, $setting['enviroments'])
+            $this->loadDatabaseServer($env, $enviroments)
         );
     }
 

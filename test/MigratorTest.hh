@@ -2,8 +2,8 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper\{ Db, File };
-use HHPack\Migrate\{ Migrator, Connection, SqlMigrationLoader };
+use HHPack\Migrate\Test\Helper\{ Db };
+use HHPack\Migrate\{ File, Migrator, Connection, SqlMigrationLoader };
 use HackPack\HackUnit\Contract\Assert;
 
 

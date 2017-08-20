@@ -2,9 +2,8 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\SqlMigrationLoader;
+use HHPack\Migrate\{ File, SqlMigrationLoader };
 use HackPack\HackUnit\Contract\Assert;
-use HHPack\Migrate\Test\Helper\{ File };
 
 final class SqlMigrationLoaderTest
 {

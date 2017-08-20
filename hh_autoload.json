@@ -3,7 +3,6 @@
     "src/"
   ],
   "extraFiles": [
-    "test/Helper/Db.hh",
-    "test/Helper/File.hh"
+    "test/Helper/Db.hh"
   ]
 }

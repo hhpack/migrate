@@ -13,6 +13,6 @@ namespace HHPack\Migrate;
 
 interface Migratable
 {
-    public function upgrade(?MigrationName $name = null): Awaitable<MigrationResult>;
+    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
     public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
 }

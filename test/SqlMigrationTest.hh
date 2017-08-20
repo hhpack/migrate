@@ -2,8 +2,8 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper\{ Db, File };
-use HHPack\Migrate\{ SqlMigration, EventPublisher, MySqlConnection, MigratorAgent, FileNotFoundException };
+use HHPack\Migrate\Test\Helper\{ Db };
+use HHPack\Migrate\{ File, SqlMigration, EventPublisher, MySqlConnection, MigratorAgent, FileNotFoundException };
 use HackPack\HackUnit\Contract\Assert;
 
 final class SqlMigrationTest

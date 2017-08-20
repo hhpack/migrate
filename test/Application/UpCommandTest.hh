@@ -2,12 +2,11 @@
 
 namespace HHPack\Migrate\Application\Test;
 
-use HHPack\Migrate\{ DataSourceName, Connection };
+use HHPack\Migrate\{ File, DataSourceName, Connection };
 use HHPack\Migrate\Application\{ Context, UpCommand };
 use HHPack\Migrate\Test\Mock\{ MigrateContext };
-use HHPack\Migrate\Test\Helper\{ Db, File };
+use HHPack\Migrate\Test\Helper\{ Db };
 use HackPack\HackUnit\Contract\Assert;
-//use AsyncMysqlQueryResult;
 
 
 final class UpCommandTest
