@@ -2,7 +2,7 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper;
+use HHPack\Migrate\Test\Helper\{ Db, File };
 use HHPack\Migrate\{ Migrator, Connection, SqlMigrationLoader };
 use HackPack\HackUnit\Contract\Assert;
 
@@ -19,9 +19,10 @@ final class MigratorTest
     <<SuiteProvider('Db')>>
     public static function create() : this
     {
-        $conn = Helper\connect();
+        $conn = Db\connect();
+        $path = File\absolutePath(__DIR__ . '/sql/migrations');
 
-        $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
+        $loader = new SqlMigrationLoader($path);
         $migrator = new Migrator($loader, $conn);
 
         return new static($conn, $migrator);

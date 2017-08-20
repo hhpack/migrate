@@ -2,7 +2,7 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper;
+use HHPack\Migrate\Test\Helper\{ Db };
 use HHPack\Migrate\{ Connection, MySqlConnection };
 use HackPack\HackUnit\Contract\Assert;
 
@@ -18,7 +18,7 @@ final class MySqlConnectionTest
     <<SuiteProvider('Db')>>
     public static function create() : this
     {
-        $conn = Helper\connect();
+        $conn = Db\connect();
         return new static($conn);
     }
 

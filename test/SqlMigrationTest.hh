@@ -2,7 +2,7 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper;
+use HHPack\Migrate\Test\Helper\{ Db, File };
 use HHPack\Migrate\{ SqlMigration, EventPublisher, MySqlConnection, MigratorAgent, FileNotFoundException };
 use HackPack\HackUnit\Contract\Assert;
 
@@ -18,7 +18,7 @@ final class SqlMigrationTest
     <<SuiteProvider('Db')>>
     public static function create() : this
     {
-        $conn = Helper\connect();
+        $conn = Db\connect();
         $agent = new MigratorAgent($conn, new EventPublisher());
 
         return new static($agent);
@@ -27,7 +27,8 @@ final class SqlMigrationTest
     <<Test('Db')>>
     public function migrationFile(Assert $assert): void
     {
-        $sql = SqlMigration::fromFile(realpath(__DIR__ . '/sql/20150824010439-show-tables.up.sql'));
+        $path = File\absolutePath(__DIR__ . '/sql/20150824010439-show-tables.up.sql');
+        $sql = SqlMigration::fromFile($path);
 
         $assert->string($sql->version())->is('20150824010439');
         $assert->string($sql->name())->is('20150824010439-show-tables');
@@ -40,7 +41,8 @@ final class SqlMigrationTest
     public function fileNotFoundMigrationFile(Assert $assert): void
     {
         $assert->whenCalled(() ==> {
-            $sql = SqlMigration::fromFile(__DIR__ . '/sql/not_found.up.sql');
+            $path = File\absolutePath(__DIR__ . '/sql/not_found.up.sql');
+            $sql = SqlMigration::fromFile($path);
         })->willThrowClass(FileNotFoundException::class);
     }
 }
