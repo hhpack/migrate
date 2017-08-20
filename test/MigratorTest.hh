@@ -49,7 +49,7 @@ final class MigratorTest
         \HH\Asio\join( $this->migrator->upgrade() );
         $result = \HH\Asio\join( $this->migrator->downgrade('20150824010439-create-users') );
 
-        $assert->int($result->resultCount())->eq(1);
+        $assert->int($result->resultCount())->eq(2);
 
         $results = $result->at('20150825102100-create-posts');
         $assert->string($results->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");

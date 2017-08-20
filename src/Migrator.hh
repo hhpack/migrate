@@ -53,8 +53,18 @@ final class Migrator implements Migratable
         $appliedMigrations = await $this->manager->loadMigrations();
         $downgradeMigrations = $this->loader->loadDowngradeMigrations($appliedMigrations);
 
+        $takedMigrations = Vector {};
         $takeHandler = $migration ==> $migration->name() !== $name;
-        $migrations = $downgradeMigrations->takeWhile($takeHandler);
+
+        foreach ($downgradeMigrations->lazy() as $migration) {
+            if ($takeHandler($migration)) {
+                $takedMigrations->add($migration);
+            } else {
+                $takedMigrations->add($migration);
+                break;
+            }
+        }
+        $migrations = $takedMigrations->immutable();
 
         await $this->publisher->migrationLoaded($migrations);
 
