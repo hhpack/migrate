@@ -12,7 +12,7 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Migrate\Application\{ MigrateApplication };
+use HHPack\Migrate\Application\{ Kernel };
 
 $autoloadFiles = [
     __DIR__ . '/vendor/hh_autoload.php',
@@ -38,4 +38,4 @@ if (!$composerInstall) {
 }
 unset($composerInstall, $autoloadFiles, $autoloadFile);
 
-(new MigrateApplication())->run($argv);
+(new Kernel())->run($argv);
