@@ -42,7 +42,8 @@ final class MigrateApplication
         ]);
 
         $this->commands = ImmMap {
-            "up" => new UpCommand()
+            "up" => new UpCommand(),
+            "down" => new DownCommand()
         };
     }
 
@@ -86,12 +87,22 @@ final class MigrateApplication
             "[OPTIONS]", "[COMMAND]"));
 
         fwrite(STDOUT, "Commands:\n");
-        foreach ($this->commands->lazy() as $name => $command) {
-            fwrite(STDOUT, sprintf("  %s   %s\n", $name, $command->description()));
-        }
+        $this->displayCommands();
         fwrite(STDOUT, "\n");
 
         $this->optionParser->displayHelp();
+    }
+
+    private function displayCommands(): void
+    {
+        $keys = $this->commands->keys()->toValuesArray();
+        $maxLength = (int) array_reduce($keys, (int $max, string $key) ==> {
+            return ($max < strlen($key)) ? strlen($key) : $max;
+        }, 0);
+
+        foreach ($this->commands->lazy() as $name => $command) {
+            fwrite(STDOUT, sprintf("  %s   %s\n", str_pad($name, $maxLength), $command->description()));
+        }
     }
 
     private function displayVersion(): void
