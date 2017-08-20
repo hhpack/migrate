@@ -13,6 +13,7 @@ namespace HHPack\Migrate\Application;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
+use HHPack\Migrate\{ File };
 
 final class MigrateApplication
 {
@@ -67,7 +68,7 @@ final class MigrateApplication
         if (!$this->commands->contains($name)) {
             $this->displayHelp();
         } else {
-            $loader = new ConfigurationLoader(getcwd() . $this->configurationPath);
+            $loader = new ConfigurationLoader(File\absolutePath(getcwd() . $this->configurationPath));
             $env = getenv('HHVM_ENV') ? getenv('HHVM_ENV') : 'development';
             $configuration = $loader->load($env);
 
