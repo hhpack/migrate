@@ -60,10 +60,12 @@ final class MigrateApplication
         $cliArgv = Vector::fromItems($argv)->skip(1);
         $remainArgv = Vector::fromItems($this->optionParser->parse($cliArgv));
 
-        if ($this->help || !$remainArgv->containsKey(0)) {
+        if ($this->help) {
             $this->displayHelp();
         } else if ($this->version) {
             $this->displayVersion();
+        } else if (!$remainArgv->containsKey(0)) {
+            $this->displayHelp();
         } else {
             $commandName = $remainArgv->at(0);
             $this->runCommand($commandName, $argv);
