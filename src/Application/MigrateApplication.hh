@@ -51,14 +51,15 @@ final class MigrateApplication
 
         $this->commands = ImmMap {
             "up" => new UpCommand(),
-            "down" => new DownCommand()
+            "down" => new DownCommand(),
+            "gen" => new GenerateMigrationCommand()
         };
     }
 
     public function run(Traversable<string> $argv): void
     {
         $cliArgv = Vector::fromItems($argv)->skip(1);
-        $remainArgv = Vector::fromItems($this->optionParser->parse($cliArgv));
+        $remainArgv = $this->optionParser->parse($cliArgv);
 
         if ($this->help) {
             $this->displayHelp();
@@ -68,16 +69,16 @@ final class MigrateApplication
             $this->displayHelp();
         } else {
             $commandName = $remainArgv->at(0);
-            $this->runCommand($commandName, $argv);
+            $this->runCommand($commandName, $remainArgv->skip(1));
         }
     }
 
-    private function runCommand(string $name, Traversable<string> $argv): void
+    private function runCommand(string $name, ImmVector<string> $argv): void
     {
         if (!$this->commands->contains($name)) {
             $this->displayHelp();
         } else {
-            $loader = new ConfigurationLoader(File\absolutePath(getcwd() . $this->configurationPath));
+            $loader = new ConfigurationLoader(File\absolutePath(getcwd() . '/' . $this->configurationPath));
             $env = getenv('HHVM_ENV') ? getenv('HHVM_ENV') : 'development';
             $configuration = $loader->load($env);
 

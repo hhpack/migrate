@@ -23,6 +23,16 @@ final class MigrateContext implements Context
         return $this->args;
     }
 
+    public function isSqlType() : bool
+    {
+        return true;
+    }
+
+    public function migrationPath() : string
+    {
+        return $this->path;
+    }
+
     public function logger() : Logger {
         return new ColoredLogger();
     }

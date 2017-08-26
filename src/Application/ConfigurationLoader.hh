@@ -28,7 +28,7 @@ final class ConfigurationLoader implements Loadable
     {
         $setting = File\readJsonFile($this->path);
 
-        if (!is_null($setting['enviroments'])) {
+        if (is_null($setting['enviroments'])) {
             throw new RuntimeException('key enviroments not found');
         }
 
@@ -48,7 +48,7 @@ final class ConfigurationLoader implements Loadable
     {
         $loader = shape(
             "type" => MigrationType::assert((string) $setting['type']),
-            "path" => (string) $setting['path']
+            "path" => getcwd() . '/' . (string) $setting['path']
         );
 
         return Migration::fromSetting($loader);

@@ -30,6 +30,16 @@ final class MigrateContext implements Context
         return $this->args;
     }
 
+    public function isSqlType() : bool
+    {
+        return $this->config->isSqlType();
+    }
+
+    public function migrationPath() : string
+    {
+        return $this->config->migrationPath();
+    }
+
     public function logger(): Logger
     {
         return $this->logger;
