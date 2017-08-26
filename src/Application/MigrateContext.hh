@@ -11,7 +11,7 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ Connection, DatabaseClient, MigrationLoader, SqlMigrationLoader };
+use HHPack\Migrate\{ Connection, DatabaseClient, Logger, MigrationLoader, SqlMigrationLoader };
 use HHPack\Migrate\Application\Configuration\{ Configuration };
 
 final class MigrateContext implements Context
@@ -19,7 +19,8 @@ final class MigrateContext implements Context
 
     public function __construct(
         private Traversable<string> $args,
-        private Configuration $config
+        private Configuration $config,
+        private Logger $logger
     )
     {
     }
@@ -27,6 +28,11 @@ final class MigrateContext implements Context
     public function cliArgs() : Traversable<string>
     {
         return $this->args;
+    }
+
+    public function logger(): Logger
+    {
+        return $this->logger;
     }
 
     public async function databaseClient() : Awaitable<Connection>

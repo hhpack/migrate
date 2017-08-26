@@ -2,8 +2,9 @@
 
 namespace HHPack\Migrate\Test\Mock;
 
-use HHPack\Migrate\{ Connection, MigrationLoader, SqlMigrationLoader };
+use HHPack\Migrate\{ Logger, Connection, MigrationLoader, SqlMigrationLoader };
 use HHPack\Migrate\Application\Context;
+use HHPack\Migrate\Logger\{ PlainLogger, ColoredLogger };
 use HHPack\Migrate\Test\Helper;
 
 final class MigrateContext implements Context
@@ -20,6 +21,10 @@ final class MigrateContext implements Context
     public function cliArgs() : Traversable<string>
     {
         return $this->args;
+    }
+
+    public function logger() : Logger {
+        return new ColoredLogger();
     }
 
     public async function databaseClient() : Awaitable<Connection>

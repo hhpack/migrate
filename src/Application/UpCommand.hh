@@ -17,14 +17,14 @@ use HHPack\Migrate\{ Migrator, SqlMigrationLoader, DatabaseClient };
 
 final class UpCommand extends AbstractCommand implements Command
 {
-    private ?string $schemaVersion = null;
+    private ?string $schemaVersion;
 
     public function __construct()
     {
         $this->usage = "migrate up [OPTIONS]";
         $this->description = "Upgrade the schema of the database";
         $this->optionParser = cli\optparser([
-            cli\take_on(['--to'], 'Version of the schema to be upgraded', ($version) ==> {
+            cli\take_on(['--to'], 'VERSION', 'Version of the schema to be upgraded', ($version) ==> {
                 $this->schemaVersion = $version;
             }),
             cli\on(['-h', '--help'], 'Display help message', () ==> {
@@ -47,7 +47,7 @@ final class UpCommand extends AbstractCommand implements Command
     private async function upgradeSchema(Context $context): Awaitable<void>
     {
         $mysql = await $context->databaseClient();
-        $migrator = new Migrator($context->migrationLoader(), $mysql);
+        $migrator = new Migrator($context->migrationLoader(), $mysql, $context->logger());
 
         if (is_null($this->schemaVersion)) {
             await $migrator->upgrade();

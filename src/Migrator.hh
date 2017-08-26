@@ -19,11 +19,12 @@ final class Migrator implements Migratable
 
     public function __construct(
         private MigrationLoader $loader,
-        Connection $connection
+        Connection $connection,
+        Logger $logger
     )
     {
         $this->publisher = new EventPublisher([
-            new MigrationLogger()
+            new MigrationLogger($logger)
         ]);
         $this->manager = new MigrationManager($connection);
         $this->agent = new MigratorAgent($connection, $this->publisher);

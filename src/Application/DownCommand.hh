@@ -51,7 +51,7 @@ final class DownCommand extends AbstractCommand implements Command
     private async function downgradeSchema(string $schemaVersion, Context $context): Awaitable<void>
     {
         $mysql = await $context->databaseClient();
-        $migrator = new Migrator($context->migrationLoader(), $mysql);
+        $migrator = new Migrator($context->migrationLoader(), $mysql, $context->logger());
 
         await $migrator->downgrade($schemaVersion);
     }

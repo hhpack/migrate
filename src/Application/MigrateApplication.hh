@@ -13,7 +13,8 @@ namespace HHPack\Migrate\Application;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\{ File };
+use HHPack\Migrate\{ File, Output, Logger };
+use HHPack\Migrate\Logger\{ PlainLogger, ColoredLogger };
 
 final class MigrateApplication
 {
@@ -24,15 +25,21 @@ final class MigrateApplication
 
     private bool $help = false;
     private bool $version = false;
+    private bool $outputColor = true;
     private string $configurationPath = 'config/database.json';
     private OptionParser $optionParser;
     private ImmMap<string, Command> $commands;
 
-    public function __construct()
+    public function __construct(
+        private Output $output
+    )
     {
         $this->optionParser = cli\optparser([
-            cli\take_on(['-c', '--config'], 'Path of configuration file', ($path) ==> {
+            cli\take_on(['-c', '--config'], 'FILE', 'Path of configuration file', ($path) ==> {
                 $this->configurationPath = $path;
+            }),
+            cli\on(['--no-color'], 'If specified, color output will not be performed', () ==> {
+                $this->outputColor = false;
             }),
             cli\on(['-h', '--help'], 'Display help message', () ==> {
                 $this->help = true;
@@ -72,24 +79,32 @@ final class MigrateApplication
             $env = getenv('HHVM_ENV') ? getenv('HHVM_ENV') : 'development';
             $configuration = $loader->load($env);
 
-            $context = new MigrateContext($argv, $configuration);
+            $context = new MigrateContext($argv, $configuration, $this->outputLogger());
 
             $command = $this->commands->at($name);
             $command->run($context);
         }
     }
 
+    private function outputLogger(): Logger {
+        if ($this->outputColor) {
+            return new ColoredLogger($this->output);
+        } else {
+            return new PlainLogger($this->output);
+        }
+    }
+
     private function displayHelp(): void
     {
-        fwrite(STDOUT, "Migration tool for database.\n");
-        fwrite(STDOUT, "https://github.com/hhpack/migrate");
-        fwrite(STDOUT, sprintf("\n\n  %s %s %s\n\n",
+        $this->output->write("Migration tool for database.\n");
+        $this->output->write("https://github.com/hhpack/migrate");
+        $this->output->write(sprintf("\n\n  %s %s %s\n\n",
             static::PROGRAM_NAME,
             "[OPTIONS]", "[COMMAND]"));
 
-        fwrite(STDOUT, "Commands:\n");
+        $this->output->write("Commands:\n");
         $this->displayCommands();
-        fwrite(STDOUT, "\n");
+        $this->output->write("\n");
 
         $this->optionParser->displayHelp();
     }
@@ -102,13 +117,13 @@ final class MigrateApplication
         }, 0);
 
         foreach ($this->commands->lazy() as $name => $command) {
-            fwrite(STDOUT, sprintf("  %s   %s\n", str_pad($name, $maxLength), $command->description()));
+            $this->output->write(sprintf("  %s   %s\n", str_pad($name, $maxLength), $command->description()));
         }
     }
 
     private function displayVersion(): void
     {
-        fwrite(STDOUT, sprintf("%s %s\n", static::PROGRAM_NAME, static::PROGRAM_VERSION));
+        $this->output->write(sprintf("%s %s\n", static::PROGRAM_NAME, static::PROGRAM_VERSION));
     }
 
 }

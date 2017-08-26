@@ -11,6 +11,7 @@
 
 namespace HHPack\Migrate\Application;
 
+use HHPack\Migrate\{ Console };
 use RuntimeException;
 
 final class Kernel
@@ -18,7 +19,7 @@ final class Kernel
     public function run(Traversable<string> $argv): void
     {
         try {
-            (new MigrateApplication())->run($argv);
+            (new MigrateApplication(new Console()))->run($argv);
         } catch (RuntimeException $e) {
             echo $e->getMessage();
             exit(-1);

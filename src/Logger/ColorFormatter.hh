@@ -11,9 +11,6 @@
 
 namespace HHPack\Migrate\Logger;
 
-use HHPack\Migrate\{ Logger };
-
-use HHPack\Color as color;
 use HHPack\Color\{ Color, ForegroundColor };
 
 final class ColorFormatter

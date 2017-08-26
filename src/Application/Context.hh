@@ -11,7 +11,7 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ Connection, MigrationLoader };
+use HHPack\Migrate\{ Connection, MigrationLoader, Logger };
 
 /**
  * Context at the time of execution of migration
@@ -22,6 +22,11 @@ interface Context
      * The specified command line argument
      */
     public function cliArgs() : Traversable<string>;
+
+    /**
+     * Return the logger
+     */
+    public function logger(): Logger;
 
     /**
      * Return database client to be used for migration

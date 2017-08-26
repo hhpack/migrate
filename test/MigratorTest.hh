@@ -4,8 +4,8 @@ namespace HHPack\Migrate\Test;
 
 use HHPack\Migrate\Test\Helper\{ Db };
 use HHPack\Migrate\{ File, Migrator, Connection, SqlMigrationLoader };
+use HHPack\Migrate\Logger\{ ColoredLogger };
 use HackPack\HackUnit\Contract\Assert;
-
 
 final class MigratorTest
 {
@@ -23,7 +23,7 @@ final class MigratorTest
         $path = File\absolutePath(__DIR__ . '/sql/migrations');
 
         $loader = new SqlMigrationLoader($path);
-        $migrator = new Migrator($loader, $conn);
+        $migrator = new Migrator($loader, $conn, new ColoredLogger());
 
         return new static($conn, $migrator);
     }
