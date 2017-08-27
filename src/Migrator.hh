@@ -19,11 +19,12 @@ final class Migrator implements Migratable
 
     public function __construct(
         private MigrationLoader $loader,
-        Connection $connection
+        Connection $connection,
+        Logger $logger
     )
     {
         $this->publisher = new EventPublisher([
-            new MigrationLogger()
+            new MigrationLogger($logger)
         ]);
         $this->manager = new MigrationManager($connection);
         $this->agent = new MigratorAgent($connection, $this->publisher);
@@ -53,8 +54,18 @@ final class Migrator implements Migratable
         $appliedMigrations = await $this->manager->loadMigrations();
         $downgradeMigrations = $this->loader->loadDowngradeMigrations($appliedMigrations);
 
+        $takedMigrations = Vector {};
         $takeHandler = $migration ==> $migration->name() !== $name;
-        $migrations = $downgradeMigrations->takeWhile($takeHandler);
+
+        foreach ($downgradeMigrations->lazy() as $migration) {
+            if ($takeHandler($migration)) {
+                $takedMigrations->add($migration);
+            } else {
+                $takedMigrations->add($migration);
+                break;
+            }
+        }
+        $migrations = $takedMigrations->immutable();
 
         await $this->publisher->migrationLoaded($migrations);
 

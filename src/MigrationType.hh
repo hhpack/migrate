@@ -2,7 +2,6 @@
 
 /**
  * This file is part of hhpack/migrate.
- *
  * (c) Noritaka Horio <holy.shared.design@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
@@ -11,8 +10,7 @@
 
 namespace HHPack\Migrate;
 
-interface Migratable
+enum MigrationType : string
 {
-    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
+    Sql = "sql";
 }

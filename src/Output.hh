@@ -11,8 +11,8 @@
 
 namespace HHPack\Migrate;
 
-interface Migratable
+interface Output
 {
-    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
+    public function write(string $message): void;
+    public function writeError(string $message): void;
 }

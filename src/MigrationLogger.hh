@@ -11,26 +11,31 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Color as color;
 use HHPack\Publisher\{ Message, Subscribable };
 
 final class MigrationLogger implements Subscribable<Message>
 {
 
+    public function __construct(
+        private Logger $logger
+    )
+    {
+    }
+
     public function loaded(MigrationLoadedEvent $event): void
     {
-        color\info("Database migration started");
-        color\info("Migration found %d files\n",  $event->migrationCount());
+        $this->logger->info("Database migration started\n");
+        $this->logger->info(sprintf("Migration found %d files\n\n",  $event->migrationCount()));
     }
 
     public function start(MigrationStartEvent $event): void
     {
-        color\info("query: %s\n",  $event->query());
+        $this->logger->info(sprintf("query: %s\n",  $event->query()));
     }
 
     public function success(MigrationSuccessEvent $event): void
     {
-        color\info("success: %F seconds\n", $event->totalTime());
+        $this->logger->info(sprintf("success: %F seconds\n\n", $event->totalTime()));
     }
 
 }

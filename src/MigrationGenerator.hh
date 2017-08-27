@@ -11,8 +11,12 @@
 
 namespace HHPack\Migrate;
 
-interface Migratable
+type GenerateVersion = shape(
+    "version" => string,
+    "name" => string
+);
+
+interface MigrationGenerator
 {
-    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
+    public function generate(GenerateVersion $newVersion): void;
 }

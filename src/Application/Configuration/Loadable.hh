@@ -9,10 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Application\Configuration;
 
-interface Migratable
+interface Loadable
 {
-    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
+    public function load(string $env) : Configuration;
 }
