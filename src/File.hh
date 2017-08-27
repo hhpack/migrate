@@ -11,11 +11,17 @@
 
 namespace HHPack\Migrate\File;
 
+use HHPack\Migrate\{ FileNotFoundException };
+
 use SplFileInfo;
 use SplFileObject;
 
 function readAll(string $path) : string
 {
+    if (!file_exists($path)) {
+        throw new FileNotFoundException("File $path is not found");
+    }
+
     $f = new SplFileObject($path);
     return $f->fread($f->getSize());
 }

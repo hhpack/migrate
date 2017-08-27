@@ -14,10 +14,16 @@ namespace HHPack\Migrate;
 final class SqlMigrationLoader implements MigrationLoader
 {
 
+    private string $directory;
+
     public function __construct(
-        private string $directory
+        string $directory
     )
     {
+        if (!file_exists($directory) || !is_dir($directory)) {
+            throw new DirectoryNotFoundException("Directory $directory not found");
+        }
+        $this->directory = $directory;
     }
 
     public function loadUpgradeMigrations(): ImmVector<Migration>
