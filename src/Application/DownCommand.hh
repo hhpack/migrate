@@ -33,13 +33,12 @@ final class DownCommand extends AbstractCommand implements Command
     public function run(Context $context): void
     {
         $remainArgs = $this->optionParser->parse($context->cliArgs());
-        $args = Vector::fromItems($remainArgs);
 
-        if (!$args->containsKey(0)) {
+        if (!$remainArgs->containsKey(0)) {
             throw new RuntimeException('Please specify the version to downgrade');
         }
 
-        $schemaVersion = $args->at(0);
+        $schemaVersion = $remainArgs->at(0);
 
         if ($this->help) {
             $this->displayHelp();
