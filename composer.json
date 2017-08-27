@@ -27,7 +27,6 @@
       "HHPack\\Migrate\\": "src/"
     },
     "files": [
-      "src/types.hh",
       "src/Application/Configuration/types.hh"
     ]
   },
