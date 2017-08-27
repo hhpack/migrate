@@ -2,8 +2,9 @@
 
 namespace HHPack\Migrate\Test\Mock;
 
-use HHPack\Migrate\{ Logger, MigrationLoader, SqlMigrationLoader };
+use HHPack\Migrate\{ Logger };
 use HHPack\Migrate\Application\Context;
+use HHPack\Migrate\Migration\{ MigrationLoader, SqlMigrationLoader };
 use HHPack\Migrate\Database\{ Connection };
 use HHPack\Migrate\Logger\{ PlainLogger, ColoredLogger };
 use HHPack\Migrate\Test\Helper;

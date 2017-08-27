@@ -9,8 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Event;
 
+use HHPack\Migrate\{ Migration };
 use HHPack\Publisher\Message;
 
 final class MigrationLoadedEvent implements Message

@@ -13,7 +13,7 @@ namespace HHPack\Migrate\Application;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\{ MigrationGenerator, GenerateVerison };
+use HHPack\Migrate\Migration\{ MigrationGenerator, GenerateVerison };
 use HHPack\Migrate\Generator\{ SqlMigrationGenerator };
 use RuntimeException;
 

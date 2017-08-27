@@ -9,8 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Migration;
 
+use HHPack\Migrate\{ Logger };
+use HHPack\Migrate\Event\{ MigrationLoadedEvent, MigrationStartEvent, MigrationSuccessEvent };
 use HHPack\Publisher\{ Message, Subscribable };
 
 final class MigrationLogger implements Subscribable<Message>

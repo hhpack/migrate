@@ -11,6 +11,8 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Migration\{ MigrationResult };
+
 interface Migratable
 {
     public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;

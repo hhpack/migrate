@@ -10,12 +10,3 @@
  */
 
 namespace HHPack\Migrate;
-
-/**
- * name of migration
- *
- * example:
- *   20150824010439-create-users
- *   20150825102100-create-posts
- */
-type MigrationName = string;

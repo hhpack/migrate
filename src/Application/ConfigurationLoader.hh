@@ -11,7 +11,8 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ File, MigrationType };
+use HHPack\Migrate\{ File };
+use HHPack\Migrate\Migration\{ MigrationType };
 use HHPack\Migrate\Application\Configuration\{ Configuration, Migration, Server, Loadable };
 use RuntimeException;
 

@@ -9,8 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Migration;
 
+use HHPack\Migrate\{ File, Migration, FileNotFoundException };
 use HHPack\Migrate\Database\{ QueryProxy, QueryResult };
 
 final class SqlMigration implements Migration

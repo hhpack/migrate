@@ -1,9 +1,9 @@
 <?hh //strict
 
-namespace HHPack\Migrate\Test;
+namespace HHPack\Migrate\Test\Migration;
 
 use HHPack\Migrate\Test\Helper\{ Db };
-use HHPack\Migrate\{ MigrationManager };
+use HHPack\Migrate\Migration\{ MigrationManager };
 use HHPack\Migrate\Database\{ Connection };
 use HackPack\HackUnit\Contract\Assert;
 
