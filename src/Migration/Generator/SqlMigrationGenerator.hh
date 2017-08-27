@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate\Generator;
+namespace HHPack\Migrate\Migration\Generator;
 
 use HHPack\Migrate\{ File, Logger };
 use HHPack\Migrate\Migration\{ MigrationGenerator, GenerateVersion };

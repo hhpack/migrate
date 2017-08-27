@@ -4,7 +4,7 @@ namespace HHPack\Migrate\Test;
 
 use HHPack\Migrate\Test\Helper\{ Db };
 use HHPack\Migrate\{ File, Migrator };
-use HHPack\Migrate\Migration\{ SqlMigrationLoader };
+use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
 use HHPack\Migrate\Database\{ Connection };
 use HHPack\Migrate\Logger\{ ColoredLogger };
 use HackPack\HackUnit\Contract\Assert;
