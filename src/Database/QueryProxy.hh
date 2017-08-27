@@ -9,11 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Database;
 
-interface Connection
+interface QueryProxy
 {
     public function query(string $query): Awaitable<QueryResult>;
-    public function escapeString(string $value): string;
-    public function close(): void;
 }

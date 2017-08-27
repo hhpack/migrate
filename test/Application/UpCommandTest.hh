@@ -2,8 +2,9 @@
 
 namespace HHPack\Migrate\Application\Test;
 
-use HHPack\Migrate\{ File, DataSourceName, Connection };
+use HHPack\Migrate\{ File };
 use HHPack\Migrate\Application\{ Context, UpCommand };
+use HHPack\Migrate\Database\{ DataSourceName, Connection };
 use HHPack\Migrate\Test\Mock\{ MigrateContext };
 use HHPack\Migrate\Test\Helper\{ Db };
 use HackPack\HackUnit\Contract\Assert;

@@ -11,7 +11,8 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ Connection, MigrationType, MigrationLoader, Logger };
+use HHPack\Migrate\{ MigrationType, MigrationLoader, Logger };
+use HHPack\Migrate\Database\{ Connection };
 
 /**
  * Context at the time of execution of migration

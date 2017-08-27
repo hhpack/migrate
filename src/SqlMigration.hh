@@ -11,6 +11,8 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Database\{ QueryProxy, QueryResult };
+
 final class SqlMigration implements Migration
 {
 

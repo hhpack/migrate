@@ -13,6 +13,8 @@ namespace HHPack\Migrate;
 
 use HHPack\Publisher\Message;
 
+use HHPack\Migrate\Database\{ QueryResult };
+
 final class MigrationSuccessEvent implements Message
 {
 

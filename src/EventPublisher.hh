@@ -11,9 +11,8 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Publisher\Message;
-use HHPack\Publisher\Subscribable;
-use HHPack\Publisher\MessagePublisher;
+use HHPack\Migrate\Database\{ QueryResult };
+use HHPack\Publisher\{ Message, Subscribable, MessagePublisher };
 
 final class EventPublisher
 {

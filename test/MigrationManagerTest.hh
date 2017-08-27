@@ -3,7 +3,8 @@
 namespace HHPack\Migrate\Test;
 
 use HHPack\Migrate\Test\Helper\{ Db };
-use HHPack\Migrate\{ Connection, MigrationManager };
+use HHPack\Migrate\{ MigrationManager };
+use HHPack\Migrate\Database\{ Connection };
 use HackPack\HackUnit\Contract\Assert;
 
 

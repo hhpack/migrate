@@ -10,6 +10,8 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Database\{ Connection };
+
 final class Migrator implements Migratable
 {
 

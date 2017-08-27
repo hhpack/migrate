@@ -13,7 +13,7 @@ namespace HHPack\Migrate\Application;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\{ Migrator, SqlMigrationLoader, DatabaseClient };
+use HHPack\Migrate\{ Migrator, SqlMigrationLoader };
 use RuntimeException;
 
 final class DownCommand extends AbstractCommand implements Command

@@ -11,6 +11,8 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Database\{ Connection, QueryResult };
+
 final class MigrationManager
 {
 

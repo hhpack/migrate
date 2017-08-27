@@ -1,9 +1,9 @@
 <?hh //strict
 
-namespace HHPack\Migrate\Test;
+namespace HHPack\Migrate\Test\Database;
 
 use HHPack\Migrate\Test\Helper\{ Db };
-use HHPack\Migrate\{ Connection, MySqlConnection };
+use HHPack\Migrate\Database\{ Connection, MySqlConnection };
 use HackPack\HackUnit\Contract\Assert;
 
 

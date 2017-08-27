@@ -19,10 +19,3 @@ namespace HHPack\Migrate;
  *   20150825102100-create-posts
  */
 type MigrationName = string;
-
-/**
- * string value of data source name
- *
- *   mysql:dbname=test;port=3306
- */
-type DSNString = string;

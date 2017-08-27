@@ -1,8 +1,8 @@
 <?hh //strict
 
-namespace HHPack\Migrate\Test;
+namespace HHPack\Migrate\Test\Database;
 
-use HHPack\Migrate\DataSourceName;
+use HHPack\Migrate\Database\{ DataSourceName };
 use HackPack\HackUnit\Contract\Assert;
 
 final class DataSourceNameTest

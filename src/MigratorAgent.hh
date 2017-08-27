@@ -11,6 +11,8 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Database\{ Connection, QueryProxy, QueryResult };
+
 final class MigratorAgent implements QueryProxy
 {
 

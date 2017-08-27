@@ -11,6 +11,8 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Database\{ QueryProxy, QueryResult };
+
 interface Migration
 {
     public function name(): string;

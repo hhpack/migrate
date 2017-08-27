@@ -11,7 +11,8 @@
 
 namespace HHPack\Migrate\Application\Configuration;
 
-use HHPack\Migrate\{ DSNString, MigrationType };
+use HHPack\Migrate\{ MigrationType };
+use HHPack\Migrate\Database\{ DSNString };
 
 final class Configuration
 {
