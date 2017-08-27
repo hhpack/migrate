@@ -11,7 +11,7 @@
 
 namespace HHPack\Migrate\Application\Configuration;
 
-use HHPack\Migrate\{ DSNString };
+use HHPack\Migrate\Database\{ DSNString };
 
 final class Server
 {

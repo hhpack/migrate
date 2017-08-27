@@ -11,7 +11,10 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ Connection, DatabaseClient, Logger, MigrationLoader, SqlMigrationLoader };
+use HHPack\Migrate\{ Logger };
+use HHPack\Migrate\Migration\{ MigrationLoader };
+use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
+use HHPack\Migrate\Database\{ Connection, DatabaseClient };
 use HHPack\Migrate\Application\Configuration\{ Configuration };
 
 final class MigrateContext implements Context

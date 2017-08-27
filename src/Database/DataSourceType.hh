@@ -9,14 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Database;
 
-type GenerateVersion = shape(
-    "version" => string,
-    "name" => string
-);
-
-interface MigrationGenerator
+enum DataSourceType: string
 {
-    public function generate(GenerateVersion $newVersion): void;
+    MySql = 'mysql';
 }

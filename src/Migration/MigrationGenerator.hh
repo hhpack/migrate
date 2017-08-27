@@ -9,11 +9,14 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Migration;
 
-interface Connection
+type GenerateVersion = shape(
+    "version" => string,
+    "name" => string
+);
+
+interface MigrationGenerator
 {
-    public function query(string $query): Awaitable<QueryResult>;
-    public function escapeString(string $value): string;
-    public function close(): void;
+    public function generate(GenerateVersion $newVersion): void;
 }

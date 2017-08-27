@@ -9,7 +9,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Migration\Loader;
+
+use HHPack\Migrate\{ File, MigrationName, Migration, DirectoryNotFoundException };
+use HHPack\Migrate\Migration\{ MigrationLoader };
+use HHPack\Migrate\Migration\Type\{ SqlMigration };
 
 final class SqlMigrationLoader implements MigrationLoader
 {

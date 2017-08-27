@@ -9,7 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Migration;
+
+use HHPack\Migrate\{ MigrationName };
+use HHPack\Migrate\Database\{ QueryResult };
 
 final class MigrationResult
 {

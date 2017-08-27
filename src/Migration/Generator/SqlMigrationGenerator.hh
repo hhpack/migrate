@@ -9,9 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate\Generator;
+namespace HHPack\Migrate\Migration\Generator;
 
-use HHPack\Migrate\{ File, MigrationGenerator, GenerateVersion, Logger };
+use HHPack\Migrate\{ File, Logger };
+use HHPack\Migrate\Migration\{ MigrationGenerator, GenerateVersion };
 use DateTime;
 
 final class SqlMigrationGenerator implements MigrationGenerator

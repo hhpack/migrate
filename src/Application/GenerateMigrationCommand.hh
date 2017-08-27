@@ -13,8 +13,8 @@ namespace HHPack\Migrate\Application;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\{ MigrationGenerator, GenerateVerison };
-use HHPack\Migrate\Generator\{ SqlMigrationGenerator };
+use HHPack\Migrate\Migration\{ MigrationGenerator, GenerateVerison };
+use HHPack\Migrate\Migration\Generator\{ SqlMigrationGenerator };
 use RuntimeException;
 
 final class GenerateMigrationCommand extends AbstractCommand implements Command

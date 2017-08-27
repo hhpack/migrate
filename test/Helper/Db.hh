@@ -2,7 +2,7 @@
 
 namespace HHPack\Migrate\Test\Helper\Db;
 
-use HHPack\Migrate\{ Connection, DatabaseClient };
+use HHPack\Migrate\Database\{ Connection, DatabaseClient };
 
 function connect(): Connection {
     $host = (string) getenv('DB_HOSTNAME');

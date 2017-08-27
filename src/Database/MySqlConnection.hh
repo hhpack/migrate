@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Database;
 
 use AsyncMysqlClient;
 use AsyncMysqlConnection;

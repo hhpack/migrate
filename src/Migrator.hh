@@ -10,6 +10,10 @@
 
 namespace HHPack\Migrate;
 
+use HHPack\Migrate\Event\{ EventPublisher };
+use HHPack\Migrate\Migration\{ MigrationManager, MigrationLoader, MigrationLogger, MigrationResult };
+use HHPack\Migrate\Database\{ Connection };
+
 final class Migrator implements Migratable
 {
 

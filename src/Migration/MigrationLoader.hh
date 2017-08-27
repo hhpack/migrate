@@ -9,7 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Migration;
+
+use HHPack\Migrate\{ Migration, MigrationName };
 
 interface MigrationLoader
 {

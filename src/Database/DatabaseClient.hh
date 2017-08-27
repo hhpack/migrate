@@ -9,7 +9,14 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate;
+namespace HHPack\Migrate\Database;
+
+/**
+ * string value of data source name
+ *
+ *   mysql:dbname=test;port=3306
+ */
+type DSNString = string;
 
 final class DatabaseClient
 {

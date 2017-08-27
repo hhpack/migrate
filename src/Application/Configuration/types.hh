@@ -11,7 +11,7 @@
 
 namespace HHPack\Migrate\Application\Configuration;
 
-use HHPack\Migrate\{ MigrationType };
+use HHPack\Migrate\Migration\{ MigrationType };
 
 type MigrationLoader = shape(
     "type" => MigrationType,
