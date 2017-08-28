@@ -35,13 +35,13 @@ final class GenerateMigrationCommand extends AbstractCommand implements Command
     {
         $remainArgs = $this->optionParser->parse($context->cliArgs());
 
-        if (!$remainArgs->containsKey(0)) {
-            throw new RuntimeException('Please specify the migration name');
-        }
-
         if ($this->help) {
             $this->displayHelp();
         } else {
+            if (!$remainArgs->containsKey(0)) {
+                throw new RuntimeException('Please specify the migration name');
+            }
+
             $name = $remainArgs->at(0);
 
             $generator = $this->createMigrationGenerator($context);

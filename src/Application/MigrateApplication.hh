@@ -34,6 +34,8 @@ final class MigrateApplication
         private Output $output
     )
     {
+        $parserOptions = shape('stopAtNonOption' => true);
+
         $this->optionParser = cli\optparser([
             cli\take_on(['-c', '--config'], 'FILE', 'Path of configuration file', ($path) ==> {
                 $this->configurationPath = $path;
@@ -47,7 +49,7 @@ final class MigrateApplication
             cli\on(['-v', '--version'], 'Display version', () ==> {
                 $this->version = true;
             })
-        ]);
+        ], $parserOptions);
 
         $this->commands = ImmMap {
             "up" => new UpCommand(),

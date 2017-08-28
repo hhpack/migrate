@@ -34,15 +34,15 @@ final class DownCommand extends AbstractCommand implements Command
     {
         $remainArgs = $this->optionParser->parse($context->cliArgs());
 
-        if (!$remainArgs->containsKey(0)) {
-            throw new RuntimeException('Please specify the version to downgrade');
-        }
-
-        $schemaVersion = $remainArgs->at(0);
-
         if ($this->help) {
             $this->displayHelp();
         } else {
+            if (!$remainArgs->containsKey(0)) {
+                throw new RuntimeException('Please specify the version to downgrade');
+            }
+
+            $schemaVersion = $remainArgs->at(0);
+
             \HH\Asio\join($this->downgradeSchema($schemaVersion, $context));
         }
     }

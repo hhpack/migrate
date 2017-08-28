@@ -14,7 +14,7 @@
     "facebook/hhvm-autoload": "^1.4",
     "hhpack/publisher": "^1.1",
     "hhpack/color": "^1.1",
-    "hhpack/getopt": "^1.0"
+    "hhpack/getopt": "^1.3"
   },
   "require-dev": {
     "hackpack/hackunit": "^1.1"
