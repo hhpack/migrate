@@ -1,8 +1,16 @@
+[bin/**/*.hh]
+indent_style = space
+indent_size = 4
+
 [src/**/*.hh]
 indent_style = space
 indent_size = 4
 
 [test/**/*Test.hh]
+indent_style = space
+indent_size = 4
+
+[example/**/*.hh]
 indent_style = space
 indent_size = 4
 
