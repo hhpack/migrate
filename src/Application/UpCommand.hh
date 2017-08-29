@@ -46,7 +46,7 @@ final class UpCommand extends AbstractCommand implements Command
 
     private async function upgradeSchema(Context $context): Awaitable<void>
     {
-        $mysql = await $context->databaseClient();
+        $mysql = $context->connectDatabase();
         $migrator = new Migrator($context->migrationLoader(), $mysql, $context->logger());
 
         if (is_null($this->schemaVersion)) {

@@ -6,15 +6,29 @@
       "host": "localhost",
       "port": 3306,
       "name": "migrate",
-      "user": "DB_USERNAME",
-      "password": "DB_PASSWORD"
+      "user": { "ENV": "DB_USERNAME" },
+      "password": { "ENV": "DB_PASSWORD" }
+    },
+    "staging": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "migrate",
+      "user": { "ENV": "DB_USERNAME" },
+      "password": { "ENV": "DB_PASSWORD" }
+    },
+    "production": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "migrate",
+      "user": { "ENV": "DB_USERNAME" },
+      "password": { "ENV": "DB_PASSWORD" }
     },
     "test": {
       "host": "localhost",
       "port": 3306,
       "name": "migrate",
-      "user": "DB_USERNAME",
-      "password": "DB_PASSWORD"
+      "user": "migrate",
+      "password": "migrate"
     }
   }
 }

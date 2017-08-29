@@ -40,11 +40,9 @@ final class MigrateContext implements Context
         return new ColoredLogger();
     }
 
-    public async function databaseClient() : Awaitable<Connection>
+    public function connectDatabase() : Connection
     {
-        return await async {
-            return $this->connection;
-        };
+        return $this->connection;
     }
 
     public function migrationLoader() : MigrationLoader

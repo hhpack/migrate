@@ -48,13 +48,18 @@ final class MigrateContext implements Context
         return $this->logger;
     }
 
-    public async function databaseClient() : Awaitable<Connection>
+    public function connectDatabase() : Connection
     {
-        return await DatabaseClient::createConnection(
-            $this->config->databaseDSN(),
-            $this->config->databaseUser(),
-            $this->config->databasePassword()
-        );
+        try {
+            $connectionHandle = DatabaseClient::createConnection(
+                $this->config->databaseDSN(),
+                $this->config->databaseUser(),
+                $this->config->databasePassword()
+            );
+            return \HH\Asio\join($connectionHandle);
+        } catch (\AsyncMysqlConnectException $e) {
+            throw new \RuntimeException($e->getMessage(), $e->getCode());
+        }
     }
 
     public function migrationLoader() : MigrationLoader

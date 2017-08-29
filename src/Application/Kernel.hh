@@ -11,18 +11,31 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ Console };
+use HHPack\Migrate\{ Output, Console };
 use RuntimeException;
 
 final class Kernel
 {
+    public function __construct(
+        private Output $console = new Console()
+    )
+    {
+    }
+
     public function run(Traversable<string> $argv): void
     {
         try {
-            (new MigrateApplication(new Console()))->run($argv);
+            (new MigrateApplication($this->console))->run($argv);
         } catch (RuntimeException $e) {
-            echo $e->getMessage();
-            exit(-1);
+            $this->terminateWithError($e);
         }
     }
+
+    private function terminateWithError(RuntimeException $e) : void
+    {
+        $this->console->writeError("Application error:\n");
+        $this->console->writeError($e->getMessage());
+        exit(-1);
+    }
+
 }

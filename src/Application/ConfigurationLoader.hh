@@ -67,15 +67,44 @@ final class ConfigurationLoader implements Loadable
             throw new RuntimeException("$env is not found");
         }
 
+        $serverSetting = $this->replaceEnvironmentVars($environment);
+
         $server = shape(
-            "host" => (string) $environment['host'],
-            "port" => (int) $environment['port'],
-            "name" => (string) $environment['name'],
-            "user" => (string) $environment['user'],
-            "password" => (string) $environment['password']
+            "host" => (string) $serverSetting['host'],
+            "port" => (int) $serverSetting['port'],
+            "name" => (string) $serverSetting['name'],
+            "user" => (string) $serverSetting['user'],
+            "password" => (string) $serverSetting['password']
         );
 
         return Server::fromSetting($server);
+    }
+
+    private function replaceEnvironmentVars(array<string, mixed> $setting): array<string, mixed>
+    {
+        $result = [];
+
+        foreach ($setting as $key => $value) {
+            if (!is_array($value)) {
+                $result[$key] = $value;
+                continue;
+            }
+
+            if (!array_key_exists('ENV', $value)) {
+                $result[$key] = $this->replaceEnvironmentVars($value);
+                continue;
+            }
+
+            $variable = getenv($value['ENV']);
+
+            if ($variable === false) {
+                throw new RuntimeException("Environment variable {$value['ENV']} is not set");
+            } else {
+                $result[$key] = $variable;
+            }
+        }
+
+        return $result;
     }
 
 }
