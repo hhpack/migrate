@@ -27,9 +27,15 @@ final class Kernel
         try {
             (new MigrateApplication($this->console))->run($argv);
         } catch (RuntimeException $e) {
-            $this->console->writeError("Application error:\n");
-            $this->console->writeError($e->getMessage());
-            exit(-1);
+            $this->terminateWithError($e);
         }
     }
+
+    private function terminateWithError(RuntimeException $e) : void
+    {
+        $this->console->writeError("Application error:\n");
+        $this->console->writeError($e->getMessage());
+        exit(-1);
+    }
+
 }

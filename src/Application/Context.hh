@@ -41,7 +41,7 @@ interface Context
     /**
      * Return database client to be used for migration
      */
-    public function databaseClient(): Awaitable<Connection>;
+    public function connectDatabase(): Connection;
 
     /**
      * Return loader to be used for migration
