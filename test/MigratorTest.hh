@@ -2,10 +2,12 @@
 
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper;
-use HHPack\Migrate\{ Migrator, Connection, SqlMigrationLoader };
+use HHPack\Migrate\Test\Helper\{ Db };
+use HHPack\Migrate\{ File, Migrator };
+use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
+use HHPack\Migrate\Database\{ Connection };
+use HHPack\Migrate\Logger\{ ColoredLogger };
 use HackPack\HackUnit\Contract\Assert;
-
 
 final class MigratorTest
 {
@@ -19,10 +21,11 @@ final class MigratorTest
     <<SuiteProvider('Db')>>
     public static function create() : this
     {
-        $conn = Helper\connect();
+        $conn = Db\connect();
+        $path = File\absolutePath(__DIR__ . '/sql/migrations');
 
-        $loader = new SqlMigrationLoader(__DIR__ . '/sql/migrations');
-        $migrator = new Migrator($loader, $conn);
+        $loader = new SqlMigrationLoader($path);
+        $migrator = new Migrator($loader, $conn, new ColoredLogger());
 
         return new static($conn, $migrator);
     }
@@ -48,7 +51,7 @@ final class MigratorTest
         \HH\Asio\join( $this->migrator->upgrade() );
         $result = \HH\Asio\join( $this->migrator->downgrade('20150824010439-create-users') );
 
-        $assert->int($result->resultCount())->eq(1);
+        $assert->int($result->resultCount())->eq(2);
 
         $results = $result->at('20150825102100-create-posts');
         $assert->string($results->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");

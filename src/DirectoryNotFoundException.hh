@@ -11,10 +11,8 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Migrate\Migration\{ MigrationResult };
+use RuntimeException;
 
-interface Migratable
+final class DirectoryNotFoundException extends RuntimeException
 {
-    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
 }

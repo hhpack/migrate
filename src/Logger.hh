@@ -11,10 +11,10 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Migrate\Migration\{ MigrationResult };
-
-interface Migratable
+interface Logger
 {
-    public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
+    public function debug(string $message) : void;
+    public function info(string $message) : void;
+    public function warn(string $message) : void;
+    public function error(string $message) : void;
 }

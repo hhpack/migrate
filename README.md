@@ -4,6 +4,64 @@
 
 ## Basic usage
 
+First place the **database.json** of the configuration file in the **config** directory.  
+Please specify the setting referring to the following.  
+
+* **type** - the type of migration, it only supports **SQL base**.
+* **path** - the directory of the migration file.
+* **enviroments** - Database connection setting for environment.
+
+```json
+{
+  "type": "sql",
+  "path": "db/migrate",
+  "enviroments": {
+    "development": {
+      "host": "localhost",
+      "port": 3306,
+      "name": "migrate",
+      "user": { "ENV": "DB_USERNAME" },
+      "password": { "ENV": "DB_PASSWORD" }
+    }
+  }
+}
+```
+
+### Upgrade of schema
+
+Use the up command to upgrade the schema.  
+You can upgrade to a specific version by specifying the **--to** option.
+
+```shell
+bin/migrate up
+```
+
+or
+
+```shell
+bin/migrate up --to=20150824010439-create-users
+```
+
+### Downgrade of schema
+
+To downgrade to the specified version, use the down command.
+
+```shell
+bin/migrate down 20150824010439-create-users
+```
+
+### Generate a migration file
+
+Use the **gen command** to generate a migration file.
+
+```shell
+bin/migrate gen create-users
+```
+
+### Migrator
+
+Current version supports SQL based migration.
+
 ```hack
 use HHPack\Migrate\Migrator;
 use HHPack\Migrate\SqlMigrationLoader;

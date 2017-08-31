@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$(cd $(dirname $0) && pwd)
+
+# Script path for package
+VENDOR_SCRIPT=$SCRIPT_DIR/migrate.hh
+
+# Script path for composer
+INSTALLED_SCRIPT=$SCRIPT_DIR/../hhpack/migrate/bin/migrate.hh
+
+#
+# Disabling JIT will core dump
+# I do not want to run it many times, so I want to disable JIT.
+#
+# GitHub issues:
+# https://github.com/facebook/hhvm/issues/7673
+# https://github.com/facebook/hhvm/issues/7821
+#
+HHVM_OPTIONS="-vHack.Lang.LookForTypechecker=0 -vEval.Jit=0"
+
+if [ -e $VENDOR_SCRIPT ]; then
+  #  hhvm $HHVM_OPTIONS $VENDOR_SCRIPT $*
+  hhvm $VENDOR_SCRIPT $*
+fi
+
+if [ -e $INSTALLED_SCRIPT ]; then
+  # hhvm $HHVM_OPTIONS $INSTALLED_SCRIPT $*
+  hhvm $INSTALLED_SCRIPT $*
+fi
