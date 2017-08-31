@@ -3,7 +3,8 @@
 namespace HHPack\Migrate\Application\Test;
 
 use HHPack\Migrate\{ File };
-use HHPack\Migrate\Application\{ Context, UpCommand, DownCommand };
+use HHPack\Migrate\Application\{ Context };
+use HHPack\Migrate\Application\Command\{ UpCommand, DownCommand };
 use HHPack\Migrate\Database\{ DataSourceName, Connection };
 use HHPack\Migrate\Test\Mock\{ MigrateContext };
 use HHPack\Migrate\Test\Helper\{ Db };
@@ -32,7 +33,7 @@ final class DownCommandTest
     <<SuiteProvider('Default')>>
     public static function noArguments() : this
     {
-        $path = File\absolutePath(__DIR__ . '/../sql/migrations/');
+        $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
         $upContext = new MigrateContext($path, [], $conn);

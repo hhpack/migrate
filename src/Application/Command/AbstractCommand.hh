@@ -9,8 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate\Application;
+namespace HHPack\Migrate\Application\Command;
 
+use HHPack\Migrate\Application\{ Command };
 use HHPack\Getopt\Parser\{ OptionParser };
 
 abstract class AbstractCommand implements Command
