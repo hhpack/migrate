@@ -14,6 +14,7 @@ namespace HHPack\Migrate\Application;
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
 use HHPack\Migrate\{ File, Output, Logger };
+use HHPack\Migrate\Application\Command\{ UpCommand, DownCommand, GenerateMigrationCommand };
 use HHPack\Migrate\Logger\{ PlainLogger, ColoredLogger };
 
 final class MigrateApplication

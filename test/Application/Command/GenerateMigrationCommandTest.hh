@@ -3,7 +3,8 @@
 namespace HHPack\Migrate\Application\Test;
 
 use HHPack\Migrate\{ File };
-use HHPack\Migrate\Application\{ Context, GenerateMigrationCommand };
+use HHPack\Migrate\Application\{ Context };
+use HHPack\Migrate\Application\Command\{ GenerateMigrationCommand };
 use HHPack\Migrate\Test\Mock\{ MigrateContext };
 use HHPack\Migrate\Test\Helper\{ Db };
 use HackPack\HackUnit\Contract\Assert;

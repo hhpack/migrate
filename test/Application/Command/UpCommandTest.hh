@@ -3,7 +3,8 @@
 namespace HHPack\Migrate\Application\Test;
 
 use HHPack\Migrate\{ File };
-use HHPack\Migrate\Application\{ Context, UpCommand };
+use HHPack\Migrate\Application\{ Context };
+use HHPack\Migrate\Application\Command\{ UpCommand };
 use HHPack\Migrate\Database\{ DataSourceName, Connection };
 use HHPack\Migrate\Test\Mock\{ MigrateContext };
 use HHPack\Migrate\Test\Helper\{ Db };
@@ -31,7 +32,7 @@ final class UpCommandTest
     <<SuiteProvider('NoArguments')>>
     public static function noArguments() : this
     {
-        $path = File\absolutePath(__DIR__ . '/../sql/migrations/');
+        $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
         $context = new MigrateContext($path, [], $conn);
@@ -42,7 +43,7 @@ final class UpCommandTest
     <<SuiteProvider('ToOption')>>
     public static function toOptions() : this
     {
-        $path = File\absolutePath(__DIR__ . '/../sql/migrations/');
+        $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
         $context = new MigrateContext($path, ['--to=20150824010439-create-users'], $conn);

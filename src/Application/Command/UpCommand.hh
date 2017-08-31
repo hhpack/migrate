@@ -9,10 +9,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate\Application;
+namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
+use HHPack\Migrate\Application\{ Context, Command };
 use HHPack\Migrate\{ Migrator, SqlMigrationLoader, DatabaseClient };
 
 final class UpCommand extends AbstractCommand implements Command

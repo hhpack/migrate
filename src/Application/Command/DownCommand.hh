@@ -9,11 +9,13 @@
  * with this source code in the file LICENSE.
  */
 
-namespace HHPack\Migrate\Application;
+namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
 use HHPack\Migrate\{ Migrator, SqlMigrationLoader };
+use HHPack\Migrate\Application\{ Context, Command };
+
 use RuntimeException;
 
 final class DownCommand extends AbstractCommand implements Command
