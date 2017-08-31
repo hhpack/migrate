@@ -11,7 +11,7 @@
 namespace HHPack\Migrate;
 
 use HHPack\Migrate\Event\{ EventPublisher };
-use HHPack\Migrate\Migration\{ MigrationManager, MigrationLoader, MigrationLogger, MigrationResult };
+use HHPack\Migrate\Migration\{ MigrationManager, MigrationLoader, MigrationLogger, MigrationResult, MigrationNotFoundException };
 use HHPack\Migrate\Database\{ Connection };
 
 final class Migrator implements Migratable
@@ -58,18 +58,15 @@ final class Migrator implements Migratable
         $appliedMigrations = await $this->manager->loadMigrations();
         $downgradeMigrations = $this->loader->loadDowngradeMigrations($appliedMigrations);
 
-        $takedMigrations = Vector {};
-        $takeHandler = $migration ==> $migration->name() !== $name;
+        $orderedMigrations = ($order, $migration) ==> Pair { $migration->name(), $order };
+        $registry = ImmMap::fromItems($downgradeMigrations->mapWithKey($orderedMigrations));
 
-        foreach ($downgradeMigrations->lazy() as $migration) {
-            if ($takeHandler($migration)) {
-                $takedMigrations->add($migration);
-            } else {
-                $takedMigrations->add($migration);
-                break;
-            }
+        if (!$registry->containsKey($name)) {
+            throw new MigrationNotFoundException("Migration $name is not found");
         }
-        $migrations = $takedMigrations->immutable();
+
+        $orderIndex = $registry->at($name);
+        $migrations = $downgradeMigrations->slice(0, $orderIndex + 1);
 
         await $this->publisher->migrationLoaded($migrations);
 
