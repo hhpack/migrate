@@ -33,6 +33,11 @@ final class MigrationResult
         return $this->results->at($key);
     }
 
+    public function containsKey(MigrationName $key): bool
+    {
+        return $this->results->containsKey($key);
+    }
+
     public function resultCount(): int
     {
         return $this->results->count();
