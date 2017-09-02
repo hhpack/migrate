@@ -43,8 +43,9 @@ final class Server
 
     public function dns() : DSNString
     {
-        return sprintf("mysql:dbname=%s;port=%d",
+        return sprintf("mysql:dbname=%s;host=%s;port=%d",
             $this->name(),
+            $this->host(),
             $this->port()
         );
     }

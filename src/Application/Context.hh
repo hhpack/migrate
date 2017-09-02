@@ -12,7 +12,7 @@
 namespace HHPack\Migrate\Application;
 
 use HHPack\Migrate\{ Logger };
-use HHPack\Migrate\Application\Configuration\{ Configuration, Server };
+use HHPack\Migrate\Application\Configuration\{ Configuration, Migration, Server };
 use HHPack\Migrate\Migration\{ MigrationType, MigrationLoader };
 use HHPack\Migrate\Database\{ Connection };
 
@@ -25,30 +25,11 @@ interface Context
      * The specified command line argument
      */
     public function cliArgs() : Traversable<string>;
-
-
-    public function isSqlType() : bool;
-
-    /**
-     * Return the migration directory
-     */
-    public function migrationPath() : string;
+    public function migration(): Migration;
+    public function databaseServer(): Server;
 
     /**
      * Return the logger
      */
     public function logger(): Logger;
-
-
-    public function databaseServer(): Server;
-
-    /**
-     * Return database client to be used for migration
-     */
-    public function connectDatabase(): Connection;
-
-    /**
-     * Return loader to be used for migration
-     */
-    public function migrationLoader(): MigrationLoader;
 }

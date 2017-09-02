@@ -55,8 +55,10 @@ final class GenerateMigrationCommand extends AbstractCommand implements Command
 
     private function createMigrationGenerator(Context $context) : MigrationGenerator
     {
+        $migration = $context->migration();
+
         $generator = new SqlMigrationGenerator(
-            $context->migrationPath(),
+            $migration->path(),
             $context->logger()
         );
 

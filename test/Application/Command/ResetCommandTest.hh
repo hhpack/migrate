@@ -36,8 +36,8 @@ final class ResetCommandTest
         $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
-        $upContext = new MigrateContext($path, [], $conn);
-        $resetContext = new MigrateContext($path, [], $conn);
+        $upContext = new MigrateContext($path, []);
+        $resetContext = new MigrateContext($path, []);
 
         return new static($conn, $upContext, $resetContext);
     }

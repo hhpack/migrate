@@ -16,7 +16,7 @@ use HHPack\Getopt\Parser\{ OptionParser };
 use HHPack\Migrate\Application\{ Context, Command };
 use HHPack\Migrate\{ Migrator, SqlMigrationLoader, DatabaseClient };
 
-final class ResetCommand extends AbstractCommand implements Command
+final class ResetCommand extends MigrateSchemaCommand implements Command
 {
 
     public function __construct()
@@ -43,9 +43,7 @@ final class ResetCommand extends AbstractCommand implements Command
 
     private async function resetToInitialState(Context $context): Awaitable<void>
     {
-        $mysql = $context->connectDatabase();
-        $migrator = new Migrator($context->migrationLoader(), $mysql, $context->logger());
-
+        $migrator = $this->createMigrator($context);
         await $migrator->downgrade();
     }
 

@@ -38,7 +38,7 @@ final class CreateDatabaseCommandTest
         $conn = Db\connectWithoutDbname();
 
         $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
-        $context = new MigrateContext($path, [], $conn, static::DB_NAME);
+        $context = new MigrateContext($path, [], static::DB_NAME);
 
         return new static($conn, $context);
     }

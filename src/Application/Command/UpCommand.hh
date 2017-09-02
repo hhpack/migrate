@@ -13,10 +13,11 @@ namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
+use HHPack\Migrate\{ Migrator };
 use HHPack\Migrate\Application\{ Context, Command };
-use HHPack\Migrate\{ Migrator, SqlMigrationLoader, DatabaseClient };
+use HHPack\Migrate\Database\{ Connection };
 
-final class UpCommand extends AbstractCommand implements Command
+final class UpCommand extends MigrateSchemaCommand implements Command
 {
     private ?string $schemaVersion;
 
@@ -47,8 +48,7 @@ final class UpCommand extends AbstractCommand implements Command
 
     private async function upgradeSchema(Context $context): Awaitable<void>
     {
-        $mysql = $context->connectDatabase();
-        $migrator = new Migrator($context->migrationLoader(), $mysql, $context->logger());
+        $migrator = $this->createMigrator($context);
 
         if (is_null($this->schemaVersion)) {
             await $migrator->upgrade();
