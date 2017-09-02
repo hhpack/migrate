@@ -43,7 +43,7 @@ final class DownCommandTest
     }
 
     <<Test('Default')>>
-    public function migrateToLatestSchema(Assert $assert): void
+    public function migrateToInitialState(Assert $assert): void
     {
         $command = new UpCommand();
         $command->run($this->upContext);
