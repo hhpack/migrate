@@ -11,7 +11,7 @@
 namespace HHPack\Migrate;
 
 use HHPack\Migrate\Event\{ EventPublisher };
-use HHPack\Migrate\Migration\{ MigrationManager, MigrationLoader, MigrationLogger, MigrationResult };
+use HHPack\Migrate\Migration\{ MigrationManager, MigrationLoader, MigrationLogger, MigrationResult, MigrationNotFoundException };
 use HHPack\Migrate\Database\{ Connection };
 
 final class Migrator implements Migratable
@@ -53,23 +53,24 @@ final class Migrator implements Migratable
         return await $this->upgradeScheme($upgradeMigrations);
     }
 
-    public async function downgrade(MigrationName $name): Awaitable<MigrationResult>
+    public async function downgrade(?MigrationName $name = null): Awaitable<MigrationResult>
     {
         $appliedMigrations = await $this->manager->loadMigrations();
         $downgradeMigrations = $this->loader->loadDowngradeMigrations($appliedMigrations);
 
-        $takedMigrations = Vector {};
-        $takeHandler = $migration ==> $migration->name() !== $name;
+        $migrations = $downgradeMigrations;
 
-        foreach ($downgradeMigrations->lazy() as $migration) {
-            if ($takeHandler($migration)) {
-                $takedMigrations->add($migration);
-            } else {
-                $takedMigrations->add($migration);
-                break;
+        if (!is_null($name)) {
+            $orderedMigrations = ($order, $migration) ==> Pair { $migration->name(), $order };
+            $registry = ImmMap::fromItems($downgradeMigrations->mapWithKey($orderedMigrations));
+
+            if (!$registry->containsKey($name)) {
+                throw new MigrationNotFoundException("Migration $name is not found");
             }
+
+            $orderIndex = $registry->at($name);
+            $migrations = $downgradeMigrations->slice(0, $orderIndex + 1);
         }
-        $migrations = $takedMigrations->immutable();
 
         await $this->publisher->migrationLoaded($migrations);
 
