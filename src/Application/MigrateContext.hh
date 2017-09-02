@@ -14,8 +14,8 @@ namespace HHPack\Migrate\Application;
 use HHPack\Migrate\{ Logger };
 use HHPack\Migrate\Migration\{ MigrationLoader };
 use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
-use HHPack\Migrate\Database\{ Connection, DatabaseClient };
-use HHPack\Migrate\Application\Configuration\{ Configuration };
+use HHPack\Migrate\Database\{ Connection, DatabaseClient, DatabaseServer };
+use HHPack\Migrate\Application\Configuration\{ Configuration, Server };
 
 final class MigrateContext implements Context
 {
@@ -46,6 +46,11 @@ final class MigrateContext implements Context
     public function logger(): Logger
     {
         return $this->logger;
+    }
+
+    public function databaseServer(): Server
+    {
+        return $this->config->databaseServer();
     }
 
     public function connectDatabase() : Connection

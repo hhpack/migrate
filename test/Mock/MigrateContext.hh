@@ -4,11 +4,12 @@ namespace HHPack\Migrate\Test\Mock;
 
 use HHPack\Migrate\{ Logger };
 use HHPack\Migrate\Application\Context;
+use HHPack\Migrate\Application\Configuration\{ Server };
 use HHPack\Migrate\Migration\{ MigrationLoader };
 use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
 use HHPack\Migrate\Database\{ Connection };
 use HHPack\Migrate\Logger\{ PlainLogger, ColoredLogger };
-use HHPack\Migrate\Test\Helper;
+use HHPack\Migrate\Test\Helper\{ Db };
 
 final class MigrateContext implements Context
 {
@@ -16,7 +17,8 @@ final class MigrateContext implements Context
     public function __construct(
         private string $path,
         private Traversable<string> $args,
-        private Connection $connection
+        private Connection $connection,
+        private ?string $dbName = null
     )
     {
     }
@@ -38,6 +40,11 @@ final class MigrateContext implements Context
 
     public function logger() : Logger {
         return new ColoredLogger();
+    }
+
+    public function databaseServer(): Server
+    {
+        return Db\connectServerSetting($this->dbName);
     }
 
     public function connectDatabase() : Connection

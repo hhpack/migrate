@@ -12,6 +12,7 @@
 namespace HHPack\Migrate\Application;
 
 use HHPack\Migrate\{ Logger };
+use HHPack\Migrate\Application\Configuration\{ Configuration, Server };
 use HHPack\Migrate\Migration\{ MigrationType, MigrationLoader };
 use HHPack\Migrate\Database\{ Connection };
 
@@ -37,6 +38,9 @@ interface Context
      * Return the logger
      */
     public function logger(): Logger;
+
+
+    public function databaseServer(): Server;
 
     /**
      * Return database client to be used for migration
