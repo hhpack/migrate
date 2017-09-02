@@ -53,20 +53,24 @@ final class Migrator implements Migratable
         return await $this->upgradeScheme($upgradeMigrations);
     }
 
-    public async function downgrade(MigrationName $name): Awaitable<MigrationResult>
+    public async function downgrade(?MigrationName $name = null): Awaitable<MigrationResult>
     {
         $appliedMigrations = await $this->manager->loadMigrations();
         $downgradeMigrations = $this->loader->loadDowngradeMigrations($appliedMigrations);
 
-        $orderedMigrations = ($order, $migration) ==> Pair { $migration->name(), $order };
-        $registry = ImmMap::fromItems($downgradeMigrations->mapWithKey($orderedMigrations));
+        $migrations = $downgradeMigrations;
 
-        if (!$registry->containsKey($name)) {
-            throw new MigrationNotFoundException("Migration $name is not found");
+        if (!is_null($name)) {
+            $orderedMigrations = ($order, $migration) ==> Pair { $migration->name(), $order };
+            $registry = ImmMap::fromItems($downgradeMigrations->mapWithKey($orderedMigrations));
+
+            if (!$registry->containsKey($name)) {
+                throw new MigrationNotFoundException("Migration $name is not found");
+            }
+
+            $orderIndex = $registry->at($name);
+            $migrations = $downgradeMigrations->slice(0, $orderIndex + 1);
         }
-
-        $orderIndex = $registry->at($name);
-        $migrations = $downgradeMigrations->slice(0, $orderIndex + 1);
 
         await $this->publisher->migrationLoaded($migrations);
 
