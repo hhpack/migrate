@@ -19,6 +19,7 @@ final class MigrationSuccessEvent implements Message
 {
 
     public function __construct(
+        private string $query,
         private QueryResult $result
     )
     {
@@ -26,7 +27,7 @@ final class MigrationSuccessEvent implements Message
 
     public function query(): string
     {
-        return $this->result->query();
+        return $this->query;
     }
 
     public function startTime(): float

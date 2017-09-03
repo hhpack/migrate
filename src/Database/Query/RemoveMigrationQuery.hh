@@ -38,7 +38,7 @@ final class RemoveMigrationQuery implements Query
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();
 
-        return new QueryResult('CREATE DATABASE %s', $rows, $result->startTime(), $result->endTime());
+        return new QueryResult($rows, $result->startTime(), $result->endTime());
     }
 
 }

@@ -40,8 +40,7 @@ final class DatabaseAlreadyExistsQuery implements Query
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();
 
-        return new QueryResult('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME %=s',
-            $rows, $result->startTime(), $result->endTime());
+        return new QueryResult($rows, $result->startTime(), $result->endTime());
     }
 
 }

@@ -41,7 +41,7 @@ final class MySqlConnection implements Connection
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();
 
-        return new QueryResult($query, $rows, $result->startTime(), $result->endTime());
+        return new QueryResult($rows, $result->startTime(), $result->endTime());
     }
 
     public function close(): void

@@ -15,20 +15,14 @@ final class QueryResult
 {
 
     public function __construct(
-        private string $query,
-        private ImmVector<ImmMap<string, mixed>> $rows,
+        private \ConstVector<ImmMap<string, mixed>> $rows,
         private float $startTime,
         private float $endTime
     )
     {
     }
 
-    public function query(): string
-    {
-        return $this->query;
-    }
-
-    public function rows(): ImmVector<ImmMap<string, mixed>>
+    public function rows(): \ConstVector<ImmMap<string, mixed>>
     {
         return $this->rows;
     }
