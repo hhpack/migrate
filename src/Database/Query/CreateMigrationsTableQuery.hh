@@ -29,12 +29,7 @@ final class CreateMigrationsTableQuery implements Query
             'CREATE TABLE IF NOT EXISTS %T (id int(11) NOT NULL AUTO_INCREMENT, name varchar(255), run_at datetime NOT NULL, PRIMARY KEY (id))',
             $this->tableName
         );
-
-        $rows = $result->mapRowsTyped()
-            ->map(($row) ==> $row->toImmMap())
-            ->toImmVector();
-
-        return new QueryResult($rows, $result->startTime(), $result->endTime());
+        return QueryResult::fromAsyncResult($result);
     }
 
 }

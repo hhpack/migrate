@@ -26,12 +26,7 @@ final class CreateDatabaseQuery implements Query
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
         $result = await $connection->queryf('CREATE DATABASE %T', $this->dbName);
-
-        $rows = $result->mapRowsTyped()
-            ->map(($row) ==> $row->toImmMap())
-            ->toImmVector();
-
-        return new QueryResult($rows, $result->startTime(), $result->endTime());
+        return QueryResult::fromAsyncResult($result);
     }
 
 }

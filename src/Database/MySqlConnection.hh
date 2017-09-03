@@ -37,11 +37,7 @@ final class MySqlConnection implements Connection
     public async function rawQuery(string $query): Awaitable<QueryResult>
     {
         $result = await $this->connection->query($query);
-        $rows = $result->mapRowsTyped()
-            ->map(($row) ==> $row->toImmMap())
-            ->toImmVector();
-
-        return new QueryResult($rows, $result->startTime(), $result->endTime());
+        return QueryResult::fromAsyncResult($result);
     }
 
     public function close(): void

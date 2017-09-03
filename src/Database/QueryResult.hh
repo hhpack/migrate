@@ -14,12 +14,15 @@ namespace HHPack\Migrate\Database;
 final class QueryResult
 {
 
+    private ImmVector<ImmMap<string, mixed>> $rows;
+
     public function __construct(
-        private \ConstVector<ImmMap<string, mixed>> $rows,
+        Traversable<ImmMap<string, mixed>> $rows,
         private float $startTime,
         private float $endTime
     )
     {
+        $this->rows = ImmVector::fromItems($rows);
     }
 
     public function rows(): \ConstVector<ImmMap<string, mixed>>
@@ -40,6 +43,15 @@ final class QueryResult
     public function endTime(): float
     {
         return $this->endTime;
+    }
+
+    public static function fromAsyncResult(\AsyncMysqlQueryResult $result) : this
+    {
+        $rows = $result->mapRowsTyped()
+            ->map(($row) ==> $row->toImmMap())
+            ->toImmVector();
+
+        return new static($rows, $result->startTime(), $result->endTime());
     }
 
 }

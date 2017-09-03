@@ -30,11 +30,7 @@ final class SelectMigrationsQuery implements Query
             $this->tableName
         );
 
-        $rows = $result->mapRowsTyped()
-            ->map(($row) ==> $row->toImmMap())
-            ->toImmVector();
-
-        return new QueryResult($rows, $result->startTime(), $result->endTime());
+        return QueryResult::fromAsyncResult($result);
     }
 
 }
