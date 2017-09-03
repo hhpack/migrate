@@ -13,12 +13,10 @@ namespace HHPack\Migrate\Migration;
 
 use HHPack\Migrate\{ MigrationName, Migration };
 use HHPack\Migrate\Database\{ Connection, QueryResult };
+use HHPack\Migrate\Database\Query\{ CreateMigrationsTableQuery, SelectMigrationsQuery, SaveMigrationQuery, RemoveMigrationQuery };
 
 final class MigrationManager
 {
-
-    const string LOG_TABLE = "CREATE TABLE IF NOT EXISTS scheme_migrations (`id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(255), `run_at` datetime NOT NULL, PRIMARY KEY (`id`))";
-    const string  MIGRATIONS_SQL = "SELECT name FROM scheme_migrations ORDER BY run_at DESC";
 
     public function __construct(
         private Connection $connection
@@ -28,12 +26,12 @@ final class MigrationManager
 
     public async function setUp(): Awaitable<QueryResult>
     {
-        return await $this->connection->rawQuery(static::LOG_TABLE);
+        return await $this->connection->query(new CreateMigrationsTableQuery());
     }
 
     public async function loadMigrations(): Awaitable<ImmSet<MigrationName>>
     {
-        $result = await $this->connection->rawQuery(static::MIGRATIONS_SQL);
+        $result = await $this->connection->query(new SelectMigrationsQuery());
         $migrations = $result->rows()
             ->map(($row) ==> (string) $row->at('name'))
             ->toImmSet();
@@ -53,22 +51,12 @@ final class MigrationManager
 
     public async function save(Migration $migration): Awaitable<QueryResult>
     {
-        $sql = sprintf(
-            "INSERT INTO scheme_migrations (name, run_at) VALUES ('%s', CURRENT_TIMESTAMP)",
-            $this->connection->escapeString($migration->name())
-        );
-
-        return await $this->connection->rawQuery($sql);
+        return await $this->connection->query(new SaveMigrationQuery($migration->name()));
     }
 
     public async function remove(Migration $migration): Awaitable<QueryResult>
     {
-        $sql = sprintf(
-            "DELETE FROM scheme_migrations WHERE name = '%s'",
-            $this->connection->escapeString($migration->name())
-        );
-
-        return await $this->connection->rawQuery($sql);
+        return await $this->connection->query(new RemoveMigrationQuery($migration->name()));
     }
 
 }
