@@ -34,10 +34,7 @@ final class MigrationManager
     public async function loadMigrations(): Awaitable<ImmSet<MigrationName>>
     {
         $result = await $this->connection->query(new SelectMigrationsQuery(static::TABLE_NAME));
-        $migrations = $result->rows()
-            ->map(($row) ==> (string) $row->at('name'))
-            ->toImmSet();
-
+        $migrations = $result->pluck('name', ($v) ==> (string) $v);
         return $migrations;
     }
 
