@@ -33,6 +33,11 @@ final class QueryResult
         return $this->rows;
     }
 
+    public function isEmpty(): bool
+    {
+        return count($this->rows) <= 0;
+    }
+
     public function startTime(): float
     {
         return $this->startTime;
