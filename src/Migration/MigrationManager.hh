@@ -18,6 +18,8 @@ use HHPack\Migrate\Database\Query\{ CreateMigrationsTableQuery, SelectMigrations
 final class MigrationManager
 {
 
+    const string TABLE_NAME = 'scheme_migrations';
+
     public function __construct(
         private Connection $connection
     )
@@ -26,12 +28,12 @@ final class MigrationManager
 
     public async function setUp(): Awaitable<QueryResult>
     {
-        return await $this->connection->query(new CreateMigrationsTableQuery());
+        return await $this->connection->query(new CreateMigrationsTableQuery(static::TABLE_NAME));
     }
 
     public async function loadMigrations(): Awaitable<ImmSet<MigrationName>>
     {
-        $result = await $this->connection->query(new SelectMigrationsQuery());
+        $result = await $this->connection->query(new SelectMigrationsQuery(static::TABLE_NAME));
         $migrations = $result->rows()
             ->map(($row) ==> (string) $row->at('name'))
             ->toImmSet();
@@ -51,12 +53,12 @@ final class MigrationManager
 
     public async function save(Migration $migration): Awaitable<QueryResult>
     {
-        return await $this->connection->query(new SaveMigrationQuery($migration->name()));
+        return await $this->connection->query(new SaveMigrationQuery(static::TABLE_NAME, $migration->name()));
     }
 
     public async function remove(Migration $migration): Awaitable<QueryResult>
     {
-        return await $this->connection->query(new RemoveMigrationQuery($migration->name()));
+        return await $this->connection->query(new RemoveMigrationQuery(static::TABLE_NAME, $migration->name()));
     }
 
 }

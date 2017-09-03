@@ -18,9 +18,8 @@ use AsyncMysqlConnection;
 final class RemoveMigrationQuery implements Query
 {
 
-    const string TABLE_NAME = 'scheme_migrations';
-
     public function __construct(
+        private string $tableName,
         private MigrationName $name
     )
     {
@@ -30,7 +29,7 @@ final class RemoveMigrationQuery implements Query
     {
         $result = await $connection->query(sprintf(
             'DELETE FROM %s WHERE name = \'%s\'',
-            $connection->escapeString(static::TABLE_NAME),
+            $connection->escapeString($this->tableName),
             $connection->escapeString($this->name)
         ));
         $rows = $result->mapRowsTyped()

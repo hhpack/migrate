@@ -17,13 +17,17 @@ use AsyncMysqlConnection;
 final class SelectMigrationsQuery implements Query
 {
 
-    const string TABLE_NAME = 'scheme_migrations';
+    public function __construct(
+        private string $tableName
+    )
+    {
+    }
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
         $result = await $connection->query(sprintf(
             'SELECT name FROM %s ORDER BY run_at DESC',
-            $connection->escapeString(static::TABLE_NAME)
+            $connection->escapeString($this->tableName)
         ));
         $rows = $result->mapRowsTyped()
             ->map(($row) ==> $row->toImmMap())

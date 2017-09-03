@@ -18,9 +18,8 @@ use AsyncMysqlConnection;
 final class SaveMigrationQuery implements Query
 {
 
-    const string TABLE_NAME = 'scheme_migrations';
-
     public function __construct(
+        private string $tableName,
         private MigrationName $name
     )
     {
@@ -30,7 +29,7 @@ final class SaveMigrationQuery implements Query
     {
         $result = await $connection->query(sprintf(
             'INSERT INTO %s (name, run_at) VALUES (\'%s\', CURRENT_TIMESTAMP)',
-            $connection->escapeString(static::TABLE_NAME),
+            $connection->escapeString($this->tableName),
             $connection->escapeString($this->name)
         ));
         $rows = $result->mapRowsTyped()

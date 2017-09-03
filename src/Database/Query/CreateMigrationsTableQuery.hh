@@ -17,13 +17,17 @@ use AsyncMysqlConnection;
 final class CreateMigrationsTableQuery implements Query
 {
 
-    const string TABLE_NAME = 'scheme_migrations';
+    public function __construct(
+        private string $tableName
+    )
+    {
+    }
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
         $result = await $connection->query(sprintf(
             'CREATE TABLE IF NOT EXISTS %s (`id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(255), `run_at` datetime NOT NULL, PRIMARY KEY (`id`))',
-            $connection->escapeString(static::TABLE_NAME)
+            $connection->escapeString($this->tableName)
         ));
         $rows = $result->mapRowsTyped()
             ->map(($row) ==> $row->toImmMap())
