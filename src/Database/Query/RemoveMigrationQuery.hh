@@ -27,11 +27,13 @@ final class RemoveMigrationQuery implements Query
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
-        $result = await $connection->query(sprintf(
-            'DELETE FROM %s WHERE name = \'%s\'',
-            $connection->escapeString($this->tableName),
-            $connection->escapeString($this->name)
-        ));
+        $result = await $connection->queryf(
+            'DELETE FROM %T WHERE %C %=s',
+            $this->tableName,
+            'name',
+            $this->name
+        );
+
         $rows = $result->mapRowsTyped()
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();

@@ -27,11 +27,12 @@ final class SaveMigrationQuery implements Query
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
-        $result = await $connection->query(sprintf(
-            'INSERT INTO %s (name, run_at) VALUES (\'%s\', CURRENT_TIMESTAMP)',
-            $connection->escapeString($this->tableName),
-            $connection->escapeString($this->name)
-        ));
+        $result = await $connection->queryf(
+            'INSERT INTO %T (name, run_at) VALUES (%s, CURRENT_TIMESTAMP)',
+            $this->tableName,
+            $this->name
+        );
+
         $rows = $result->mapRowsTyped()
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();

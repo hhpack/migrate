@@ -25,10 +25,11 @@ final class SelectMigrationsQuery implements Query
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
-        $result = await $connection->query(sprintf(
-            'SELECT name FROM %s ORDER BY run_at DESC',
-            $connection->escapeString($this->tableName)
-        ));
+        $result = await $connection->queryf(
+            'SELECT name FROM %T ORDER BY run_at DESC',
+            $this->tableName
+        );
+
         $rows = $result->mapRowsTyped()
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();

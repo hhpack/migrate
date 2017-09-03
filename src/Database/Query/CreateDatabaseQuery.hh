@@ -18,16 +18,15 @@ final class CreateDatabaseQuery implements Query
 {
 
     public function __construct(
-        private string $name
+        private string $dbName
     )
     {
     }
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
-        $result = await $connection->query(
-            sprintf('CREATE DATABASE %s', $connection->escapeString($this->name))
-        );
+        $result = await $connection->queryf('CREATE DATABASE %T', $this->dbName);
+
         $rows = $result->mapRowsTyped()
             ->map(($row) ==> $row->toImmMap())
             ->toImmVector();
