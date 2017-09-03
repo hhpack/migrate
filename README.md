@@ -27,6 +27,22 @@ Please specify the setting referring to the following.
 }
 ```
 
+### Create a database
+
+You can run the create command to create the database.  
+
+```shell
+bin/migrate create
+```
+
+### Generate a migration file
+
+Use the **gen command** to generate a migration file.
+
+```shell
+bin/migrate gen create-users
+```
+
 ### Upgrade of schema
 
 Use the up command to upgrade the schema.  
@@ -50,12 +66,12 @@ To downgrade to the specified version, use the down command.
 bin/migrate down 20150824010439-create-users
 ```
 
-### Generate a migration file
+### Reset of schema
 
-Use the **gen command** to generate a migration file.
+Restore all applied migrations.
 
 ```shell
-bin/migrate gen create-users
+bin/migrate reset
 ```
 
 ### Migrator

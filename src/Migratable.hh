@@ -16,5 +16,5 @@ use HHPack\Migrate\Migration\{ MigrationResult };
 interface Migratable
 {
     public function upgrade(?MigrationName $name): Awaitable<MigrationResult>;
-    public function downgrade(MigrationName $name): Awaitable<MigrationResult>;
+    public function downgrade(?MigrationName $name): Awaitable<MigrationResult>;
 }

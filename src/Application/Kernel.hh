@@ -34,7 +34,8 @@ final class Kernel
     private function terminateWithError(RuntimeException $e) : void
     {
         $this->console->writeError("Application error:\n");
-        $this->console->writeError($e->getMessage());
+        $this->console->writeError(sprintf("%d: %s\n",
+            $e->getCode(), $e->getMessage()));
         exit(-1);
     }
 

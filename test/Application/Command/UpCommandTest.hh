@@ -35,7 +35,7 @@ final class UpCommandTest
         $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
-        $context = new MigrateContext($path, [], $conn);
+        $context = new MigrateContext($path, []);
 
         return new static($conn, $context);
     }
@@ -46,7 +46,7 @@ final class UpCommandTest
         $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
-        $context = new MigrateContext($path, ['--to=20150824010439-create-users'], $conn);
+        $context = new MigrateContext($path, ['--to=20150824010439-create-users']);
 
         return new static($conn, $context);
     }

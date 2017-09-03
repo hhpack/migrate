@@ -4,20 +4,20 @@ namespace HHPack\Migrate\Application\Test;
 
 use HHPack\Migrate\{ File };
 use HHPack\Migrate\Application\{ Context };
-use HHPack\Migrate\Application\Command\{ UpCommand, DownCommand };
+use HHPack\Migrate\Application\Command\{ UpCommand, ResetCommand };
 use HHPack\Migrate\Database\{ DataSourceName, Connection };
 use HHPack\Migrate\Test\Mock\{ MigrateContext };
 use HHPack\Migrate\Test\Helper\{ Db };
 use HackPack\HackUnit\Contract\Assert;
 
 
-final class DownCommandTest
+final class ResetCommandTest
 {
 
     public function __construct(
         private Connection $conn,
         private Context $upContext,
-        private Context $downContext
+        private Context $resetContext
     )
     {
     }
@@ -37,9 +37,9 @@ final class DownCommandTest
 
         $conn = Db\connect();
         $upContext = new MigrateContext($path, []);
-        $downContext = new MigrateContext($path, ['20150824010439-create-users']);
+        $resetContext = new MigrateContext($path, []);
 
-        return new static($conn, $upContext, $downContext);
+        return new static($conn, $upContext, $resetContext);
     }
 
     <<Test('Default')>>
@@ -48,8 +48,8 @@ final class DownCommandTest
         $command = new UpCommand();
         $command->run($this->upContext);
 
-        $command = new DownCommand();
-        $command->run($this->downContext);
+        $command = new ResetCommand();
+        $command->run($this->resetContext);
 
         $result = \HH\Asio\join($this->conn->query('show tables'));
         $rows = $result->rows();

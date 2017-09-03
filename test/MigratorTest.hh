@@ -4,6 +4,7 @@ namespace HHPack\Migrate\Test;
 
 use HHPack\Migrate\Test\Helper\{ Db };
 use HHPack\Migrate\{ File, Migrator };
+use HHPack\Migrate\Migration\{  MigrationNotFoundException };
 use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
 use HHPack\Migrate\Database\{ Connection };
 use HHPack\Migrate\Logger\{ ColoredLogger };
@@ -46,14 +47,57 @@ final class MigratorTest
     }
 
     <<Test('Db')>>
-    public function downgrade(Assert $assert): void
+    public function downgradeByLastName(Assert $assert): void
     {
         \HH\Asio\join( $this->migrator->upgrade() );
         $result = \HH\Asio\join( $this->migrator->downgrade('20150824010439-create-users') );
 
         $assert->int($result->resultCount())->eq(2);
 
-        $results = $result->at('20150825102100-create-posts');
-        $assert->string($results->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+        $posts = $result->at('20150825102100-create-posts');
+        $assert->string($posts->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+
+        $users = $result->at('20150824010439-create-users');
+        $assert->string($users->at(0)->query())->is("DROP TABLE IF EXISTS `users`");
     }
+
+    <<Test('Db')>>
+    public function downgradeByFirstName(Assert $assert): void
+    {
+        \HH\Asio\join( $this->migrator->upgrade() );
+        $result = \HH\Asio\join( $this->migrator->downgrade('20150825102100-create-posts') );
+
+        $assert->int($result->resultCount())->eq(1);
+
+        $posts = $result->at('20150825102100-create-posts');
+        $assert->string($posts->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+
+        $assert->bool($result->containsKey('20150824010439-create-users'))->is(false);
+    }
+
+    <<Test('Db')>>
+    public function downgradeAll(Assert $assert): void
+    {
+        \HH\Asio\join( $this->migrator->upgrade() );
+        $result = \HH\Asio\join( $this->migrator->downgrade() );
+
+        $assert->int($result->resultCount())->eq(2);
+
+        $posts = $result->at('20150825102100-create-posts');
+        $assert->string($posts->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+
+        $users = $result->at('20150824010439-create-users');
+        $assert->string($users->at(0)->query())->is("DROP TABLE IF EXISTS `users`");
+    }
+
+    <<Test('Db')>>
+    public function downgradeMigrationNotFound(Assert $assert): void
+    {
+        \HH\Asio\join( $this->migrator->upgrade() );
+
+        $assert->whenCalled(() ==> {
+            \HH\Asio\join( $this->migrator->downgrade('20150825102999-not-found') );
+        })->willThrowClass(MigrationNotFoundException::class);
+    }
+
 }

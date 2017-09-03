@@ -14,8 +14,8 @@ namespace HHPack\Migrate\Application;
 use HHPack\Migrate\{ Logger };
 use HHPack\Migrate\Migration\{ MigrationLoader };
 use HHPack\Migrate\Migration\Loader\{ SqlMigrationLoader };
-use HHPack\Migrate\Database\{ Connection, DatabaseClient };
-use HHPack\Migrate\Application\Configuration\{ Configuration };
+use HHPack\Migrate\Database\{ Connection, DatabaseClient, DatabaseServer };
+use HHPack\Migrate\Application\Configuration\{ Configuration, Migration, Server };
 
 final class MigrateContext implements Context
 {
@@ -33,14 +33,9 @@ final class MigrateContext implements Context
         return $this->args;
     }
 
-    public function isSqlType() : bool
+    public function migration(): Migration
     {
-        return $this->config->isSqlType();
-    }
-
-    public function migrationPath() : string
-    {
-        return $this->config->migrationPath();
+        return $this->config->migration();
     }
 
     public function logger(): Logger
@@ -48,31 +43,9 @@ final class MigrateContext implements Context
         return $this->logger;
     }
 
-    public function connectDatabase() : Connection
+    public function databaseServer(): Server
     {
-        try {
-            $connectionHandle = DatabaseClient::createConnection(
-                $this->config->databaseDSN(),
-                $this->config->databaseUser(),
-                $this->config->databasePassword()
-            );
-            return \HH\Asio\join($connectionHandle);
-        } catch (\AsyncMysqlConnectException $e) {
-            throw new \RuntimeException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    public function migrationLoader() : MigrationLoader
-    {
-        $path = $this->config->migrationPath();
-
-        if ($this->config->isSqlType()) {
-            $loader = new SqlMigrationLoader($path);
-        } else {
-            $loader = new SqlMigrationLoader($path);
-        }
-
-        return $loader;
+        return $this->config->databaseServer();
     }
 
 }

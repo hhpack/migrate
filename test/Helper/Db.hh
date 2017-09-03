@@ -2,7 +2,8 @@
 
 namespace HHPack\Migrate\Test\Helper\Db;
 
-use HHPack\Migrate\Database\{ Connection, DatabaseClient };
+use HHPack\Migrate\Application\Configuration\{ Server };
+use HHPack\Migrate\Database\{ Connection, DatabaseClient, DatabaseServer };
 
 function connect(): Connection {
     $host = (string) getenv('DB_HOSTNAME');
@@ -16,4 +17,29 @@ function connect(): Connection {
         $user,
         $password
     ));
+}
+
+function connectServerSetting(?string $name = null): Server
+{
+    $defaultName = (string) getenv('DB_DATABASE');
+
+    return new Server(
+        (string) getenv('DB_HOSTNAME'),
+        (int) getenv('DB_PORT'),
+        (is_null($name)) ? $defaultName : $name,
+        (string) getenv('DB_USER'),
+        (string) getenv('DB_PASSWORD')
+    );
+}
+
+function connectWithoutDbname(): Connection
+{
+    return DatabaseClient::createWithoutDbConnection(
+        new DatabaseServer(
+            (string) getenv('DB_HOSTNAME'),
+            (int) getenv('DB_PORT')
+        ),
+        (string) getenv('DB_USER'),
+        (string) getenv('DB_PASSWORD')
+    );
 }

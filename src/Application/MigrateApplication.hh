@@ -14,7 +14,10 @@ namespace HHPack\Migrate\Application;
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
 use HHPack\Migrate\{ File, Output, Logger };
-use HHPack\Migrate\Application\Command\{ UpCommand, DownCommand, GenerateMigrationCommand };
+use HHPack\Migrate\Application\Command\{
+    CreateDatabaseCommand, UpCommand, DownCommand,
+    ResetCommand, GenerateMigrationCommand
+};
 use HHPack\Migrate\Logger\{ PlainLogger, ColoredLogger };
 
 final class MigrateApplication
@@ -53,8 +56,10 @@ final class MigrateApplication
         ], $parserOptions);
 
         $this->commands = ImmMap {
+            "create" => new CreateDatabaseCommand(),
             "up" => new UpCommand(),
             "down" => new DownCommand(),
+            "reset" => new ResetCommand(),
             "gen" => new GenerateMigrationCommand()
         };
     }

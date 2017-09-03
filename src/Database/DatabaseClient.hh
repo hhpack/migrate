@@ -24,15 +24,14 @@ final class DatabaseClient
     public static async function createConnection(DSNString $value, string $username, string $password): Awaitable<Connection>
     {
         $dsn = DataSourceName::fromString($value);
-
-        if ($dsn->type() === DataSourceType::MySql) {
-            $connection = await MySqlConnection::create($value, $username, $password);
-        // default action
-        } else {
-            $connection = await MySqlConnection::create($value, $username, $password);
-        }
+        $connection = await MySqlConnection::createConnection($value, $username, $password);
 
         return $connection;
+    }
+
+    public static function createWithoutDbConnection(DatabaseServer $server, string $username, string $password): Connection
+    {
+        return MySqlConnection::createWithoutDbConnection($server, $username, $password);
     }
 
 }
