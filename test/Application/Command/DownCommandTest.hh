@@ -36,8 +36,8 @@ final class DownCommandTest
         $path = File\absolutePath(__DIR__ . '/../../sql/migrations/');
 
         $conn = Db\connect();
-        $upContext = new MigrateContext($path, [], $conn);
-        $downContext = new MigrateContext($path, ['20150824010439-create-users'], $conn);
+        $upContext = new MigrateContext($path, []);
+        $downContext = new MigrateContext($path, ['20150824010439-create-users']);
 
         return new static($conn, $upContext, $downContext);
     }

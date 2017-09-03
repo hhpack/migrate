@@ -39,6 +39,16 @@ final class Configuration
         return $this->migration->path();
     }
 
+    public function migration() : Migration
+    {
+        return $this->migration;
+    }
+
+    public function databaseServer() : Server
+    {
+        return $this->server;
+    }
+
     public function databaseDSN() : DSNString
     {
         return $this->server->dns();

@@ -13,12 +13,14 @@ namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\{ Migrator, SqlMigrationLoader };
+use HHPack\Migrate\{ Migrator };
+use HHPack\Migrate\Migration\{ MigrationLoader };
 use HHPack\Migrate\Application\{ Context, Command };
-
+use HHPack\Migrate\Application\Configuration\{ Server };
 use RuntimeException;
 
-final class DownCommand extends AbstractCommand implements Command
+
+final class DownCommand extends MigrateSchemaCommand implements Command
 {
 
     public function __construct()
@@ -45,16 +47,8 @@ final class DownCommand extends AbstractCommand implements Command
 
             $schemaVersion = $remainArgs->at(0);
 
-            \HH\Asio\join($this->downgradeSchema($schemaVersion, $context));
+            $migrator = $this->createMigrator($context);
+            \HH\Asio\join($migrator->downgrade($schemaVersion));
         }
     }
-
-    private async function downgradeSchema(string $schemaVersion, Context $context): Awaitable<void>
-    {
-        $mysql = $context->connectDatabase();
-        $migrator = new Migrator($context->migrationLoader(), $mysql, $context->logger());
-
-        await $migrator->downgrade($schemaVersion);
-    }
-
 }

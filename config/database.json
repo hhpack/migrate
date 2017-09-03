@@ -6,8 +6,8 @@
       "host": "localhost",
       "port": 3306,
       "name": "migrate",
-      "user": { "ENV": "DB_USERNAME" },
-      "password": { "ENV": "DB_PASSWORD" }
+      "user": "root",
+      "password": ""
     },
     "staging": {
       "host": "localhost",

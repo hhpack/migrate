@@ -13,61 +13,64 @@ namespace HHPack\Migrate\Database;
 
 final class DataSourceName
 {
-    /**
-     * Default host name of database
-     */
-    const DEFAULT_HOST = '127.0.0.1';
-    const DEFAULT_PORT = 3306;
 
     public function __construct(
-        private ImmMap<string, mixed> $options
+        private DataSourceType $type,
+        private string $name,
+        private DatabaseServer $server
     )
     {
     }
 
     public function type(): DataSourceType
     {
-        $type = $this->options->at('type');
-        $dataSourceType = DataSourceType::assert($type);
-
-        return $dataSourceType;
+        return $this->type;
     }
 
     public function name(): string
     {
-        return (string) $this->options->at('dbname');
+        return $this->name;
     }
 
     public function host(): string
     {
-        $host = $this->options->get('host');
-
-        if ($host === null) {
-            return static::DEFAULT_HOST;
-        }
-
-        return (string) $host;
+        return $this->server->host();
     }
 
     public function port(): int
     {
-        $port = $this->options->get('port');
-        return ($port !== null) ? (int) $port : static::DEFAULT_PORT;
+        return $this->server->port();
+    }
+
+    public function server(): DatabaseServer
+    {
+        return $this->server;
     }
 
     public static function fromString(DSNString $dsn): this
     {
-        $options = Map {};
         $parts = explode(':', $dsn);
         $parameters = explode(';', $parts[1]);
 
-        foreach ($parameters as $parameter) {
-            $values = explode('=', $parameter);
-            $options->set($values[0], $values[1]);
-        }
-        $options->set('type', $parts[0]);
+        $dbname = '';
+        $dbhost = DatabaseServer::DEFAULT_HOST;
+        $dbport = DatabaseServer::DEFAULT_PORT;
 
-        return new DataSourceName( $options->toImmMap() );
+        foreach ($parameters as $parameter) {
+            list($name, $value) = explode('=', $parameter);
+
+            if ($name === 'dbname') {
+                $dbname = $value;
+            } else if ($name === 'host') {
+                $dbhost = $value;
+            } else if ($name === 'port') {
+                $dbport = (int) $value;
+            }
+        }
+        $dbtype = DataSourceType::assert($parts[0]);
+        $dbserver = new DatabaseServer($dbhost, $dbport);
+
+        return new DataSourceName($dbtype, $dbname, $dbserver);
     }
 
 }
