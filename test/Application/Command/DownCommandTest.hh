@@ -25,9 +25,9 @@ final class DownCommandTest
     <<Setup('test')>>
     public function setUpTest() : void
     {
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS scheme_migrations") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS users") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS posts") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS users") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS posts") );
     }
 
     <<SuiteProvider('Default')>>
@@ -51,7 +51,7 @@ final class DownCommandTest
         $command = new DownCommand();
         $command->run($this->downContext);
 
-        $result = \HH\Asio\join($this->conn->query('show tables'));
+        $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
         $rows = $result->rows();
 
         // scheme_migrations

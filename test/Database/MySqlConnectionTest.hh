@@ -25,7 +25,7 @@ final class MySqlConnectionTest
     <<Test('Db')>>
     public function query(Assert $assert): void
     {
-        $result = \HH\Asio\join($this->conn->query('show tables'));
-        $assert->string($result->query())->is('show tables');
+        $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
+        $assert->bool($result->isEmpty())->is(false);
     }
 }

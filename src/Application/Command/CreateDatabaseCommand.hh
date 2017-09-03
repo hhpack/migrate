@@ -14,6 +14,7 @@ namespace HHPack\Migrate\Application\Command;
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{ OptionParser };
 use HHPack\Migrate\Database\{ Connection, DatabaseClient, DatabaseServer, DatabaseAlreadyExistsException };
+use HHPack\Migrate\Database\Query\{ CreateDatabaseQuery, DatabaseAlreadyExistsQuery };
 use HHPack\Migrate\Application\{ Context, Command };
 use HHPack\Migrate\Application\Configuration\{ Server };
 use RuntimeException;
@@ -51,18 +52,14 @@ final class CreateDatabaseCommand extends AbstractCommand implements Command
     private async function createDatabase(Server $server): Awaitable<void>
     {
         $connection = $this->connectToServer($server);
-
-        $escapedName = $connection->escapeString($server->name());
-        $databaseQuery = sprintf('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME=\'%s\'', $escapedName);
-        $result = await $connection->query($databaseQuery);
+        $result = await $connection->query(new DatabaseAlreadyExistsQuery($server->name()));
 
         if (!$result->isEmpty()) {
             throw new DatabaseAlreadyExistsException(sprintf("Database %s is already exists",
                 $server->name()));
         }
 
-        $escapedName = $connection->escapeString($server->name());
-        await $connection->query(sprintf('CREATE DATABASE %s', $escapedName));
+        await $connection->query(new CreateDatabaseQuery($server->name()));
     }
 
     private function connectToServer(Server $server): Connection

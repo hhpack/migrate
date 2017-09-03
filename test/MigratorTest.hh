@@ -34,9 +34,9 @@ final class MigratorTest
     <<Setup('test')>>
     public function setUpTest() : void
     {
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS scheme_migrations") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS users") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS posts") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS users") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS posts") );
     }
 
     <<Test('Db')>>
@@ -55,10 +55,10 @@ final class MigratorTest
         $assert->int($result->resultCount())->eq(2);
 
         $posts = $result->at('20150825102100-create-posts');
-        $assert->string($posts->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+        $assert->bool($posts->containsKey(0))->is(true);
 
         $users = $result->at('20150824010439-create-users');
-        $assert->string($users->at(0)->query())->is("DROP TABLE IF EXISTS `users`");
+        $assert->bool($users->containsKey(0))->is(true);
     }
 
     <<Test('Db')>>
@@ -70,7 +70,7 @@ final class MigratorTest
         $assert->int($result->resultCount())->eq(1);
 
         $posts = $result->at('20150825102100-create-posts');
-        $assert->string($posts->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+        $assert->bool($posts->containsKey(0))->is(true);
 
         $assert->bool($result->containsKey('20150824010439-create-users'))->is(false);
     }
@@ -84,10 +84,10 @@ final class MigratorTest
         $assert->int($result->resultCount())->eq(2);
 
         $posts = $result->at('20150825102100-create-posts');
-        $assert->string($posts->at(0)->query())->is("DROP TABLE IF EXISTS `posts`");
+        $assert->bool($posts->containsKey(0))->is(true);
 
         $users = $result->at('20150824010439-create-users');
-        $assert->string($users->at(0)->query())->is("DROP TABLE IF EXISTS `users`");
+        $assert->bool($users->containsKey(0))->is(true);
     }
 
     <<Test('Db')>>

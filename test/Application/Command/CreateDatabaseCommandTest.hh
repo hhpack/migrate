@@ -28,7 +28,7 @@ final class CreateDatabaseCommandTest
     {
         $dbname = $this->conn->escapeString(static::DB_NAME);
         \HH\Asio\join(
-            $this->conn->query(sprintf("DROP DATABASE IF EXISTS %s", $dbname))
+            $this->conn->rawQuery(sprintf("DROP DATABASE IF EXISTS %s", $dbname))
         );
     }
 
@@ -49,7 +49,7 @@ final class CreateDatabaseCommandTest
         $command = new CreateDatabaseCommand();
         $command->run($this->context);
 
-        $result = \HH\Asio\join($this->conn->query('show databases'));
+        $result = \HH\Asio\join($this->conn->rawQuery('show databases'));
         $createdDatabases = $result->rows()->filter(($row) ==> $row->at('Database') === static::DB_NAME);
 
         $assert->int($createdDatabases->count())->eq(1);

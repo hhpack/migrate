@@ -11,10 +11,9 @@
 
 namespace HHPack\Migrate\Database;
 
-interface Connection
+use AsyncMysqlConnection;
+
+interface Query
 {
-    public function query(Query $query): Awaitable<QueryResult>;
-    public function rawQuery(string $query): Awaitable<QueryResult>;
-    public function escapeString(string $value): string;
-    public function close(): void;
+    public function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>;
 }
