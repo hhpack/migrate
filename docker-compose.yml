@@ -20,8 +20,8 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_DATABASE=migrate
-      - DB_USER=migrate
-      - DB_PASSWORD=migrate
+      - DB_USER=root
+      - DB_PASSWORD=example
       - DB_PORT=3306
     user: develop
     tty: true
