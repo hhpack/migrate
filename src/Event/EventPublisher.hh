@@ -37,9 +37,9 @@ final class EventPublisher
         await $this->publisher->publish(new MigrationStartEvent($query));
     }
 
-    public async function migrationSuccess(QueryResult $result): Awaitable<void>
+    public async function migrationSuccess(string $query, QueryResult $result): Awaitable<void>
     {
-        await $this->publisher->publish(new MigrationSuccessEvent($result));
+        await $this->publisher->publish(new MigrationSuccessEvent($query, $result));
     }
 
 }

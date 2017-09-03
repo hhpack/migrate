@@ -29,14 +29,15 @@ final class MySqlConnection implements Connection
         return $this->connection->escapeString($value);
     }
 
-    public async function query(string $query): Awaitable<QueryResult>
+    public async function query(Query $query): Awaitable<QueryResult>
+    {
+        return await $query->execute($this->connection);
+    }
+
+    public async function rawQuery(string $query): Awaitable<QueryResult>
     {
         $result = await $this->connection->query($query);
-        $rows = $result->mapRowsTyped()
-            ->map(($row) ==> $row->toImmMap())
-            ->toImmVector();
-
-        return new QueryResult($query, $rows, $result->startTime(), $result->endTime());
+        return QueryResult::fromAsyncResult($result);
     }
 
     public function close(): void
