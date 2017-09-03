@@ -24,9 +24,9 @@ final class UpCommandTest
     <<Setup('test')>>
     public function setUpTest() : void
     {
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS scheme_migrations") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS users") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS posts") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS users") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS posts") );
     }
 
     <<SuiteProvider('NoArguments')>>
@@ -57,7 +57,7 @@ final class UpCommandTest
         $command = new UpCommand();
         $command->run($this->context);
 
-        $result = \HH\Asio\join($this->conn->query('show tables'));
+        $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
         $rows = $result->rows();
 
         // users, posts, scheme_migrations
@@ -70,7 +70,7 @@ final class UpCommandTest
         $command = new UpCommand();
         $command->run($this->context);
 
-        $result = \HH\Asio\join($this->conn->query('show tables'));
+        $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
         $rows = $result->rows();
 
         // users, scheme_migrations

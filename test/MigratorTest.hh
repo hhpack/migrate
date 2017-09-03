@@ -34,9 +34,9 @@ final class MigratorTest
     <<Setup('test')>>
     public function setUpTest() : void
     {
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS scheme_migrations") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS users") );
-        \HH\Asio\join( $this->conn->query("DROP TABLE IF EXISTS posts") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS users") );
+        \HH\Asio\join( $this->conn->rawQuery("DROP TABLE IF EXISTS posts") );
     }
 
     <<Test('Db')>>
