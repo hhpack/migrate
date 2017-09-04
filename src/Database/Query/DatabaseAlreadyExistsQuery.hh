@@ -17,7 +17,7 @@ use AsyncMysqlConnection;
 final class DatabaseAlreadyExistsQuery implements Query
 {
 
-    const string TABLE_NAME = 'INFORMATION_SCHEMA.SCHEMATA';
+    const string TABLE_NAME = 'SCHEMATA';
     const string COLUMN_NAME = 'SCHEMA_NAME';
 
     public function __construct(
@@ -28,12 +28,12 @@ final class DatabaseAlreadyExistsQuery implements Query
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
-        $result = await $connection->query(
-            sprintf('SELECT %s FROM %s WHERE %s = \'%s\'',
+        $result = await $connection->queryf(
+            'SELECT %C FROM %T WHERE %C %=s',
             static::COLUMN_NAME,
             static::TABLE_NAME,
             static::COLUMN_NAME,
-            $connection->escapeString($this->name))
+            $this->name
         );
 
         return QueryResult::fromAsyncResult($result);

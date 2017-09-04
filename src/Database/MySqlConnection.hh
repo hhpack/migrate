@@ -74,10 +74,15 @@ final class MySqlConnection implements Connection
      * NOTE: Right now this does not work with mysqli or PDO connections.
      * @see https://docs.hhvm.com/hack/reference/class/AsyncMysqlClient/adoptConnection/
      */
-    public static function createWithoutDbConnection(DatabaseServer $server, string $username, string $password): this
+    public static async function createWithoutDbConnection(DatabaseServer $server, string $username, string $password): Awaitable<this>
     {
-        $syncConnection = mysql_connect((string )$server, $username, $password);
-        $connection = AsyncMysqlClient::adoptConnection($syncConnection);
+        $connection = await AsyncMysqlClient::connect(
+            $server->host(),
+            $server->port(),
+            'information_schema',
+            $username,
+            $password
+        );
 
         return new static($connection);
     }

@@ -51,7 +51,7 @@ final class CreateDatabaseCommand extends AbstractCommand implements Command
 
     private async function createDatabase(Server $server): Awaitable<void>
     {
-        $connection = $this->connectToServer($server);
+        $connection = await $this->connectToServer($server);
         $result = await $connection->query(new DatabaseAlreadyExistsQuery($server->name()));
 
         if (!$result->isEmpty()) {
@@ -62,12 +62,12 @@ final class CreateDatabaseCommand extends AbstractCommand implements Command
         await $connection->query(new CreateDatabaseQuery($server->name()));
     }
 
-    private function connectToServer(Server $server): Connection
+    private async function connectToServer(Server $server): Awaitable<Connection>
     {
         $connectServer = new DatabaseServer($server->host(), $server->port());
 
         try {
-            $connectionHandle = DatabaseClient::createWithoutDbConnection(
+            $connectionHandle = await DatabaseClient::createWithoutDbConnection(
                 $connectServer,
                 $server->user(),
                 $server->password()

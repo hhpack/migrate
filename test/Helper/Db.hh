@@ -34,12 +34,12 @@ function connectServerSetting(?string $name = null): Server
 
 function connectWithoutDbname(): Connection
 {
-    return DatabaseClient::createWithoutDbConnection(
+    return \HH\Asio\join(DatabaseClient::createWithoutDbConnection(
         new DatabaseServer(
             (string) getenv('DB_HOSTNAME'),
             (int) getenv('DB_PORT')
         ),
         (string) getenv('DB_USER'),
         (string) getenv('DB_PASSWORD')
-    );
+    ));
 }

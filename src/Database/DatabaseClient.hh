@@ -21,17 +21,21 @@ type DSNString = string;
 final class DatabaseClient
 {
 
-    public static async function createConnection(DSNString $value, string $username, string $password): Awaitable<Connection>
+    public static async function createConnection(
+        DSNString $value,
+        string $username,
+        string $password): Awaitable<Connection>
     {
         $dsn = DataSourceName::fromString($value);
-        $connection = await MySqlConnection::createConnection($value, $username, $password);
-
-        return $connection;
+        return  await MySqlConnection::createConnection($value, $username, $password);
     }
 
-    public static function createWithoutDbConnection(DatabaseServer $server, string $username, string $password): Connection
+    public static async function createWithoutDbConnection(
+        DatabaseServer $server,
+        string $username,
+        string $password): Awaitable<Connection>
     {
-        return MySqlConnection::createWithoutDbConnection($server, $username, $password);
+        return await MySqlConnection::createWithoutDbConnection($server, $username, $password);
     }
 
 }
