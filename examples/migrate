@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+bin/migrate --version
+bin/migrate create
+bin/migrate up
+bin/migrate reset
+bin/migrate drop

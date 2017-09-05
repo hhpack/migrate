@@ -14,28 +14,18 @@ namespace HHPack\Migrate\Database\Query;
 use HHPack\Migrate\Database\{ Query, QueryResult };
 use AsyncMysqlConnection;
 
-final class DatabaseAlreadyExistsQuery implements Query
+final class DropDatabaseQuery implements Query
 {
 
-    const string TABLE_NAME = 'SCHEMATA';
-    const string COLUMN_NAME = 'SCHEMA_NAME';
-
     public function __construct(
-        private string $name
+        private string $dbName
     )
     {
     }
 
     public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
     {
-        $result = await $connection->queryf(
-            'SELECT %C FROM %T WHERE %C %=s',
-            static::COLUMN_NAME,
-            static::TABLE_NAME,
-            static::COLUMN_NAME,
-            $this->name
-        );
-
+        $result = await $connection->queryf('DROP DATABASE %T', $this->dbName);
         return QueryResult::fromAsyncResult($result);
     }
 
