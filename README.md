@@ -74,6 +74,15 @@ Restore all applied migrations.
 bin/migrate reset
 ```
 
+### Drop database
+
+You can delete the database with the following command.  
+
+```shell
+bin/migrate drop
+```
+
+
 ### Migrator
 
 Current version supports SQL based migration.
