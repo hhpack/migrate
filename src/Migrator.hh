@@ -50,7 +50,7 @@ final class Migrator implements Migratable
 
         await $this->publisher->migrationLoaded($upgradeMigrations);
 
-        return await $this->upgradeScheme($upgradeMigrations);
+        return await $this->upgradeSchema($upgradeMigrations);
     }
 
     public async function downgrade(?MigrationName $name = null): Awaitable<MigrationResult>
@@ -74,10 +74,10 @@ final class Migrator implements Migratable
 
         await $this->publisher->migrationLoaded($migrations);
 
-        return await $this->downgradeScheme($migrations);
+        return await $this->downgradeSchema($migrations);
     }
 
-    private async function downgradeScheme(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
+    private async function downgradeSchema(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
     {
         $results = Map {};
 
@@ -90,7 +90,7 @@ final class Migrator implements Migratable
         return new MigrationResult( $results->toImmMap() );
     }
 
-    private async function upgradeScheme(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
+    private async function upgradeSchema(ImmVector<Migration> $migrations): Awaitable<MigrationResult>
     {
         $results = Map {};
 
