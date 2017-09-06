@@ -24,7 +24,7 @@ final class MigrateApplication
 {
 
     const PROGRAM_NAME = 'migrate';
-    const PROGRAM_VERSION = '2.0.1';
+    const PROGRAM_VERSION = '2.0.2';
     const PROGRAM_LICENCE = 'The MIT Licence';
 
     private bool $help = false;
