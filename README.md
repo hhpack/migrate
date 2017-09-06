@@ -32,7 +32,7 @@ Please specify the setting referring to the following.
 You can run the create command to create the database.  
 
 ```shell
-bin/migrate create
+vendor/bin/migrate create
 ```
 
 ### Generate a migration file
@@ -40,7 +40,7 @@ bin/migrate create
 Use the **gen command** to generate a migration file.
 
 ```shell
-bin/migrate gen create-users
+vendor/bin/migrate gen create-users
 ```
 
 ### Upgrade of schema
@@ -49,13 +49,13 @@ Use the up command to upgrade the schema.
 You can upgrade to a specific version by specifying the **--to** option.
 
 ```shell
-bin/migrate up
+vendor/bin/migrate up
 ```
 
 or
 
 ```shell
-bin/migrate up --to=20150824010439-create-users
+vendor/bin/migrate up --to=20150824010439-create-users
 ```
 
 ### Downgrade of schema
@@ -63,7 +63,7 @@ bin/migrate up --to=20150824010439-create-users
 To downgrade to the specified version, use the down command.
 
 ```shell
-bin/migrate down 20150824010439-create-users
+vendor/bin/migrate down 20150824010439-create-users
 ```
 
 ### Reset of schema
@@ -71,7 +71,7 @@ bin/migrate down 20150824010439-create-users
 Restore all applied migrations.
 
 ```shell
-bin/migrate reset
+vendor/bin/migrate reset
 ```
 
 ### Drop database
@@ -79,7 +79,7 @@ bin/migrate reset
 You can delete the database with the following command.  
 
 ```shell
-bin/migrate drop
+vendor/bin/migrate drop
 ```
 
 
