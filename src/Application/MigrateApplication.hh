@@ -27,7 +27,7 @@ use HHPack\Migrate\Logger\{PlainLogger, ColoredLogger};
 final class MigrateApplication {
 
   const PROGRAM_NAME = 'migrate';
-  const PROGRAM_VERSION = '2.0.2';
+  const PROGRAM_VERSION = '2.0.3';
   const PROGRAM_LICENCE = 'The MIT Licence';
 
   private bool $help = false;
