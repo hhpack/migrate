@@ -12,13 +12,21 @@ function connect(): Connection {
   $user = (string) getenv('DB_USER');
   $password = (string) getenv('DB_PASSWORD');
 
-  return \HH\Asio\join(
+  static $connection = null;
+
+  if (!is_null($connection)) {
+    return $connection;
+  }
+
+  $connection = \HH\Asio\join(
     DatabaseClient::createConnection(
       'mysql:host='.$host.';port='.$port.';dbname='.$name,
       $user,
       $password,
     ),
   );
+
+  return $connection;
 }
 
 function connectServerSetting(?string $name = null): Server {
@@ -34,7 +42,13 @@ function connectServerSetting(?string $name = null): Server {
 }
 
 function connectWithoutDbname(): Connection {
-  return \HH\Asio\join(
+  static $connection = null;
+
+  if (!is_null($connection)) {
+    return $connection;
+  }
+
+  $connection = \HH\Asio\join(
     DatabaseClient::createWithoutDbConnection(
       new DatabaseServer(
         (string) getenv('DB_HOSTNAME'),
@@ -44,4 +58,6 @@ function connectWithoutDbname(): Connection {
       (string) getenv('DB_PASSWORD'),
     ),
   );
+
+  return $connection;
 }
