@@ -13,6 +13,4 @@ namespace HHPack\Migrate;
 
 use RuntimeException;
 
-final class FileNotFoundException extends RuntimeException
-{
-}
+final class FileNotFoundException extends RuntimeException {}

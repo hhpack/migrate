@@ -11,30 +11,27 @@
 
 namespace HHPack\Migrate\File;
 
-use HHPack\Migrate\{ FileNotFoundException };
+use HHPack\Migrate\{FileNotFoundException};
 
 use SplFileInfo;
 use SplFileObject;
 
-function readAll(string $path) : string
-{
-    if (!file_exists($path)) {
-        throw new FileNotFoundException("File $path is not found");
-    }
+function readAll(string $path): string {
+  if (!file_exists($path)) {
+    throw new FileNotFoundException("File $path is not found");
+  }
 
-    $f = new SplFileObject($path);
-    return $f->fread($f->getSize());
+  $f = new SplFileObject($path);
+  return $f->fread($f->getSize());
 }
 
-function readJsonFile(string $path) : array<string, mixed>
-{
-    $json = readAll($path);
-    return json_decode($json, true);
+function readJsonFile(string $path): array<string, mixed> {
+  $json = readAll($path);
+  return json_decode($json, true);
 }
 
 // In the case of realpath(), it becomes consider type annotations
-function absolutePath(string $path) : string
-{
-    $f = new SplFileInfo($path);
-    return $f->getPathname();
+function absolutePath(string $path): string {
+  $f = new SplFileInfo($path);
+  return $f->getPathname();
 }

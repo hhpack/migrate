@@ -11,17 +11,18 @@
 
 namespace HHPack\Migrate\Migration;
 
-use HHPack\Migrate\{ Migration, MigrationName };
+use HHPack\Migrate\{Migration, MigrationName};
 
-interface MigrationLoader
-{
-    /**
-     * Load the migration for the upgrade
-     */
-    public function loadUpgradeMigrations(): ImmVector<Migration>;
+interface MigrationLoader {
+  /**
+   * Load the migration for the upgrade
+   */
+  public function loadUpgradeMigrations(): ImmVector<Migration>;
 
-    /**
-     * Load the migration for the downgrade
-     */
-    public function loadDowngradeMigrations(Traversable<MigrationName> $migrations): ImmVector<Migration>;
+  /**
+   * Load the migration for the downgrade
+   */
+  public function loadDowngradeMigrations(
+    Traversable<MigrationName> $migrations,
+  ): ImmVector<Migration>;
 }

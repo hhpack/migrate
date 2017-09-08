@@ -11,32 +11,25 @@
 
 namespace HHPack\Migrate\Event;
 
-use HHPack\Migrate\{ Migration };
+use HHPack\Migrate\{Migration};
 use HHPack\Publisher\Message;
 
-final class MigrationLoadedEvent implements Message
-{
+final class MigrationLoadedEvent implements Message {
 
-    public function __construct(
-        private ImmVector<Migration> $migrations
-    )
-    {
+  public function __construct(private ImmVector<Migration> $migrations) {}
+
+  public function queries(): ImmVector<string> {
+    $queries = Vector {};
+
+    foreach ($this->migrations as $migration) {
+      $queries->addAll($migration->queries());
     }
 
-    public function queries(): ImmVector<string>
-    {
-        $queries = Vector {};
+    return $queries->toImmVector();
+  }
 
-        foreach ($this->migrations as $migration) {
-            $queries->addAll( $migration->queries() );
-        }
-
-        return $queries->toImmVector();
-    }
-
-    public function migrationCount(): int
-    {
-        return $this->migrations->count();
-    }
+  public function migrationCount(): int {
+    return $this->migrations->count();
+  }
 
 }

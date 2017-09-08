@@ -13,6 +13,4 @@ namespace HHPack\Migrate\Database;
 
 use RuntimeException;
 
-final class DatabaseNotFoundException extends RuntimeException
-{
-}
+final class DatabaseNotFoundException extends RuntimeException {}

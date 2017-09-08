@@ -11,26 +11,22 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Migrate\Database\{ Connection, QueryProxy, QueryResult };
-use HHPack\Migrate\Event\{ EventPublisher };
+use HHPack\Migrate\Database\{Connection, QueryProxy, QueryResult};
+use HHPack\Migrate\Event\{EventPublisher};
 
-final class MigratorAgent implements QueryProxy
-{
+final class MigratorAgent implements QueryProxy {
 
-    public function __construct(
-        private Connection $connection,
-        private EventPublisher $publisher
-    )
-    {
-    }
+  public function __construct(
+    private Connection $connection,
+    private EventPublisher $publisher,
+  ) {}
 
-    public async function query(string $query): Awaitable<QueryResult>
-    {
-        await $this->publisher->migrationStart($query);
-        $result = await $this->connection->rawQuery($query);
-        await $this->publisher->migrationSuccess($query, $result);
+  public async function query(string $query): Awaitable<QueryResult> {
+    await $this->publisher->migrationStart($query);
+    $result = await $this->connection->rawQuery($query);
+    await $this->publisher->migrationSuccess($query, $result);
 
-        return $result;
-    }
+    return $result;
+  }
 
 }

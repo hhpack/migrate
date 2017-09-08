@@ -2,18 +2,16 @@
 
 namespace HHPack\Migrate\Test\Database;
 
-use HHPack\Migrate\Database\{ DataSourceName };
+use HHPack\Migrate\Database\{DataSourceName};
 use HackPack\HackUnit\Contract\Assert;
 
-final class DataSourceNameTest
-{
-    <<Test>>
-    public function create(Assert $assert): void
-    {
-        $dns = DataSourceName::fromString('mysql:dbname=test;port=10000');
+final class DataSourceNameTest {
+  <<Test>>
+  public function create(Assert $assert): void {
+    $dns = DataSourceName::fromString('mysql:dbname=test;port=10000');
 
-        $assert->int($dns->port())->eq(10000);
-        $assert->string((string) $dns->type())->is('mysql');
-        $assert->string($dns->name())->is('test');
-    }
+    $assert->int($dns->port())->eq(10000);
+    $assert->string((string) $dns->type())->is('mysql');
+    $assert->string($dns->name())->is('test');
+  }
 }

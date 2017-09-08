@@ -11,7 +11,6 @@
 
 namespace HHPack\Migrate\Application\Configuration;
 
-interface Loadable
-{
-    public function load(string $env) : Configuration;
+interface Loadable {
+  public function load(string $env): Configuration;
 }

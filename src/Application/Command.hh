@@ -11,9 +11,8 @@
 
 namespace HHPack\Migrate\Application;
 
-interface Command
-{
-    public function usage(): string;
-    public function description(): string;
-    public function run(Context $context): void;
+interface Command {
+  public function usage(): string;
+  public function description(): string;
+  public function run(Context $context): void;
 }

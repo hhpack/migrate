@@ -11,7 +11,6 @@
 
 namespace HHPack\Migrate\Database;
 
-interface QueryProxy
-{
-    public function query(string $query): Awaitable<QueryResult>;
+interface QueryProxy {
+  public function query(string $query): Awaitable<QueryResult>;
 }

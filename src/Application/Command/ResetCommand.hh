@@ -12,39 +12,43 @@
 namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
-use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\Application\{ Context, Command };
-use HHPack\Migrate\{ Migrator, SqlMigrationLoader, DatabaseClient };
+use HHPack\Getopt\Parser\{OptionParser};
+use HHPack\Migrate\Application\{Context, Command};
+use HHPack\Migrate\{Migrator, SqlMigrationLoader, DatabaseClient};
 
-final class ResetCommand extends MigrateSchemaCommand implements Command
-{
+final class ResetCommand extends MigrateSchemaCommand implements Command {
 
-    public function __construct()
-    {
-        $this->usage = "migrate reset [OPTIONS]";
-        $this->description = "Reset the schema to its initial state";
-        $this->optionParser = cli\optparser([
-            cli\on(['-h', '--help'], 'Display help message', () ==> {
-                $this->help = true;
-            })
-        ]);
+  public function __construct() {
+    $this->usage = "migrate reset [OPTIONS]";
+    $this->description = "Reset the schema to its initial state";
+    $this->optionParser = cli\optparser(
+      [
+        cli\on(
+          ['-h', '--help'],
+          'Display help message',
+          () ==> {
+            $this->help = true;
+          },
+        ),
+      ],
+    );
+  }
+
+  public function run(Context $context): void {
+    $this->optionParser->parse($context->cliArgs());
+
+    if ($this->help) {
+      $this->displayHelp();
+    } else {
+      \HH\Asio\join($this->resetToInitialState($context));
     }
+  }
 
-    public function run(Context $context): void
-    {
-        $this->optionParser->parse($context->cliArgs());
-
-        if ($this->help) {
-            $this->displayHelp();
-        } else {
-            \HH\Asio\join($this->resetToInitialState($context));
-        }
-    }
-
-    private async function resetToInitialState(Context $context): Awaitable<void>
-    {
-        $migrator = $this->createMigrator($context);
-        await $migrator->downgrade();
-    }
+  private async function resetToInitialState(
+    Context $context,
+  ): Awaitable<void> {
+    $migrator = $this->createMigrator($context);
+    await $migrator->downgrade();
+  }
 
 }

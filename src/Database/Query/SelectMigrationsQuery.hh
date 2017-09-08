@@ -11,26 +11,22 @@
 
 namespace HHPack\Migrate\Database\Query;
 
-use HHPack\Migrate\Database\{ Query, QueryResult };
+use HHPack\Migrate\Database\{Query, QueryResult};
 use AsyncMysqlConnection;
 
-final class SelectMigrationsQuery implements Query
-{
+final class SelectMigrationsQuery implements Query {
 
-    public function __construct(
-        private string $tableName
-    )
-    {
-    }
+  public function __construct(private string $tableName) {}
 
-    public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
-    {
-        $result = await $connection->queryf(
-            'SELECT name FROM %T ORDER BY run_at DESC',
-            $this->tableName
-        );
+  public async function execute(
+    AsyncMysqlConnection $connection,
+  ): Awaitable<QueryResult> {
+    $result = await $connection->queryf(
+      'SELECT name FROM %T ORDER BY run_at DESC',
+      $this->tableName,
+    );
 
-        return QueryResult::fromAsyncResult($result);
-    }
+    return QueryResult::fromAsyncResult($result);
+  }
 
 }

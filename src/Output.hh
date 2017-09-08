@@ -11,8 +11,7 @@
 
 namespace HHPack\Migrate;
 
-interface Output
-{
-    public function write(string $message): void;
-    public function writeError(string $message): void;
+interface Output {
+  public function write(string $message): void;
+  public function writeError(string $message): void;
 }

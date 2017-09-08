@@ -11,19 +11,19 @@
 
 namespace HHPack\Migrate\Application\Configuration;
 
-use HHPack\Migrate\Migration\{ MigrationType };
+use HHPack\Migrate\Migration\{MigrationType};
 
 type MigrationLoader = shape(
-    "type" => MigrationType,
-    "path" => string
+  "type" => MigrationType,
+  "path" => string,
 );
 
 type DatabaseServer = shape(
-    "host" => string,
-    "port" => int,
-    "name" => string,
-    "user" => string,
-    "password" => string
+  "host" => string,
+  "port" => int,
+  "name" => string,
+  "user" => string,
+  "password" => string,
 );
 
 type DatabaseEnviroment = ImmMap<string, DatabaseServer>;

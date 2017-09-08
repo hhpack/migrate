@@ -12,11 +12,10 @@
 namespace HHPack\Migrate\Migration;
 
 type GenerateVersion = shape(
-    "version" => string,
-    "name" => string
+  "version" => string,
+  "name" => string,
 );
 
-interface MigrationGenerator
-{
-    public function generate(GenerateVersion $newVersion): void;
+interface MigrationGenerator {
+  public function generate(GenerateVersion $newVersion): void;
 }

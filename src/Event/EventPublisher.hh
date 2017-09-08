@@ -11,35 +11,36 @@
 
 namespace HHPack\Migrate\Event;
 
-use HHPack\Migrate\{ Migration };
-use HHPack\Migrate\Database\{ QueryResult };
-use HHPack\Publisher\{ Message, Subscribable, MessagePublisher };
+use HHPack\Migrate\{Migration};
+use HHPack\Migrate\Database\{QueryResult};
+use HHPack\Publisher\{Message, Subscribable, MessagePublisher};
 
-final class EventPublisher
-{
+final class EventPublisher {
 
-    private MessagePublisher<Message> $publisher;
+  private MessagePublisher<Message> $publisher;
 
-    public function __construct(
-        Traversable<Subscribable<Message>> $subscribers = []
-    )
-    {
-        $this->publisher = new MessagePublisher($subscribers);
-    }
+  public function __construct(
+    Traversable<Subscribable<Message>> $subscribers = [],
+  ) {
+    $this->publisher = new MessagePublisher($subscribers);
+  }
 
-    public async function migrationLoaded(ImmVector<Migration> $migrations): Awaitable<void>
-    {
-        await $this->publisher->publish(new MigrationLoadedEvent($migrations));
-    }
+  public async function migrationLoaded(
+    ImmVector<Migration> $migrations,
+  ): Awaitable<void> {
+    await $this->publisher->publish(new MigrationLoadedEvent($migrations));
+  }
 
-    public async function migrationStart(string $query): Awaitable<void>
-    {
-        await $this->publisher->publish(new MigrationStartEvent($query));
-    }
+  public async function migrationStart(string $query): Awaitable<void> {
+    await $this->publisher->publish(new MigrationStartEvent($query));
+  }
 
-    public async function migrationSuccess(string $query, QueryResult $result): Awaitable<void>
-    {
-        await $this->publisher->publish(new MigrationSuccessEvent($query, $result));
-    }
+  public async function migrationSuccess(
+    string $query,
+    QueryResult $result,
+  ): Awaitable<void> {
+    await $this->publisher
+      ->publish(new MigrationSuccessEvent($query, $result));
+  }
 
 }

@@ -11,33 +11,29 @@
 
 namespace HHPack\Migrate\Migration\Generator;
 
-use HHPack\Migrate\{ File, Logger };
-use HHPack\Migrate\Migration\{ MigrationGenerator, GenerateVersion };
+use HHPack\Migrate\{File, Logger};
+use HHPack\Migrate\Migration\{MigrationGenerator, GenerateVersion};
 use DateTime;
 
-final class SqlMigrationGenerator implements MigrationGenerator
-{
+final class SqlMigrationGenerator implements MigrationGenerator {
 
-    public function __construct(
-        private string $directory,
-        private Logger $logger
-    )
-    {
-    }
+  public function __construct(
+    private string $directory,
+    private Logger $logger,
+  ) {}
 
-    public function generate(GenerateVersion $newVersion): void
-    {
-        $identity = $newVersion['version'] . '_' . $newVersion['name'];
+  public function generate(GenerateVersion $newVersion): void {
+    $identity = $newVersion['version'].'_'.$newVersion['name'];
 
-        $path = File\absolutePath($this->directory);
-        $up = sprintf("%s/%s.up.sql", $path, $identity);
-        $down = sprintf("%s/%s.down.sql", $path, $identity);
+    $path = File\absolutePath($this->directory);
+    $up = sprintf("%s/%s.up.sql", $path, $identity);
+    $down = sprintf("%s/%s.down.sql", $path, $identity);
 
-        touch($up);
-        $this->logger->info(sprintf("File %s created\n", $up));
+    touch($up);
+    $this->logger->info(sprintf("File %s created\n", $up));
 
-        touch($down);
-        $this->logger->info(sprintf("File %s created\n", $down));
-    }
+    touch($down);
+    $this->logger->info(sprintf("File %s created\n", $down));
+  }
 
 }

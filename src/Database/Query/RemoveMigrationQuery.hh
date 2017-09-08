@@ -11,29 +11,27 @@
 
 namespace HHPack\Migrate\Database\Query;
 
-use HHPack\Migrate\{ MigrationName };
-use HHPack\Migrate\Database\{ Query, QueryResult };
+use HHPack\Migrate\{MigrationName};
+use HHPack\Migrate\Database\{Query, QueryResult};
 use AsyncMysqlConnection;
 
-final class RemoveMigrationQuery implements Query
-{
+final class RemoveMigrationQuery implements Query {
 
-    public function __construct(
-        private string $tableName,
-        private MigrationName $name
-    )
-    {
-    }
+  public function __construct(
+    private string $tableName,
+    private MigrationName $name,
+  ) {}
 
-    public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
-    {
-        $result = await $connection->queryf(
-            'DELETE FROM %T WHERE %C %=s',
-            $this->tableName,
-            'name',
-            $this->name
-        );
-        return QueryResult::fromAsyncResult($result);
-    }
+  public async function execute(
+    AsyncMysqlConnection $connection,
+  ): Awaitable<QueryResult> {
+    $result = await $connection->queryf(
+      'DELETE FROM %T WHERE %C %=s',
+      $this->tableName,
+      'name',
+      $this->name,
+    );
+    return QueryResult::fromAsyncResult($result);
+  }
 
 }

@@ -11,29 +11,27 @@
 
 namespace HHPack\Migrate\Database\Query;
 
-use HHPack\Migrate\{ MigrationName };
-use HHPack\Migrate\Database\{ Query, QueryResult };
+use HHPack\Migrate\{MigrationName};
+use HHPack\Migrate\Database\{Query, QueryResult};
 use AsyncMysqlConnection;
 
-final class SaveMigrationQuery implements Query
-{
+final class SaveMigrationQuery implements Query {
 
-    public function __construct(
-        private string $tableName,
-        private MigrationName $name
-    )
-    {
-    }
+  public function __construct(
+    private string $tableName,
+    private MigrationName $name,
+  ) {}
 
-    public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
-    {
-        $result = await $connection->queryf(
-            'INSERT INTO %T (name, run_at) VALUES (%s, CURRENT_TIMESTAMP)',
-            $this->tableName,
-            $this->name
-        );
+  public async function execute(
+    AsyncMysqlConnection $connection,
+  ): Awaitable<QueryResult> {
+    $result = await $connection->queryf(
+      'INSERT INTO %T (name, run_at) VALUES (%s, CURRENT_TIMESTAMP)',
+      $this->tableName,
+      $this->name,
+    );
 
-        return QueryResult::fromAsyncResult($result);
-    }
+    return QueryResult::fromAsyncResult($result);
+  }
 
 }
