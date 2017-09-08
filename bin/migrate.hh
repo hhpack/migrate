@@ -15,9 +15,9 @@ namespace HHPack\Migrate;
 use HHPack\Migrate\Application\{Kernel};
 
 $autoloadFiles = [
-  __DIR__.'/vendor/hh_autoload.php',
+  __DIR__.'/../vendor/hh_autoload.php',
   __DIR__.'/../../../hh_autoload.php',
-  __DIR__.'/vendor/autoload.php',
+  __DIR__.'/../vendor/autoload.php',
   __DIR__.'/../../../autoload.php',
 ];
 
