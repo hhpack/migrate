@@ -18,24 +18,28 @@ namespace HHPack\Migrate\Database;
  */
 type DSNString = string;
 
-final class DatabaseClient
-{
+final class DatabaseClient {
 
-    public static async function createConnection(
-        DSNString $value,
-        string $username,
-        string $password): Awaitable<Connection>
-    {
-        $dsn = DataSourceName::fromString($value);
-        return  await MySqlConnection::createConnection($value, $username, $password);
-    }
+  public static async function createConnection(
+    DSNString $value,
+    string $username,
+    string $password,
+  ): Awaitable<Connection> {
+    $dsn = DataSourceName::fromString($value);
+    return
+      await MySqlConnection::createConnection($value, $username, $password);
+  }
 
-    public static async function createWithoutDbConnection(
-        DatabaseServer $server,
-        string $username,
-        string $password): Awaitable<Connection>
-    {
-        return await MySqlConnection::createWithoutDbConnection($server, $username, $password);
-    }
+  public static async function createWithoutDbConnection(
+    DatabaseServer $server,
+    string $username,
+    string $password,
+  ): Awaitable<Connection> {
+    return await MySqlConnection::createWithoutDbConnection(
+      $server,
+      $username,
+      $password,
+    );
+  }
 
 }

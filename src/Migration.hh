@@ -11,7 +11,7 @@
 
 namespace HHPack\Migrate;
 
-use HHPack\Migrate\Database\{ QueryProxy, QueryResult };
+use HHPack\Migrate\Database\{QueryProxy, QueryResult};
 
 /**
  * name of migration
@@ -22,10 +22,11 @@ use HHPack\Migrate\Database\{ QueryProxy, QueryResult };
  */
 type MigrationName = string;
 
-interface Migration
-{
-    public function name(): string;
-    public function version(): string;
-    public function queries(): ImmSet<string>;
-    public function change(QueryProxy $proxy): Awaitable<ImmVector<QueryResult>>;
+interface Migration {
+  public function name(): string;
+  public function version(): string;
+  public function queries(): ImmSet<string>;
+  public function change(
+    QueryProxy $proxy,
+  ): Awaitable<ImmVector<QueryResult>>;
 }

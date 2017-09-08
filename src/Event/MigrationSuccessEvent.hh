@@ -13,36 +13,29 @@ namespace HHPack\Migrate\Event;
 
 use HHPack\Publisher\Message;
 
-use HHPack\Migrate\Database\{ QueryResult };
+use HHPack\Migrate\Database\{QueryResult};
 
-final class MigrationSuccessEvent implements Message
-{
+final class MigrationSuccessEvent implements Message {
 
-    public function __construct(
-        private string $query,
-        private QueryResult $result
-    )
-    {
-    }
+  public function __construct(
+    private string $query,
+    private QueryResult $result,
+  ) {}
 
-    public function query(): string
-    {
-        return $this->query;
-    }
+  public function query(): string {
+    return $this->query;
+  }
 
-    public function startTime(): float
-    {
-        return $this->result->startTime();
-    }
+  public function startTime(): float {
+    return $this->result->startTime();
+  }
 
-    public function endTime(): float
-    {
-        return $this->result->endTime();
-    }
+  public function endTime(): float {
+    return $this->result->endTime();
+  }
 
-    public function totalTime(): float
-    {
-        return $this->endTime() - $this->startTime();
-    }
+  public function totalTime(): float {
+    return $this->endTime() - $this->startTime();
+  }
 
 }

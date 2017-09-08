@@ -11,34 +11,25 @@
 
 namespace HHPack\Migrate\Application\Configuration;
 
-use HHPack\Migrate\Migration\{ MigrationType };
+use HHPack\Migrate\Migration\{MigrationType};
 
-final class Migration
-{
+final class Migration {
 
-    public function __construct(
-        private MigrationType $type,
-        private string $path
-    )
-    {
-    }
+  public function __construct(
+    private MigrationType $type,
+    private string $path,
+  ) {}
 
-    public function type() : MigrationType
-    {
-        return $this->type;
-    }
+  public function type(): MigrationType {
+    return $this->type;
+  }
 
-    public function path() : string
-    {
-        return $this->path;
-    }
+  public function path(): string {
+    return $this->path;
+  }
 
-    public static function fromSetting(MigrationLoader $migration) : this
-    {
-        return new self(
-            $migration['type'],
-            $migration['path']
-        );
-    }
+  public static function fromSetting(MigrationLoader $migration): this {
+    return new self($migration['type'], $migration['path']);
+  }
 
 }

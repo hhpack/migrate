@@ -11,36 +11,30 @@
 
 namespace HHPack\Migrate\Migration;
 
-use HHPack\Migrate\{ MigrationName };
-use HHPack\Migrate\Database\{ QueryResult };
+use HHPack\Migrate\{MigrationName};
+use HHPack\Migrate\Database\{QueryResult};
 
-final class MigrationResult
-{
+final class MigrationResult {
 
-    public function __construct(
-        private ImmMap<MigrationName, ImmVector<QueryResult>> $results
-    )
-    {
-    }
+  public function __construct(
+    private ImmMap<MigrationName, ImmVector<QueryResult>> $results,
+  ) {}
 
-    public function results(): ImmVector<Pair<MigrationName, ImmVector<QueryResult>>>
-    {
-        return ImmVector::fromItems( $this->results->items() );
-    }
+  public function results(
+  ): ImmVector<Pair<MigrationName, ImmVector<QueryResult>>> {
+    return ImmVector::fromItems($this->results->items());
+  }
 
-    public function at(MigrationName $key): ImmVector<QueryResult>
-    {
-        return $this->results->at($key);
-    }
+  public function at(MigrationName $key): ImmVector<QueryResult> {
+    return $this->results->at($key);
+  }
 
-    public function containsKey(MigrationName $key): bool
-    {
-        return $this->results->containsKey($key);
-    }
+  public function containsKey(MigrationName $key): bool {
+    return $this->results->containsKey($key);
+  }
 
-    public function resultCount(): int
-    {
-        return $this->results->count();
-    }
+  public function resultCount(): int {
+    return $this->results->count();
+  }
 
 }

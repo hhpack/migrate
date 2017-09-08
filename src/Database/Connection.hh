@@ -11,10 +11,9 @@
 
 namespace HHPack\Migrate\Database;
 
-interface Connection
-{
-    public function query(Query $query): Awaitable<QueryResult>;
-    public function rawQuery(string $query): Awaitable<QueryResult>;
-    public function escapeString(string $value): string;
-    public function close(): void;
+interface Connection {
+  public function query(Query $query): Awaitable<QueryResult>;
+  public function rawQuery(string $query): Awaitable<QueryResult>;
+  public function escapeString(string $value): string;
+  public function close(): void;
 }

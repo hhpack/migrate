@@ -12,49 +12,56 @@
 namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
-use HHPack\Getopt\Parser\{ OptionParser };
-use HHPack\Migrate\{ Migrator };
-use HHPack\Migrate\Application\{ Context, Command };
-use HHPack\Migrate\Database\{ Connection };
+use HHPack\Getopt\Parser\{OptionParser};
+use HHPack\Migrate\{Migrator};
+use HHPack\Migrate\Application\{Context, Command};
+use HHPack\Migrate\Database\{Connection};
 
-final class UpCommand extends MigrateSchemaCommand implements Command
-{
-    private ?string $schemaVersion;
+final class UpCommand extends MigrateSchemaCommand implements Command {
+  private ?string $schemaVersion;
 
-    public function __construct()
-    {
-        $this->usage = "migrate up [OPTIONS]";
-        $this->description = "Upgrade the schema of the database";
-        $this->optionParser = cli\optparser([
-            cli\take_on(['--to'], 'VERSION', 'Version of the schema to be upgraded', ($version) ==> {
-                $this->schemaVersion = $version;
-            }),
-            cli\on(['-h', '--help'], 'Display help message', () ==> {
-                $this->help = true;
-            })
-        ]);
+  public function __construct() {
+    $this->usage = "migrate up [OPTIONS]";
+    $this->description = "Upgrade the schema of the database";
+    $this->optionParser = cli\optparser(
+      [
+        cli\take_on(
+          ['--to'],
+          'VERSION',
+          'Version of the schema to be upgraded',
+          ($version) ==> {
+            $this->schemaVersion = $version;
+          },
+        ),
+        cli\on(
+          ['-h', '--help'],
+          'Display help message',
+          () ==> {
+            $this->help = true;
+          },
+        ),
+      ],
+    );
+  }
+
+  public function run(Context $context): void {
+    $this->optionParser->parse($context->cliArgs());
+
+    if ($this->help) {
+      $this->displayHelp();
+    } else {
+      \HH\Asio\join($this->upgradeSchema($context));
     }
+  }
 
-    public function run(Context $context): void
-    {
-        $this->optionParser->parse($context->cliArgs());
+  private async function upgradeSchema(Context $context): Awaitable<void> {
+    $migrator = $this->createMigrator($context);
 
-        if ($this->help) {
-            $this->displayHelp();
-        } else {
-            \HH\Asio\join($this->upgradeSchema($context));
-        }
+    if (is_null($this->schemaVersion)) {
+      await $migrator->upgrade();
+    } else {
+      await $migrator->upgrade($this->schemaVersion);
     }
-
-    private async function upgradeSchema(Context $context): Awaitable<void>
-    {
-        $migrator = $this->createMigrator($context);
-
-        if (is_null($this->schemaVersion)) {
-            await $migrator->upgrade();
-        } else {
-            await $migrator->upgrade($this->schemaVersion);
-        }
-    }
+  }
 
 }

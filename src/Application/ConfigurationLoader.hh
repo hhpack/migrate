@@ -11,100 +11,103 @@
 
 namespace HHPack\Migrate\Application;
 
-use HHPack\Migrate\{ File };
-use HHPack\Migrate\Migration\{ MigrationType };
-use HHPack\Migrate\Application\Configuration\{ Configuration, Migration, Server, Loadable };
+use HHPack\Migrate\{File};
+use HHPack\Migrate\Migration\{MigrationType};
+use HHPack\Migrate\Application\Configuration\{
+  Configuration,
+  Migration,
+  Server,
+  Loadable
+};
 use RuntimeException;
 
-final class ConfigurationLoader implements Loadable
-{
+final class ConfigurationLoader implements Loadable {
 
-    public function __construct(
-        private string $path
-    )
-    {
+  public function __construct(private string $path) {}
+
+  public function load(string $env = 'development'): Configuration {
+    $setting = File\readJsonFile($this->path);
+
+    if (is_null($setting['enviroments'])) {
+      throw new RuntimeException('key enviroments not found');
     }
 
-    public function load(string $env = 'development') : Configuration
-    {
-        $setting = File\readJsonFile($this->path);
+    $enviroments = $setting['enviroments'];
 
-        if (is_null($setting['enviroments'])) {
-            throw new RuntimeException('key enviroments not found');
-        }
+    if (!is_array($enviroments)) {
+      throw new RuntimeException('enviroments is not object');
+    }
 
-        $enviroments = $setting['enviroments'];
+    return new Configuration(
+      $this->loadMigration($setting),
+      $this->loadDatabaseServer($env, $enviroments),
+    );
+  }
 
-        if (!is_array($enviroments)) {
-            throw new RuntimeException('enviroments is not object');
-        }
+  private function loadMigration(array<string, mixed> $setting): Migration {
+    $loader = shape(
+      "type" => MigrationType::assert((string) $setting['type']),
+      "path" => getcwd().'/'.(string) $setting['path'],
+    );
 
-        return new Configuration(
-            $this->loadMigration($setting),
-            $this->loadDatabaseServer($env, $enviroments)
+    return Migration::fromSetting($loader);
+  }
+
+  private function loadDatabaseServer(
+    string $env,
+    array<string, mixed> $setting,
+  ): Server {
+    if (is_null($setting[$env])) {
+      throw new RuntimeException("$env is not found");
+    }
+
+    $environment = $setting[$env];
+
+    if (!is_array($environment)) {
+      throw new RuntimeException("$env is not found");
+    }
+
+    $serverSetting = $this->replaceEnvironmentVars($environment);
+
+    $server = shape(
+      "host" => (string) $serverSetting['host'],
+      "port" => (int) $serverSetting['port'],
+      "name" => (string) $serverSetting['name'],
+      "user" => (string) $serverSetting['user'],
+      "password" => (string) $serverSetting['password'],
+    );
+
+    return Server::fromSetting($server);
+  }
+
+  private function replaceEnvironmentVars(
+    array<string, mixed> $setting,
+  ): array<string, mixed> {
+    $result = [];
+
+    foreach ($setting as $key => $value) {
+      if (!is_array($value)) {
+        $result[$key] = $value;
+        continue;
+      }
+
+      if (!array_key_exists('ENV', $value)) {
+        $result[$key] = $this->replaceEnvironmentVars($value);
+        continue;
+      }
+
+      $variable = getenv($value['ENV']);
+
+      if ($variable === false) {
+        throw new RuntimeException(
+          "Environment variable {$value['ENV']} is not set",
         );
+      } else {
+        $result[$key] = $variable;
+      }
     }
 
-    private function loadMigration(array<string, mixed> $setting) : Migration
-    {
-        $loader = shape(
-            "type" => MigrationType::assert((string) $setting['type']),
-            "path" => getcwd() . '/' . (string) $setting['path']
-        );
-
-        return Migration::fromSetting($loader);
-    }
-
-    private function loadDatabaseServer(string $env, array<string, mixed> $setting) : Server
-    {
-        if (is_null($setting[$env])) {
-            throw new RuntimeException("$env is not found");
-        }
-
-        $environment = $setting[$env];
-
-        if (!is_array($environment)) {
-            throw new RuntimeException("$env is not found");
-        }
-
-        $serverSetting = $this->replaceEnvironmentVars($environment);
-
-        $server = shape(
-            "host" => (string) $serverSetting['host'],
-            "port" => (int) $serverSetting['port'],
-            "name" => (string) $serverSetting['name'],
-            "user" => (string) $serverSetting['user'],
-            "password" => (string) $serverSetting['password']
-        );
-
-        return Server::fromSetting($server);
-    }
-
-    private function replaceEnvironmentVars(array<string, mixed> $setting): array<string, mixed>
-    {
-        $result = [];
-
-        foreach ($setting as $key => $value) {
-            if (!is_array($value)) {
-                $result[$key] = $value;
-                continue;
-            }
-
-            if (!array_key_exists('ENV', $value)) {
-                $result[$key] = $this->replaceEnvironmentVars($value);
-                continue;
-            }
-
-            $variable = getenv($value['ENV']);
-
-            if ($variable === false) {
-                throw new RuntimeException("Environment variable {$value['ENV']} is not set");
-            } else {
-                $result[$key] = $variable;
-            }
-        }
-
-        return $result;
-    }
+    return $result;
+  }
 
 }

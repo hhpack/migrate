@@ -10,7 +10,6 @@
 
 namespace HHPack\Migrate\Migration;
 
-enum MigrationType : string
-{
-    Sql = "sql";
+enum MigrationType : string {
+  Sql = "sql";
 }

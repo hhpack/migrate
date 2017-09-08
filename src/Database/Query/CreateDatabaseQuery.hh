@@ -11,22 +11,18 @@
 
 namespace HHPack\Migrate\Database\Query;
 
-use HHPack\Migrate\Database\{ Query, QueryResult };
+use HHPack\Migrate\Database\{Query, QueryResult};
 use AsyncMysqlConnection;
 
-final class CreateDatabaseQuery implements Query
-{
+final class CreateDatabaseQuery implements Query {
 
-    public function __construct(
-        private string $dbName
-    )
-    {
-    }
+  public function __construct(private string $dbName) {}
 
-    public async function execute(AsyncMysqlConnection $connection): Awaitable<QueryResult>
-    {
-        $result = await $connection->queryf('CREATE DATABASE %T', $this->dbName);
-        return QueryResult::fromAsyncResult($result);
-    }
+  public async function execute(
+    AsyncMysqlConnection $connection,
+  ): Awaitable<QueryResult> {
+    $result = await $connection->queryf('CREATE DATABASE %T', $this->dbName);
+    return QueryResult::fromAsyncResult($result);
+  }
 
 }

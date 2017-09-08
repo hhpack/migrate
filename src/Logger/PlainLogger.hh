@@ -11,35 +11,26 @@
 
 namespace HHPack\Migrate\Logger;
 
-use HHPack\Migrate\{ Logger, Output, Console };
+use HHPack\Migrate\{Logger, Output, Console};
 
-final class PlainLogger implements Logger
-{
+final class PlainLogger implements Logger {
 
-    public function __construct(
-        private Output $output = new Console()
-    )
-    {
-    }
+  public function __construct(private Output $output = new Console()) {}
 
-    public function debug(string $message) : void
-    {
-        $this->output->write($message);
-    }
+  public function debug(string $message): void {
+    $this->output->write($message);
+  }
 
-    public function info(string $message) : void
-    {
-        $this->output->write($message);
-    }
+  public function info(string $message): void {
+    $this->output->write($message);
+  }
 
-    public function warn(string $message) : void
-    {
-        $this->output->write($message);
-    }
+  public function warn(string $message): void {
+    $this->output->write($message);
+  }
 
-    public function error(string $message) : void
-    {
-        $this->output->writeError($message);
-    }
+  public function error(string $message): void {
+    $this->output->writeError($message);
+  }
 
 }
