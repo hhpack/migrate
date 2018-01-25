@@ -11,10 +11,10 @@
   "license": "MIT",
   "require": {
     "hhvm": ">= 3.21.0",
-    "facebook/hhvm-autoload": "^1.4",
+    "hhvm/hhvm-autoload": "^1.5",
     "hhpack/publisher": "^1.1",
     "hhpack/color": "^1.1",
-    "hhpack/getopt": "^1.3"
+    "hhpack/getopt": "^1.4"
   },
   "require-dev": {
     "hackpack/hackunit": "^1.1"
@@ -35,6 +35,12 @@
       "test/Helper/Db.hh"
     ]
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/holyshared/HackUnit"
+    }
+  ],
   "scripts": {
     "test": "vendor/bin/hackunit test",
     "check": "./typecheck"

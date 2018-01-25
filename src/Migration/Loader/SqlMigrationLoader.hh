@@ -36,7 +36,7 @@ final class SqlMigrationLoader implements MigrationLoader {
     $files = $this->findFiles($pattern);
 
     $files = ImmSet::fromItems($files)->toValuesArray();
-    asort($files);
+    asort(&$files);
 
     return
       ImmVector::fromItems($files)
@@ -52,7 +52,7 @@ final class SqlMigrationLoader implements MigrationLoader {
     $files = $this->findFiles($pattern);
 
     $files = ImmSet::fromItems($files)->toValuesArray();
-    arsort($files);
+    arsort(&$files);
 
     return
       ImmVector::fromItems($files)
