@@ -11,9 +11,11 @@
 
 namespace HHPack\Migrate;
 
-interface Migratable<T> {
-  public function upgrade(): Awaitable<T>;
-  public function downgrade(): Awaitable<T>;
-  public function upgradeTo(MigrationName $name): Awaitable<T>;
-  public function downgradeTo(MigrationName $name): Awaitable<T>;
+use HHPack\Migrate\Migration\MigrationResult;
+
+interface Migratable {
+  public function upgrade(): Awaitable<MigrationResult>;
+  public function downgrade(): Awaitable<MigrationResult>;
+  public function upgradeTo(MigrationName $name): Awaitable<MigrationResult>;
+  public function downgradeTo(MigrationName $name): Awaitable<MigrationResult>;
 }
