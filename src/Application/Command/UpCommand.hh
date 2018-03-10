@@ -19,6 +19,7 @@ use HHPack\Migrate\Database\{Connection};
 
 final class UpCommand extends MigrateSchemaCommand implements Command {
   private ?string $schemaVersion;
+  private bool $dryRun = false;
 
   public function __construct() {
     $this->usage = "migrate up [OPTIONS]";
@@ -31,6 +32,13 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
           'Version of the schema to be upgraded',
           ($version) ==> {
             $this->schemaVersion = $version;
+          },
+        ),
+        cli\on(
+          ['--dry-run'],
+          'Test the change to apply',
+          () ==> {
+            $this->dryRun = true;
           },
         ),
         cli\on(
