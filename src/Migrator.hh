@@ -20,7 +20,7 @@ use HHPack\Migrate\Migration\{
 };
 use HHPack\Migrate\Database\{Connection};
 
-final class Migrator implements Migratable {
+final class Migrator implements Migratable<MigrationResult> {
 
   private MigratorAgent $agent;
   private MigrationManager $manager;
