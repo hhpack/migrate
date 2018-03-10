@@ -68,7 +68,7 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
     if (is_null($this->schemaVersion)) {
       await $migrator->upgrade();
     } else {
-      await $migrator->upgrade($this->schemaVersion);
+      await $migrator->upgradeTo($this->schemaVersion);
     }
   }
 

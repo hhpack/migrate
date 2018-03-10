@@ -50,7 +50,7 @@ final class DownCommand extends MigrateSchemaCommand implements Command {
       $schemaVersion = $remainArgs->at(0);
 
       $migrator = $this->createMigrator($context);
-      \HH\Asio\join($migrator->downgrade($schemaVersion));
+      \HH\Asio\join($migrator->downgradeTo($schemaVersion));
     }
   }
 }

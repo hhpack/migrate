@@ -46,7 +46,7 @@ final class MigratorTest {
   public function downgradeByLastName(Assert $assert): void {
     \HH\Asio\join($this->migrator->upgrade());
     $result = \HH\Asio\join(
-      $this->migrator->downgrade('20150824010439-create-users'),
+      $this->migrator->downgradeTo('20150824010439-create-users'),
     );
 
     $assert->int($result->resultCount())->eq(2);
@@ -62,7 +62,7 @@ final class MigratorTest {
   public function downgradeByFirstName(Assert $assert): void {
     \HH\Asio\join($this->migrator->upgrade());
     $result = \HH\Asio\join(
-      $this->migrator->downgrade('20150825102100-create-posts'),
+      $this->migrator->downgradeTo('20150825102100-create-posts'),
     );
 
     $assert->int($result->resultCount())->eq(1);
@@ -95,7 +95,7 @@ final class MigratorTest {
     $assert->whenCalled(
       () ==> {
         \HH\Asio\join(
-          $this->migrator->downgrade('20150825102999-not-found'),
+          $this->migrator->downgradeTo('20150825102999-not-found'),
         );
       },
     )->willThrowClass(MigrationNotFoundException::class);

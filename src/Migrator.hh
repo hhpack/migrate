@@ -36,53 +36,63 @@ final class Migrator implements Migratable {
     $this->agent = new MigratorAgent($connection, $this->publisher);
   }
 
-  public async function upgrade(
-    ?MigrationName $name = null,
-  ): Awaitable<MigrationResult> {
-    $migrations = $this->loader->loadUpgradeMigrations();
-
-    await $this->manager->setUp();
-    $diffMigrations = await $this->manager->diff($migrations);
-    $takeHandler = $migration ==> true;
-
-    if ($name !== null) {
-      $takeHandler = $migration ==> $migration->name() === $name;
-    }
-
-    $upgradeMigrations = $diffMigrations->takeWhile($takeHandler);
+  public async function upgrade(): Awaitable<MigrationResult> {
+    $upgradeMigrations = await $this->selectUpgradeMigrations();
 
     await $this->publisher->migrationLoaded($upgradeMigrations);
 
     return await $this->upgradeSchema($upgradeMigrations);
   }
 
-  public async function downgrade(
-    ?MigrationName $name = null,
-  ): Awaitable<MigrationResult> {
-    $appliedMigrations = await $this->manager->loadMigrations();
-    $downgradeMigrations =
-      $this->loader->loadDowngradeMigrations($appliedMigrations);
+  public async function upgradeTo(MigrationName $name): Awaitable<MigrationResult> {
+    $upgradeMigrations = await $this->selectUpgradeMigrations();
 
-    $migrations = $downgradeMigrations;
+    $takeHandler = $migration ==> $migration->name() === $name;
+    $targetUpgradeMigrations = $upgradeMigrations->takeWhile($takeHandler);
 
-    if (!is_null($name)) {
-      $orderedMigrations =
-        ($order, $migration) ==> Pair {$migration->name(), $order};
-      $registry = ImmMap::fromItems(
-        $downgradeMigrations->mapWithKey($orderedMigrations),
-      );
+    await $this->publisher->migrationLoaded($targetUpgradeMigrations);
 
-      if (!$registry->containsKey($name)) {
-        throw new MigrationNotFoundException("Migration $name is not found");
-      }
+    return await $this->upgradeSchema($targetUpgradeMigrations);
+  }
 
-      $orderIndex = $registry->at($name);
-      $migrations = $downgradeMigrations->slice(0, $orderIndex + 1);
-    }
+  public async function downgrade(): Awaitable<MigrationResult> {
+    $migrations = await $this->selectDowngradeMigrations();
 
     await $this->publisher->migrationLoaded($migrations);
 
     return await $this->downgradeSchema($migrations);
+  }
+
+
+  public async function downgradeTo(MigrationName $name): Awaitable<MigrationResult> {
+    $downgradeMigrations = await $this->selectDowngradeMigrations();
+    $orderedMigrations = ($order, $migration) ==> Pair {$migration->name(), $order};
+
+    $registry = ImmMap::fromItems(
+      $downgradeMigrations->mapWithKey($orderedMigrations),
+    );
+
+    if (!$registry->containsKey($name)) {
+      throw new MigrationNotFoundException("Migration $name is not found");
+    }
+
+    $orderIndex = $registry->at($name);
+    $migrations = $downgradeMigrations->slice(0, $orderIndex + 1);
+
+    await $this->publisher->migrationLoaded($migrations);
+
+    return await $this->downgradeSchema($migrations);
+  }
+
+  private async function selectUpgradeMigrations(): Awaitable<ImmVector<Migration>> {
+    $migrations = $this->loader->loadUpgradeMigrations();
+    await $this->manager->setUp();
+    return await $this->manager->diff($migrations);
+  }
+
+  private async function selectDowngradeMigrations(): Awaitable<ImmVector<Migration>> {
+    $appliedMigrations = await $this->manager->loadMigrations();
+    return  $this->loader->loadDowngradeMigrations($appliedMigrations);
   }
 
   private async function downgradeSchema(
