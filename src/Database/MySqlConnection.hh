@@ -36,10 +36,6 @@ final class MySqlConnection implements Connection {
     $this->connection->close();
   }
 
-  public function __destruct() {
-    $this->close();
-  }
-
   /**
    * Create database connection
    */
