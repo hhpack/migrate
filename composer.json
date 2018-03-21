@@ -12,6 +12,7 @@
   "require": {
     "hhvm": ">= 3.21.0",
     "hhvm/hhvm-autoload": "^1.5",
+    "hhvm/type-assert": "^3.2",
     "hhpack/publisher": "^1.1",
     "hhpack/color": "^1.1",
     "hhpack/getopt": "^1.4"

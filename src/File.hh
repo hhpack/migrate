@@ -25,9 +25,9 @@ function read_all(string $path): string {
   return $f->fread($f->getSize());
 }
 
-function read_json_file(string $path): array<string, mixed> {
+function read_json_file(string $path): dict<string, mixed> {
   $json = read_all($path);
-  return json_decode($json, true);
+  return json_decode($json, true, 512, JSON_FB_HACK_ARRAYS);
 }
 
 // In the case of realpath(), it becomes consider type annotations
