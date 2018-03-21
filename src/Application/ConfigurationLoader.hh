@@ -20,31 +20,27 @@ use HHPack\Migrate\Application\Configuration\{
   Loadable
 };
 use RuntimeException;
+use Facebook\TypeSpec;
 
 final class ConfigurationLoader implements Loadable {
-
   public function __construct(private string $path) {}
 
   public function load(string $env = 'development'): Configuration {
-    $setting = File\readJsonFile($this->path);
+    $setting = File\read_json_file($this->path);
 
-    if (is_null($setting['enviroments'])) {
+    if (!\HH\Lib\C\contains_key($setting, 'enviroments')) {
       throw new RuntimeException('key enviroments not found');
     }
-
     $enviroments = $setting['enviroments'];
-
-    if (!is_array($enviroments)) {
-      throw new RuntimeException('enviroments is not object');
-    }
+    $expectedEnviroments = $this->expectDict($enviroments);
 
     return new Configuration(
       $this->loadMigration($setting),
-      $this->loadDatabaseServer($env, $enviroments),
+      $this->loadDatabaseServer($env, $expectedEnviroments),
     );
   }
 
-  private function loadMigration(array<string, mixed> $setting): Migration {
+  private function loadMigration(dict<string, mixed> $setting): Migration {
     $loader = shape(
       "type" => MigrationType::assert((string) $setting['type']),
       "path" => getcwd().'/'.(string) $setting['path'],
@@ -55,19 +51,15 @@ final class ConfigurationLoader implements Loadable {
 
   private function loadDatabaseServer(
     string $env,
-    array<string, mixed> $setting,
+    dict<string, mixed> $setting,
   ): Server {
     if (is_null($setting[$env])) {
       throw new RuntimeException("$env is not found");
     }
 
     $environment = $setting[$env];
-
-    if (!is_array($environment)) {
-      throw new RuntimeException("$env is not found");
-    }
-
-    $serverSetting = $this->replaceEnvironmentVars($environment);
+    $expectedEnvironment = $this->expectDict($environment);
+    $serverSetting = $this->replaceEnvironmentVars($expectedEnvironment);
 
     $server = shape(
       "host" => (string) $serverSetting['host'],
@@ -81,33 +73,44 @@ final class ConfigurationLoader implements Loadable {
   }
 
   private function replaceEnvironmentVars(
-    array<string, mixed> $setting,
-  ): array<string, mixed> {
-    $result = [];
+    dict<string, mixed> $setting,
+  ): dict<string, mixed> {
+    $result = dict[];
 
     foreach ($setting as $key => $value) {
-      if (!is_array($value)) {
+      if (!is_dict($value)) {
         $result[$key] = $value;
         continue;
       }
 
-      if (!array_key_exists('ENV', $value)) {
-        $result[$key] = $this->replaceEnvironmentVars($value);
+      $expectedEnvVars = $this->expectDict($value);
+
+      if (!\HH\Lib\C\contains_key($expectedEnvVars, 'ENV')) {
+        $result[$key] = $this->replaceEnvironmentVars($expectedEnvVars);
         continue;
       }
 
-      $variable = getenv($value['ENV']);
-
-      if ($variable === false) {
-        throw new RuntimeException(
-          "Environment variable {$value['ENV']} is not set",
-        );
-      } else {
-        $result[$key] = $variable;
-      }
+      $result[$key] = $this->envvarFromDict($expectedEnvVars);
     }
 
     return $result;
   }
 
+  private function expectDict(mixed $value): dict<string, mixed> {
+    return
+      TypeSpec\dict(TypeSpec\string(), TypeSpec\mixed())->assertType($value);
+  }
+
+  private function envvarFromDict(dict<string, mixed> $value): mixed {
+    $envvarName = (string) $value['ENV'];
+    $variable = getenv($envvarName);
+
+    if ($variable === false) {
+      throw new RuntimeException(
+        "Environment variable {$envvarName} is not set",
+      );
+    }
+
+    return $variable;
+  }
 }

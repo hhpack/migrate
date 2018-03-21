@@ -19,4 +19,4 @@ ADD composer.json composer.json
 ADD hh_autoload.json hh_autoload.json
 ADD .hhconfig .hhconfig
 RUN sudo chown ${hack_user}:${hack_group} composer.json hh_autoload.json test src
-RUN composer install --no-interaction
+RUN composer install --prefer-dist --no-interaction

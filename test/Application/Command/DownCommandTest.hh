@@ -29,7 +29,7 @@ final class DownCommandTest {
 
   <<SuiteProvider('Default')>>
   public static function noArguments(): this {
-    $path = File\absolutePath(__DIR__.'/../../sql/migrations/');
+    $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
     $conn = Db\connect();
     $upContext = new MigrateContext($path, []);

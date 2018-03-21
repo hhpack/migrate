@@ -28,7 +28,7 @@ final class UpCommandTest {
 
   <<SuiteProvider('NoArguments')>>
   public static function noArguments(): this {
-    $path = File\absolutePath(__DIR__.'/../../sql/migrations/');
+    $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
     $conn = Db\connect();
     $context = new MigrateContext($path, []);
@@ -38,7 +38,7 @@ final class UpCommandTest {
 
   <<SuiteProvider('ToOption')>>
   public static function toOptions(): this {
-    $path = File\absolutePath(__DIR__.'/../../sql/migrations/');
+    $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
     $conn = Db\connect();
     $context =
