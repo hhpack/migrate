@@ -97,7 +97,8 @@ final class ConfigurationLoader implements Loadable {
   }
 
   private function expectDict(mixed $value): dict<string, mixed> {
-    return TypeSpec\dict(TypeSpec\string(), TypeSpec\mixed())->assertType($value);
+    return
+      TypeSpec\dict(TypeSpec\string(), TypeSpec\mixed())->assertType($value);
   }
 
   private function envvarFromDict(dict<string, mixed> $value): mixed {
