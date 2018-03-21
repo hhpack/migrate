@@ -26,7 +26,7 @@ final class ConfigurationLoader implements Loadable {
   public function __construct(private string $path) {}
 
   public function load(string $env = 'development'): Configuration {
-    $setting = File\readJsonFile($this->path);
+    $setting = File\read_json_file($this->path);
 
     if (is_null($setting['enviroments'])) {
       throw new RuntimeException('key enviroments not found');

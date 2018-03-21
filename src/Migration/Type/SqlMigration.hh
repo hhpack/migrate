@@ -55,7 +55,7 @@ final class SqlMigration implements Migration {
       throw new FileNotFoundException("$file is not found");
     }
 
-    $absolutePath = File\absolutePath($file);
+    $absolutePath = File\absolute_path($file);
 
     $name = preg_replace("/\.(down|up)\..+$/", "", basename($absolutePath));
     $sql = file_get_contents($absolutePath);

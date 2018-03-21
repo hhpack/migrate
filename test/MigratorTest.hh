@@ -19,7 +19,7 @@ final class MigratorTest {
   <<SuiteProvider('Db')>>
   public static function create(): this {
     $conn = Db\connect();
-    $path = File\absolutePath(__DIR__.'/sql/migrations');
+    $path = File\absolute_path(__DIR__.'/sql/migrations');
 
     $loader = new SqlMigrationLoader($path);
     $migrator = new Migrator($loader, $conn, new ColoredLogger());

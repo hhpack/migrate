@@ -25,7 +25,7 @@ final class SqlMigrationGenerator implements MigrationGenerator {
   public function generate(GenerateVersion $newVersion): void {
     $identity = $newVersion['version'].'_'.$newVersion['name'];
 
-    $path = File\absolutePath($this->directory);
+    $path = File\absolute_path($this->directory);
     $up = sprintf("%s/%s.up.sql", $path, $identity);
     $down = sprintf("%s/%s.down.sql", $path, $identity);
 

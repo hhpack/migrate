@@ -106,7 +106,7 @@ final class MigrateApplication {
       $this->displayHelp();
     } else {
       $loader = new ConfigurationLoader(
-        File\absolutePath(getcwd().'/'.$this->configurationPath),
+        File\absolute_path(getcwd().'/'.$this->configurationPath),
       );
       $env = getenv('HHVM_ENV') ? getenv('HHVM_ENV') : 'development';
       $configuration = $loader->load($env);

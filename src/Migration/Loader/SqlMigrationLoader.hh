@@ -32,7 +32,7 @@ final class SqlMigrationLoader implements MigrationLoader {
   }
 
   public function loadUpgradeMigrations(): ImmVector<Migration> {
-    $pattern = File\absolutePath($this->directory).'/*.up.sql';
+    $pattern = File\absolute_path($this->directory).'/*.up.sql';
     $files = $this->findFiles($pattern);
 
     $files = ImmSet::fromItems($files)->toValuesArray();
@@ -48,7 +48,7 @@ final class SqlMigrationLoader implements MigrationLoader {
   ): ImmVector<Migration> {
     $appliedMigrations = ImmSet::fromItems($migrations);
 
-    $pattern = File\absolutePath($this->directory).'/*.down.sql';
+    $pattern = File\absolute_path($this->directory).'/*.down.sql';
     $files = $this->findFiles($pattern);
 
     $files = ImmSet::fromItems($files)->toValuesArray();

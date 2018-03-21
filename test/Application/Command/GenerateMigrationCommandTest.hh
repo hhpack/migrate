@@ -15,7 +15,7 @@ final class GenerateMigrationCommandTest {
 
   <<SuiteProvider('SqlMigration')>>
   public static function newSqlMigration(): this {
-    $path = File\absolutePath(sys_get_temp_dir());
+    $path = File\absolute_path(sys_get_temp_dir());
 
     $context = new MigrateContext($path, ['create-groups']);
 
