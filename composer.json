@@ -46,5 +46,8 @@
     "test": "vendor/bin/hackunit test",
     "check": "./typecheck"
   },
+  "config": {
+    "preferred-install": "dist"
+  },
   "minimum-stability": "stable"
 }
