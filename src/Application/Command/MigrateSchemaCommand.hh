@@ -24,30 +24,5 @@ use RuntimeException;
 abstract class MigrateSchemaCommand extends AbstractCommand
   implements Command {
 
-  protected function createMigrator(Context $context): Migrator {
-    $server = $context->databaseServer();
-    $connection = $this->connectToServer($server);
-
-    $loader = $this->loaderFrom($context->migration());
-
-    return new Migrator($loader, $connection, $context->logger());
-  }
-
-  private function loaderFrom(Migration $setting): MigrationLoader {
-    return new SqlMigrationLoader($setting->path());
-  }
-
-  private function connectToServer(Server $server): Connection {
-    try {
-      $connectionHandle = DatabaseClient::createConnection(
-        $server->dns(),
-        $server->user(),
-        $server->password(),
-      );
-      return \HH\Asio\join($connectionHandle);
-    } catch (\AsyncMysqlConnectException $e) {
-      throw new \RuntimeException($e->getMessage(), $e->getCode());
-    }
-  }
-
+  protected bool $dryRun = false;
 }

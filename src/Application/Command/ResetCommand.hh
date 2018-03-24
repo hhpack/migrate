@@ -13,7 +13,7 @@ namespace HHPack\Migrate\Application\Command;
 
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{OptionParser};
-use HHPack\Migrate\Application\{Context, Command};
+use HHPack\Migrate\Application\{Context, Command, MigratorBuilder};
 use HHPack\Migrate\{Migrator, SqlMigrationLoader, DatabaseClient};
 
 final class ResetCommand extends MigrateSchemaCommand implements Command {
@@ -23,6 +23,13 @@ final class ResetCommand extends MigrateSchemaCommand implements Command {
     $this->description = "Reset the schema to its initial state";
     $this->optionParser = cli\optparser(
       [
+        cli\on(
+          ['--dry-run'],
+          'Test the change to apply',
+          () ==> {
+            $this->dryRun = true;
+          },
+        ),
         cli\on(
           ['-h', '--help'],
           'Display help message',
@@ -47,8 +54,9 @@ final class ResetCommand extends MigrateSchemaCommand implements Command {
   private async function resetToInitialState(
     Context $context,
   ): Awaitable<void> {
-    $migrator = $this->createMigrator($context);
+    $builder = new MigratorBuilder($context);
+    $migrator = $builder->dryRun($this->dryRun)->build();
+
     await $migrator->downgrade();
   }
-
 }

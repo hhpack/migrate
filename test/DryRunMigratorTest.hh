@@ -3,17 +3,18 @@
 namespace HHPack\Migrate\Test;
 
 use HHPack\Migrate\Test\Helper\{Db};
-use HHPack\Migrate\{File, Migrator};
+use HHPack\Migrate\{File, Migrator, DryRunMigrator};
 use HHPack\Migrate\Migration\{MigrationNotFoundException};
 use HHPack\Migrate\Migration\Loader\{SqlMigrationLoader};
 use HHPack\Migrate\Database\{Connection};
 use HHPack\Migrate\Logger\{ColoredLogger};
 use HackPack\HackUnit\Contract\Assert;
 
-final class MigratorTest {
+final class DryRunMigratorTest {
   public function __construct(
     private Connection $conn,
     private Migrator $migrator,
+    private DryRunMigrator $dryRunMigrator,
   ) {}
 
   <<SuiteProvider('Db')>>
@@ -23,8 +24,9 @@ final class MigratorTest {
 
     $loader = new SqlMigrationLoader($path);
     $migrator = new Migrator($loader, $conn, new ColoredLogger());
+    $dryRunMigrator = new DryRunMigrator($loader, $conn, new ColoredLogger());
 
-    return new static($conn, $migrator);
+    return new static($conn, $migrator, $dryRunMigrator);
   }
 
   <<Setup('test')>>
@@ -38,15 +40,16 @@ final class MigratorTest {
 
   <<Test('Db')>>
   public function upgrade(Assert $assert): void {
-    $result = \HH\Asio\join($this->migrator->upgrade());
+    $result = \HH\Asio\join($this->dryRunMigrator->upgrade());
     $assert->int($result->resultCount())->eq(2);
   }
 
   <<Test('Db')>>
   public function downgradeByLastName(Assert $assert): void {
     \HH\Asio\join($this->migrator->upgrade());
+
     $result = \HH\Asio\join(
-      $this->migrator->downgradeTo('20150824010439-create-users'),
+      $this->dryRunMigrator->downgradeTo('20150824010439-create-users'),
     );
 
     $assert->int($result->resultCount())->eq(2);
@@ -62,7 +65,7 @@ final class MigratorTest {
   public function downgradeByFirstName(Assert $assert): void {
     \HH\Asio\join($this->migrator->upgrade());
     $result = \HH\Asio\join(
-      $this->migrator->downgradeTo('20150825102100-create-posts'),
+      $this->dryRunMigrator->downgradeTo('20150825102100-create-posts'),
     );
 
     $assert->int($result->resultCount())->eq(1);
@@ -77,7 +80,7 @@ final class MigratorTest {
   <<Test('Db')>>
   public function downgradeAll(Assert $assert): void {
     \HH\Asio\join($this->migrator->upgrade());
-    $result = \HH\Asio\join($this->migrator->downgrade());
+    $result = \HH\Asio\join($this->dryRunMigrator->downgrade());
 
     $assert->int($result->resultCount())->eq(2);
 
@@ -87,18 +90,4 @@ final class MigratorTest {
     $users = $result->at('20150824010439-create-users');
     $assert->bool($users->containsKey(0))->is(true);
   }
-
-  <<Test('Db')>>
-  public function downgradeMigrationNotFound(Assert $assert): void {
-    \HH\Asio\join($this->migrator->upgrade());
-
-    $assert->whenCalled(
-      () ==> {
-        \HH\Asio\join(
-          $this->migrator->downgradeTo('20150825102999-not-found'),
-        );
-      },
-    )->willThrowClass(MigrationNotFoundException::class);
-  }
-
 }
