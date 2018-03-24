@@ -14,7 +14,7 @@ namespace HHPack\Migrate\Application\Command;
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{OptionParser};
 use HHPack\Migrate\{Migrator};
-use HHPack\Migrate\Application\{Context, Command};
+use HHPack\Migrate\Application\{Context, Command, MigratorBuilder};
 use HHPack\Migrate\Database\{Connection};
 
 final class UpCommand extends MigrateSchemaCommand implements Command {
@@ -31,6 +31,13 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
           'Version of the schema to be upgraded',
           ($version) ==> {
             $this->schemaVersion = $version;
+          },
+        ),
+        cli\on(
+          ['--dry-run'],
+          'Test the change to apply',
+          () ==> {
+            $this->dryRun = true;
           },
         ),
         cli\on(
@@ -55,13 +62,13 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
   }
 
   private async function upgradeSchema(Context $context): Awaitable<void> {
-    $migrator = $this->createMigrator($context);
+    $builder = new MigratorBuilder($context);
+    $migrator = $builder->dryRun($this->dryRun)->build();
 
     if (is_null($this->schemaVersion)) {
       await $migrator->upgrade();
     } else {
-      await $migrator->upgrade($this->schemaVersion);
+      await $migrator->upgradeTo($this->schemaVersion);
     }
   }
-
 }

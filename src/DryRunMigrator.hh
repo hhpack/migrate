@@ -18,9 +18,9 @@ use HHPack\Migrate\Migration\{
   MigrationResult,
   MigrationNotFoundException
 };
-use HHPack\Migrate\Database\{Connection};
+use HHPack\Migrate\Database\{Connection, QueryResult};
 
-final class Migrator implements Migratable {
+final class DryRunMigrator implements Migratable {
 
   private MigratorAgent $agent;
   private MigrationManager $manager;
@@ -41,7 +41,7 @@ final class Migrator implements Migratable {
 
     await $this->publisher->migrationLoaded($upgradeMigrations);
 
-    return await $this->upgradeSchema($upgradeMigrations);
+    return $this->dryRun($upgradeMigrations);
   }
 
   public async function upgradeTo(
@@ -54,7 +54,7 @@ final class Migrator implements Migratable {
 
     await $this->publisher->migrationLoaded($targetUpgradeMigrations);
 
-    return await $this->upgradeSchema($targetUpgradeMigrations);
+    return $this->dryRun($targetUpgradeMigrations);
   }
 
   public async function downgrade(): Awaitable<MigrationResult> {
@@ -62,7 +62,7 @@ final class Migrator implements Migratable {
 
     await $this->publisher->migrationLoaded($migrations);
 
-    return await $this->downgradeSchema($migrations);
+    return $this->dryRun($migrations);
   }
 
   public async function downgradeTo(
@@ -84,7 +84,7 @@ final class Migrator implements Migratable {
 
     await $this->publisher->migrationLoaded($migrations);
 
-    return await $this->downgradeSchema($migrations);
+    return $this->dryRun($migrations);
   }
 
   private async function selectUpgradeMigrations(
@@ -100,32 +100,19 @@ final class Migrator implements Migratable {
     return $this->loader->loadDowngradeMigrations($appliedMigrations);
   }
 
-  private async function downgradeSchema(
-    ImmVector<Migration> $migrations,
-  ): Awaitable<MigrationResult> {
+  private function dryRun(ImmVector<Migration> $migrations): MigrationResult {
     $results = Map {};
 
     foreach ($migrations->items() as $migration) {
-      $changeResults = await $migration->change($this->agent);
-      await $this->manager->remove($migration);
-      $results->set($migration->name(), $changeResults);
+      $queryResults =
+        $migration->queries()->toImmVector()->map(
+          ($query) ==> {
+            return new QueryResult([ImmMap {"query" => $query}], 0.0, 0.0);
+          },
+        );
+      $results->set($migration->name(), $queryResults);
     }
 
     return new MigrationResult($results->toImmMap());
   }
-
-  private async function upgradeSchema(
-    ImmVector<Migration> $migrations,
-  ): Awaitable<MigrationResult> {
-    $results = Map {};
-
-    foreach ($migrations->items() as $migration) {
-      $changeResults = await $migration->change($this->agent);
-      await $this->manager->save($migration);
-      $results->set($migration->name(), $changeResults);
-    }
-
-    return new MigrationResult($results->toImmMap());
-  }
-
 }
