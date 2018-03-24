@@ -15,7 +15,7 @@ use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{OptionParser};
 use HHPack\Migrate\{Migrator};
 use HHPack\Migrate\Migration\{MigrationLoader};
-use HHPack\Migrate\Application\{Context, Command};
+use HHPack\Migrate\Application\{Context, Command, MigratorBuilder};
 use HHPack\Migrate\Application\Configuration\{Server};
 use RuntimeException;
 
@@ -26,6 +26,13 @@ final class DownCommand extends MigrateSchemaCommand implements Command {
     $this->description = "Downgrade the schema of the database";
     $this->optionParser = cli\optparser(
       [
+        cli\on(
+          ['--dry-run'],
+          'Test the change to apply',
+          () ==> {
+            $this->dryRun = true;
+          },
+        ),
         cli\on(
           ['-h', '--help'],
           'Display help message',
@@ -49,7 +56,9 @@ final class DownCommand extends MigrateSchemaCommand implements Command {
 
       $schemaVersion = $remainArgs->at(0);
 
-      $migrator = $this->createMigrator($context);
+      $builder = new MigratorBuilder($context);
+      $migrator = $builder->dryRun($this->dryRun)->build();
+
       \HH\Asio\join($migrator->downgradeTo($schemaVersion));
     }
   }

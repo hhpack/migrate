@@ -14,12 +14,11 @@ namespace HHPack\Migrate\Application\Command;
 use HHPack\Getopt as cli;
 use HHPack\Getopt\Parser\{OptionParser};
 use HHPack\Migrate\{Migrator};
-use HHPack\Migrate\Application\{Context, Command};
+use HHPack\Migrate\Application\{Context, Command, MigratorBuilder};
 use HHPack\Migrate\Database\{Connection};
 
 final class UpCommand extends MigrateSchemaCommand implements Command {
   private ?string $schemaVersion;
-  private bool $dryRun = false;
 
   public function __construct() {
     $this->usage = "migrate up [OPTIONS]";
@@ -63,7 +62,8 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
   }
 
   private async function upgradeSchema(Context $context): Awaitable<void> {
-    $migrator = $this->createMigrator($context);
+    $builder = new MigratorBuilder($context);
+    $migrator = $builder->dryRun($this->dryRun)->build();
 
     if (is_null($this->schemaVersion)) {
       await $migrator->upgrade();
@@ -71,5 +71,4 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
       await $migrator->upgradeTo($this->schemaVersion);
     }
   }
-
 }
