@@ -17,7 +17,7 @@ use SplFileInfo;
 use SplFileObject;
 
 function read_all(string $path): string {
-  if (!file_exists($path)) {
+  if (!\file_exists($path)) {
     throw new FileNotFoundException("File $path is not found");
   }
 
@@ -27,7 +27,7 @@ function read_all(string $path): string {
 
 function read_json_file(string $path): dict<string, mixed> {
   $json = read_all($path);
-  return json_decode($json, true, 512, JSON_FB_HACK_ARRAYS);
+  return \json_decode($json, true, 512, \JSON_FB_HACK_ARRAYS);
 }
 
 // In the case of realpath(), it becomes consider type annotations

@@ -26,14 +26,14 @@ final class SqlMigrationGenerator implements MigrationGenerator {
     $identity = $newVersion['version'].'_'.$newVersion['name'];
 
     $path = File\absolute_path($this->directory);
-    $up = sprintf("%s/%s.up.sql", $path, $identity);
-    $down = sprintf("%s/%s.down.sql", $path, $identity);
+    $up = \sprintf("%s/%s.up.sql", $path, $identity);
+    $down = \sprintf("%s/%s.down.sql", $path, $identity);
 
-    touch($up);
-    $this->logger->info(sprintf("File %s created\n", $up));
+    \touch($up);
+    $this->logger->info(\sprintf("File %s created\n", $up));
 
-    touch($down);
-    $this->logger->info(sprintf("File %s created\n", $down));
+    \touch($down);
+    $this->logger->info(\sprintf("File %s created\n", $down));
   }
 
 }

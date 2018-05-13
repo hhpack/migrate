@@ -25,7 +25,7 @@ final class SqlMigrationLoader implements MigrationLoader {
   private string $directory;
 
   public function __construct(string $directory) {
-    if (!file_exists($directory) || !is_dir($directory)) {
+    if (!\file_exists($directory) || !\is_dir($directory)) {
       throw new DirectoryNotFoundException("Directory $directory not found");
     }
     $this->directory = $directory;
@@ -36,7 +36,7 @@ final class SqlMigrationLoader implements MigrationLoader {
     $files = $this->findFiles($pattern);
 
     $files = ImmSet::fromItems($files)->toValuesArray();
-    asort(&$files);
+    \asort(&$files);
 
     return
       ImmVector::fromItems($files)
@@ -52,7 +52,7 @@ final class SqlMigrationLoader implements MigrationLoader {
     $files = $this->findFiles($pattern);
 
     $files = ImmSet::fromItems($files)->toValuesArray();
-    arsort(&$files);
+    \arsort(&$files);
 
     return
       ImmVector::fromItems($files)
@@ -63,15 +63,15 @@ final class SqlMigrationLoader implements MigrationLoader {
   }
 
   private function findFiles(string $pattern): Iterator<string> {
-    foreach (glob($pattern) as $file) {
+    foreach (\glob($pattern) as $file) {
       yield $file;
     }
 
     // An error may appear in the check type, do not use the constant.
     // GLOB_NOSORT = 4, GLOB_ONLYDIR = 8192
-    $directories = glob(dirname($pattern).'/*', 4 | 8192);
+    $directories = \glob(\dirname($pattern).'/*', 4 | 8192);
     foreach ($directories as $directory) {
-      $files = $this->findFiles($directory.'/'.basename($pattern));
+      $files = $this->findFiles($directory.'/'.\basename($pattern));
       foreach ($files as $file) {
         yield $file;
       }

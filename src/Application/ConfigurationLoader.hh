@@ -43,7 +43,7 @@ final class ConfigurationLoader implements Loadable {
   private function loadMigration(dict<string, mixed> $setting): Migration {
     $loader = shape(
       "type" => MigrationType::assert((string) $setting['type']),
-      "path" => getcwd().'/'.(string) $setting['path'],
+      "path" => \getcwd().'/'.(string) $setting['path'],
     );
 
     return Migration::fromSetting($loader);
@@ -53,7 +53,7 @@ final class ConfigurationLoader implements Loadable {
     string $env,
     dict<string, mixed> $setting,
   ): Server {
-    if (is_null($setting[$env])) {
+    if (\is_null($setting[$env])) {
       throw new RuntimeException("$env is not found");
     }
 
@@ -103,7 +103,7 @@ final class ConfigurationLoader implements Loadable {
 
   private function envvarFromDict(dict<string, mixed> $value): mixed {
     $envvarName = (string) $value['ENV'];
-    $variable = getenv($envvarName);
+    $variable = \getenv($envvarName);
 
     if ($variable === false) {
       throw new RuntimeException(

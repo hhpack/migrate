@@ -106,9 +106,9 @@ final class MigrateApplication {
       $this->displayHelp();
     } else {
       $loader = new ConfigurationLoader(
-        File\absolute_path(getcwd().'/'.$this->configurationPath),
+        File\absolute_path(\getcwd().'/'.$this->configurationPath),
       );
-      $env = getenv('HHVM_ENV') ? getenv('HHVM_ENV') : 'development';
+      $env = \getenv('HHVM_ENV') ? \getenv('HHVM_ENV') : 'development';
       $configuration = $loader->load($env);
 
       $context =
@@ -131,7 +131,7 @@ final class MigrateApplication {
     $this->output->write("Migration tool for database.\n");
     $this->output->write("https://github.com/hhpack/migrate");
     $this->output->write(
-      sprintf(
+      \sprintf(
         "\n\n  %s %s %s\n\n",
         static::PROGRAM_NAME,
         "[OPTIONS]",
@@ -148,19 +148,19 @@ final class MigrateApplication {
 
   private function displayCommands(): void {
     $keys = $this->commands->keys()->toValuesArray();
-    $maxLength = (int) array_reduce(
+    $maxLength = (int) \array_reduce(
       $keys,
       (int $max, string $key) ==> {
-        return ($max < strlen($key)) ? strlen($key) : $max;
+        return ($max < \strlen($key)) ? \strlen($key) : $max;
       },
       0,
     );
 
     foreach ($this->commands->lazy() as $name => $command) {
       $this->output->write(
-        sprintf(
+        \sprintf(
           "  %s   %s\n",
-          str_pad($name, $maxLength),
+          \str_pad($name, $maxLength),
           $command->description(),
         ),
       );
@@ -169,7 +169,7 @@ final class MigrateApplication {
 
   private function displayVersion(): void {
     $this->output->write(
-      sprintf("%s %s\n", static::PROGRAM_NAME, static::PROGRAM_VERSION),
+      \sprintf("%s %s\n", static::PROGRAM_NAME, static::PROGRAM_VERSION),
     );
   }
 

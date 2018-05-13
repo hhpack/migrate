@@ -28,7 +28,7 @@ final class QueryResult {
   }
 
   public function isEmpty(): bool {
-    return count($this->rows) <= 0;
+    return \count($this->rows) <= 0;
   }
 
   public function startTime(): float {

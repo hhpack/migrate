@@ -30,7 +30,7 @@ final class SqlMigration implements Migration {
   }
 
   public function version(): string {
-    return preg_replace("/^(\d+)\-.+/", "$1", $this->name);
+    return \preg_replace("/^(\d+)\-.+/", "$1", $this->name);
   }
 
   public function queries(): ImmSet<string> {
@@ -51,17 +51,17 @@ final class SqlMigration implements Migration {
   }
 
   public static function fromFile(string $file): this {
-    if (!file_exists($file)) {
+    if (!\file_exists($file)) {
       throw new FileNotFoundException("$file is not found");
     }
 
     $absolutePath = File\absolute_path($file);
 
-    $name = preg_replace("/\.(down|up)\..+$/", "", basename($absolutePath));
-    $sql = file_get_contents($absolutePath);
+    $name = \preg_replace("/\.(down|up)\..+$/", "", \basename($absolutePath));
+    $sql = \file_get_contents($absolutePath);
 
-    $queries = explode(';', trim($sql));
-    $queries = array_slice($queries, 0, count($queries) - 1);
+    $queries = \explode(';', \trim($sql));
+    $queries = \array_slice($queries, 0, \count($queries) - 1);
 
     return new SqlMigration($name, $queries);
   }

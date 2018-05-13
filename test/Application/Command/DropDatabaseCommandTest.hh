@@ -23,10 +23,10 @@ final class DropDatabaseCommandTest {
   public function setUpTest(): void {
     $dbname = $this->conn->escapeString(static::DB_NAME);
     \HH\Asio\join(
-      $this->conn->rawQuery(sprintf("DROP DATABASE IF EXISTS %s", $dbname)),
+      $this->conn->rawQuery(\sprintf("DROP DATABASE IF EXISTS %s", $dbname)),
     );
     \HH\Asio\join(
-      $this->conn->rawQuery(sprintf("CREATE DATABASE %s", $dbname)),
+      $this->conn->rawQuery(\sprintf("CREATE DATABASE %s", $dbname)),
     );
   }
 

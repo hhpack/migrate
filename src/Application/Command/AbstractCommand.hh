@@ -30,8 +30,8 @@ abstract class AbstractCommand implements Command {
   }
 
   protected function displayHelp(): void {
-    fwrite(STDOUT, $this->description);
-    fwrite(STDOUT, sprintf("\n\n  %s\n\n", $this->usage));
+    \fwrite(\STDOUT, $this->description);
+    \fwrite(\STDOUT, \sprintf("\n\n  %s\n\n", $this->usage));
     $this->optionParser->displayHelp();
   }
 

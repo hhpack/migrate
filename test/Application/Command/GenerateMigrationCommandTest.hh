@@ -15,7 +15,7 @@ final class GenerateMigrationCommandTest {
 
   <<SuiteProvider('SqlMigration')>>
   public static function newSqlMigration(): this {
-    $path = File\absolute_path(sys_get_temp_dir());
+    $path = File\absolute_path(\sys_get_temp_dir());
 
     $context = new MigrateContext($path, ['create-groups']);
 
@@ -40,10 +40,10 @@ final class GenerateMigrationCommandTest {
     $migration = $this->context->migration();
 
     $entries = Set {};
-    $directory = dir($migration->path());
+    $directory = \dir($migration->path());
 
     while (false !== ($entry = $directory->read())) {
-      if (preg_match(
+      if (\preg_match(
             '/(create-groups.up\.sql|create-groups.down\.sql)$/',
             $entry,
           )) {
@@ -59,7 +59,7 @@ final class GenerateMigrationCommandTest {
     $directory = $migration->path();
 
     foreach ($this->sqlMigrationFiles() as $file) {
-      unlink($directory.'/'.$file);
+      \unlink($directory.'/'.$file);
     }
   }
 

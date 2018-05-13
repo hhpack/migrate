@@ -26,17 +26,17 @@ final class MigrationLogger implements Subscribable<Message> {
   public function loaded(MigrationLoadedEvent $event): void {
     $this->logger->info("Database migration started\n");
     $this->logger->info(
-      sprintf("Migration found %d files\n\n", $event->migrationCount()),
+      \sprintf("Migration found %d files\n\n", $event->migrationCount()),
     );
   }
 
   public function start(MigrationStartEvent $event): void {
-    $this->logger->info(sprintf("query: %s\n", $event->query()));
+    $this->logger->info(\sprintf("query: %s\n", $event->query()));
   }
 
   public function success(MigrationSuccessEvent $event): void {
     $this->logger
-      ->info(sprintf("success: %F seconds\n\n", $event->totalTime()));
+      ->info(\sprintf("success: %F seconds\n\n", $event->totalTime()));
   }
 
 }

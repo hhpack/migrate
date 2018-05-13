@@ -22,12 +22,12 @@ final class Console implements Output {
 
   // TODO check all content write to stream
   public function write(string $message): void {
-    $this->stdout->fwrite($message, strlen($message));
+    $this->stdout->fwrite($message, \strlen($message));
   }
 
   // TODO check all content write to stream
   public function writeError(string $message): void {
-    $this->stderr->fwrite($message, strlen($message));
+    $this->stderr->fwrite($message, \strlen($message));
   }
 
 }

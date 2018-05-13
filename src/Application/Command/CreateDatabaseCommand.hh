@@ -54,9 +54,9 @@ final class CreateDatabaseCommand extends DatabaseCommand implements Command {
       $logger = $context->logger();
       $server = $context->databaseServer();
 
-      $logger->info(sprintf("Create the database %s\n", $server->name()));
+      $logger->info(\sprintf("Create the database %s\n", $server->name()));
       \HH\Asio\join($this->createDatabase($server));
-      $logger->info(sprintf("%s is created\n", $server->name()));
+      $logger->info(\sprintf("%s is created\n", $server->name()));
     }
   }
 
@@ -68,7 +68,7 @@ final class CreateDatabaseCommand extends DatabaseCommand implements Command {
 
     if (!$result->isEmpty()) {
       throw new DatabaseAlreadyExistsException(
-        sprintf("Database %s is already exists", $server->name()),
+        \sprintf("Database %s is already exists", $server->name()),
       );
     }
 

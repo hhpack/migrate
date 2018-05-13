@@ -54,9 +54,9 @@ final class DropDatabaseCommand extends DatabaseCommand implements Command {
       $logger = $context->logger();
       $server = $context->databaseServer();
 
-      $logger->info(sprintf("Drop the database %s\n", $server->name()));
+      $logger->info(\sprintf("Drop the database %s\n", $server->name()));
       \HH\Asio\join($this->dropDatabase($server));
-      $logger->info(sprintf("%s is droped\n", $server->name()));
+      $logger->info(\sprintf("%s is droped\n", $server->name()));
     }
   }
 
@@ -68,7 +68,7 @@ final class DropDatabaseCommand extends DatabaseCommand implements Command {
 
     if ($result->isEmpty()) {
       throw new DatabaseNotFoundException(
-        sprintf("Database %s is not found", $server->name()),
+        \sprintf("Database %s is not found", $server->name()),
       );
     }
 

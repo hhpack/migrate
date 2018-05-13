@@ -40,15 +40,15 @@ final class DataSourceName {
   }
 
   public static function fromString(DSNString $dsn): this {
-    $parts = explode(':', $dsn);
-    $parameters = explode(';', $parts[1]);
+    $parts = \explode(':', $dsn);
+    $parameters = \explode(';', $parts[1]);
 
     $dbname = '';
     $dbhost = DatabaseServer::DEFAULT_HOST;
     $dbport = DatabaseServer::DEFAULT_PORT;
 
     foreach ($parameters as $parameter) {
-      list($name, $value) = explode('=', $parameter);
+      list($name, $value) = \explode('=', $parameter);
 
       if ($name === 'dbname') {
         $dbname = $value;

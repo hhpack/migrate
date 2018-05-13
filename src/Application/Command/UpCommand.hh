@@ -65,7 +65,7 @@ final class UpCommand extends MigrateSchemaCommand implements Command {
     $builder = new MigratorBuilder($context);
     $migrator = $builder->dryRun($this->dryRun)->build();
 
-    if (is_null($this->schemaVersion)) {
+    if (\is_null($this->schemaVersion)) {
       await $migrator->upgrade();
     } else {
       await $migrator->upgradeTo($this->schemaVersion);
