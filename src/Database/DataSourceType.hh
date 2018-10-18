@@ -11,6 +11,6 @@
 
 namespace HHPack\Migrate\Database;
 
-enum DataSourceType : string {
+enum DataSourceType: string {
   MySql = 'mysql';
 }

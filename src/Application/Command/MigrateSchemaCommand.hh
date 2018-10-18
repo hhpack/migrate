@@ -21,8 +21,7 @@ use HHPack\Migrate\Application\{Context, Command};
 use HHPack\Migrate\Application\Configuration\{Migration, Server};
 use RuntimeException;
 
-abstract class MigrateSchemaCommand extends AbstractCommand
-  implements Command {
+abstract class MigrateSchemaCommand extends AbstractCommand implements Command {
 
   protected bool $dryRun = false;
 }

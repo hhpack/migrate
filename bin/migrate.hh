@@ -31,14 +31,12 @@ foreach ($autoloadFiles as $autoloadFile) {
   break;
 }
 if (!$composerInstall) {
-  echo
-    'You must set up the dependencies, run the following commands:'.
+  echo 'You must set up the dependencies, run the following commands:'.
     PHP_EOL.
     'curl -s http://getcomposer.org/installer | php'.
     PHP_EOL.
     'php composer.phar install'.
-    PHP_EOL
-  ;
+    PHP_EOL;
   exit(1);
 }
 unset($composerInstall, $autoloadFiles, $autoloadFile);

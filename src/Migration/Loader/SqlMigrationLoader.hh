@@ -11,12 +11,7 @@
 
 namespace HHPack\Migrate\Migration\Loader;
 
-use HHPack\Migrate\{
-  File,
-  MigrationName,
-  Migration,
-  DirectoryNotFoundException
-};
+use HHPack\Migrate\{File, MigrationName, Migration, DirectoryNotFoundException};
 use HHPack\Migrate\Migration\{MigrationLoader};
 use HHPack\Migrate\Migration\Type\{SqlMigration};
 
@@ -38,9 +33,8 @@ final class SqlMigrationLoader implements MigrationLoader {
     $files = ImmSet::fromItems($files)->toValuesArray();
     \asort(&$files);
 
-    return
-      ImmVector::fromItems($files)
-        ->map(($file) ==> SqlMigration::fromFile($file));
+    return ImmVector::fromItems($files)
+      ->map(($file) ==> SqlMigration::fromFile($file));
   }
 
   public function loadDowngradeMigrations(
@@ -54,12 +48,11 @@ final class SqlMigrationLoader implements MigrationLoader {
     $files = ImmSet::fromItems($files)->toValuesArray();
     \arsort(&$files);
 
-    return
-      ImmVector::fromItems($files)
-        ->map(($file) ==> SqlMigration::fromFile($file))
-        ->filter(
-          ($migration) ==> $appliedMigrations->contains($migration->name()),
-        );
+    return ImmVector::fromItems($files)
+      ->map(($file) ==> SqlMigration::fromFile($file))
+      ->filter(
+        ($migration) ==> $appliedMigrations->contains($migration->name()),
+      );
   }
 
   private function findFiles(string $pattern): Iterator<string> {

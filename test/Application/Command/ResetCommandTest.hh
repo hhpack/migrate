@@ -8,48 +8,41 @@ use HHPack\Migrate\Application\Command\{UpCommand, ResetCommand};
 use HHPack\Migrate\Database\{DataSourceName, Connection};
 use HHPack\Migrate\Test\Mock\{MigrateContext};
 use HHPack\Migrate\Test\Helper\{Db};
-use HackPack\HackUnit\Contract\Assert;
 
-final class ResetCommandTest {
+use type Facebook\HackTest\{HackTest,DataProvider};
+use function Facebook\FBExpect\expect;
 
-  public function __construct(
-    private Connection $conn,
-    private Context $upContext,
-    private Context $resetContext,
-  ) {}
+final class ResetCommandTest extends HackTest {
 
-  <<Setup('test')>>
-  public function setUpTest(): void {
-    \HH\Asio\join(
-      $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations"),
-    );
-    \HH\Asio\join($this->conn->rawQuery("DROP TABLE IF EXISTS users"));
-    \HH\Asio\join($this->conn->rawQuery("DROP TABLE IF EXISTS posts"));
+  public async function beforeEachTestAsync(): Awaitable<void> {
+    $conn = Db\connect();
+    await $conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations");
+    await $conn->rawQuery("DROP TABLE IF EXISTS users");
+    await $conn->rawQuery("DROP TABLE IF EXISTS posts");
   }
 
-  <<SuiteProvider('Default')>>
-  public static function noArguments(): this {
+  public function provideContext(): vec<(Connection, Context, Context)> {
     $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
     $conn = Db\connect();
     $upContext = new MigrateContext($path, []);
     $resetContext = new MigrateContext($path, []);
 
-    return new static($conn, $upContext, $resetContext);
+    return vec[tuple($conn, $upContext, $resetContext)];
   }
 
-  <<Test('Default')>>
-  public function migrateToInitialState(Assert $assert): void {
+  <<DataProvider('provideContext')>>
+  public function testMigrateToInitialState(Connection $conn, Context $upContext, Context $resetContext): void {
     $command = new UpCommand();
-    $command->run($this->upContext);
+    $command->run($upContext);
 
     $command = new ResetCommand();
-    $command->run($this->resetContext);
+    $command->run($resetContext);
 
-    $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
+    $result = \HH\Asio\join($conn->rawQuery('show tables'));
     $rows = $result->rows();
 
     // scheme_migrations
-    $assert->int($rows->count())->eq(1);
+    expect($rows->count())->toBeSame(1);
   }
 }

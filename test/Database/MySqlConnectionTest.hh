@@ -4,20 +4,17 @@ namespace HHPack\Migrate\Test\Database;
 
 use HHPack\Migrate\Test\Helper\{Db};
 use HHPack\Migrate\Database\{Connection, MySqlConnection};
-use HackPack\HackUnit\Contract\Assert;
+use type Facebook\HackTest\{HackTest,DataProvider};
+use function Facebook\FBExpect\expect;
 
-final class MySqlConnectionTest {
-  public function __construct(private Connection $conn) {}
-
-  <<SuiteProvider('Db')>>
-  public static function create(): this {
-    $conn = Db\connect();
-    return new static($conn);
+final class MySqlConnectionTest extends HackTest {
+  public function provideConnection(): vec<(Connection)> {
+    return vec[tuple(Db\connect())];
   }
 
-  <<Test('Db')>>
-  public function query(Assert $assert): void {
-    $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
-    $assert->bool($result->isEmpty())->is(false);
+  <<DataProvider('Db')>>
+  public function testQuery(Connection $conn): void {
+    $result = \HH\Asio\join($conn->rawQuery('show tables'));
+    expect($result->isEmpty())->toBeTrue();
   }
 }

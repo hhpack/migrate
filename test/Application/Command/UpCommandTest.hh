@@ -8,66 +8,58 @@ use HHPack\Migrate\Application\Command\{UpCommand};
 use HHPack\Migrate\Database\{DataSourceName, Connection};
 use HHPack\Migrate\Test\Mock\{MigrateContext};
 use HHPack\Migrate\Test\Helper\{Db};
-use HackPack\HackUnit\Contract\Assert;
 
-final class UpCommandTest {
+use type Facebook\HackTest\{HackTest,DataProvider};
+use function Facebook\FBExpect\expect;
 
-  public function __construct(
-    private Connection $conn,
-    private Context $context,
-  ) {}
+final class UpCommandTest extends HackTest {
 
-  <<Setup('test')>>
-  public function setUpTest(): void {
-    \HH\Asio\join(
-      $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations"),
-    );
-    \HH\Asio\join($this->conn->rawQuery("DROP TABLE IF EXISTS users"));
-    \HH\Asio\join($this->conn->rawQuery("DROP TABLE IF EXISTS posts"));
+  public async function beforeEachTestAsync(): Awaitable<void> {
+    $conn = Db\connect();
+    await $conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations");
+    await $conn->rawQuery("DROP TABLE IF EXISTS users");
+    await $conn->rawQuery("DROP TABLE IF EXISTS posts");
   }
 
-  <<SuiteProvider('NoArguments')>>
-  public static function noArguments(): this {
+  public function provideNoArguments(): vec<(Connection, Context)> {
     $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
     $conn = Db\connect();
     $context = new MigrateContext($path, []);
 
-    return new static($conn, $context);
+    return vec[tuple($conn, $context)];
   }
 
-  <<SuiteProvider('ToOption')>>
-  public static function toOptions(): this {
+  public function provideOptions(): vec<(Connection, Context)> {
     $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
     $conn = Db\connect();
-    $context =
-      new MigrateContext($path, ['--to=20150824010439-create-users']);
+    $context = new MigrateContext($path, ['--to=20150824010439-create-users']);
 
-    return new static($conn, $context);
+    return vec[tuple($conn, $context)];
   }
 
-  <<Test('NoArguments')>>
-  public function migrateToLatestSchema(Assert $assert): void {
+  <<DataProvider('provideNoArguments')>>
+  public function testMigrateToLatestSchema(Connection $conn, Context $context): void {
     $command = new UpCommand();
-    $command->run($this->context);
+    $command->run($context);
 
-    $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
+    $result = \HH\Asio\join($conn->rawQuery('show tables'));
     $rows = $result->rows();
 
     // users, posts, scheme_migrations
-    $assert->int($rows->count())->eq(3);
+    expect($rows->count())->toBeSame(3);
   }
 
-  <<Test('ToOption')>>
-  public function migrateToUsersSchema(Assert $assert): void {
+  <<DataProvider('provideOptions')>>
+  public function testMigrateToUsersSchema(Connection $conn, Context $context): void {
     $command = new UpCommand();
-    $command->run($this->context);
+    $command->run($context);
 
-    $result = \HH\Asio\join($this->conn->rawQuery('show tables'));
+    $result = \HH\Asio\join($conn->rawQuery('show tables'));
     $rows = $result->rows();
 
     // users, scheme_migrations
-    $assert->int($rows->count())->eq(2);
+    expect($rows->count())->toBeSame(2);
   }
 }

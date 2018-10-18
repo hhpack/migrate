@@ -18,7 +18,8 @@ use HHPack\Migrate\Migration\{MigrationGenerator, GenerateVerison};
 use HHPack\Migrate\Migration\Generator\{SqlMigrationGenerator};
 use RuntimeException;
 
-final class GenerateMigrationCommand extends AbstractCommand
+final class GenerateMigrationCommand
+  extends AbstractCommand
   implements Command {
 
   public function __construct() {
@@ -52,7 +53,7 @@ final class GenerateMigrationCommand extends AbstractCommand
       $generator = $this->createMigrationGenerator($context);
       $generator->generate(
         shape(
-          'version' => (string) (new \DateTime())->format('Ymdhis'),
+          'version' => (string)(new \DateTime())->format('Ymdhis'),
           'name' => $name,
         ),
       );

@@ -15,7 +15,7 @@ use HHPack\Migrate\{Logger};
 use HHPack\Migrate\Event\{
   MigrationLoadedEvent,
   MigrationStartEvent,
-  MigrationSuccessEvent
+  MigrationSuccessEvent,
 };
 use HHPack\Publisher\{Message, Subscribable};
 

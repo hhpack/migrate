@@ -21,11 +21,10 @@ final class CreateMigrationsTableQuery implements Query {
   public async function execute(
     AsyncMysqlConnection $connection,
   ): Awaitable<QueryResult> {
-    $result =
-      await $connection->queryf(
-        'CREATE TABLE IF NOT EXISTS %T (id int(11) NOT NULL AUTO_INCREMENT, name varchar(255), run_at datetime NOT NULL, PRIMARY KEY (id))',
-        $this->tableName,
-      );
+    $result = await $connection->queryf(
+      'CREATE TABLE IF NOT EXISTS %T (id int(11) NOT NULL AUTO_INCREMENT, name varchar(255), run_at datetime NOT NULL, PRIMARY KEY (id))',
+      $this->tableName,
+    );
     return QueryResult::fromAsyncResult($result);
   }
 

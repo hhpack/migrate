@@ -16,7 +16,7 @@ use HHPack\Migrate\Migration\{
   MigrationLoader,
   MigrationLogger,
   MigrationResult,
-  MigrationNotFoundException
+  MigrationNotFoundException,
 };
 use HHPack\Migrate\Database\{Connection};
 

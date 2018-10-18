@@ -17,7 +17,7 @@ use HHPack\Migrate\Application\Configuration\{
   Configuration,
   Migration,
   Server,
-  Loadable
+  Loadable,
 };
 use RuntimeException;
 use Facebook\TypeSpec;
@@ -42,8 +42,8 @@ final class ConfigurationLoader implements Loadable {
 
   private function loadMigration(dict<string, mixed> $setting): Migration {
     $loader = shape(
-      "type" => MigrationType::assert((string) $setting['type']),
-      "path" => \getcwd().'/'.(string) $setting['path'],
+      "type" => MigrationType::assert((string)$setting['type']),
+      "path" => \getcwd().'/'.(string)$setting['path'],
     );
 
     return Migration::fromSetting($loader);
@@ -62,11 +62,11 @@ final class ConfigurationLoader implements Loadable {
     $serverSetting = $this->replaceEnvironmentVars($expectedEnvironment);
 
     $server = shape(
-      "host" => (string) $serverSetting['host'],
-      "port" => (int) $serverSetting['port'],
-      "name" => (string) $serverSetting['name'],
-      "user" => (string) $serverSetting['user'],
-      "password" => (string) $serverSetting['password'],
+      "host" => (string)$serverSetting['host'],
+      "port" => (int)$serverSetting['port'],
+      "name" => (string)$serverSetting['name'],
+      "user" => (string)$serverSetting['user'],
+      "password" => (string)$serverSetting['password'],
     );
 
     return Server::fromSetting($server);
@@ -102,13 +102,12 @@ final class ConfigurationLoader implements Loadable {
   }
 
   private function envvarFromDict(dict<string, mixed> $value): mixed {
-    $envvarName = (string) $value['ENV'];
+    $envvarName = (string)$value['ENV'];
     $variable = \getenv($envvarName);
 
     if ($variable === false) {
-      throw new RuntimeException(
-        "Environment variable {$envvarName} is not set",
-      );
+      throw
+        new RuntimeException("Environment variable {$envvarName} is not set");
     }
 
     return $variable;

@@ -8,17 +8,19 @@ use HHPack\Migrate\Migration\{MigrationNotFoundException};
 use HHPack\Migrate\Migration\Loader\{SqlMigrationLoader};
 use HHPack\Migrate\Database\{Connection};
 use HHPack\Migrate\Logger\{ColoredLogger};
-use HackPack\HackUnit\Contract\Assert;
 
-final class DryRunMigratorTest {
-  public function __construct(
-    private Connection $conn,
-    private Migrator $migrator,
-    private DryRunMigrator $dryRunMigrator,
-  ) {}
+use type Facebook\HackTest\{HackTest,DataProvider};
+use function Facebook\FBExpect\expect;
 
-  <<SuiteProvider('Db')>>
-  public static function create(): this {
+final class DryRunMigratorTest extends HackTest {
+  public async function beforeEachTestAsync(): Awaitable<void> {
+    $conn = Db\connect();
+    \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations"));
+    \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS users"));
+    \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS posts"));
+  }
+
+  public function provide(): vec<(Connection, Migrator, DryRunMigrator)> {
     $conn = Db\connect();
     $path = File\absolute_path(__DIR__.'/sql/migrations');
 
@@ -26,68 +28,75 @@ final class DryRunMigratorTest {
     $migrator = new Migrator($loader, $conn, new ColoredLogger());
     $dryRunMigrator = new DryRunMigrator($loader, $conn, new ColoredLogger());
 
-    return new static($conn, $migrator, $dryRunMigrator);
+    return vec[tuple($conn, $migrator, $dryRunMigrator)];
   }
 
-  <<Setup('test')>>
-  public function setUpTest(): void {
-    \HH\Asio\join(
-      $this->conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations"),
-    );
-    \HH\Asio\join($this->conn->rawQuery("DROP TABLE IF EXISTS users"));
-    \HH\Asio\join($this->conn->rawQuery("DROP TABLE IF EXISTS posts"));
+  <<DataProvider('provide')>>
+  public function testUpgrade(
+    Connection $conn,
+    Migrator $migrator,
+    DryRunMigrator $dryRunMigrator,
+  ): void {
+    $result = \HH\Asio\join($dryRunMigrator->upgrade());
+    expect($result->resultCount())->toBeSame(2);
   }
 
-  <<Test('Db')>>
-  public function upgrade(Assert $assert): void {
-    $result = \HH\Asio\join($this->dryRunMigrator->upgrade());
-    $assert->int($result->resultCount())->eq(2);
-  }
-
-  <<Test('Db')>>
-  public function downgradeByLastName(Assert $assert): void {
-    \HH\Asio\join($this->migrator->upgrade());
+  <<DataProvider('provide')>>
+  public function testDowngradeByLastName(
+    Connection $conn,
+    Migrator $migrator,
+    DryRunMigrator $dryRunMigrator,
+  ): void {
+    \HH\Asio\join($migrator->upgrade());
 
     $result = \HH\Asio\join(
-      $this->dryRunMigrator->downgradeTo('20150824010439-create-users'),
+      $dryRunMigrator->downgradeTo('20150824010439-create-users'),
     );
 
-    $assert->int($result->resultCount())->eq(2);
+    expect($result->resultCount())->toBeSame(2);
 
     $posts = $result->at('20150825102100-create-posts');
-    $assert->bool($posts->containsKey(0))->is(true);
+    expect($posts->containsKey(0))->toBeTrue();
 
     $users = $result->at('20150824010439-create-users');
-    $assert->bool($users->containsKey(0))->is(true);
+    expect($users->containsKey(0))->toBeTrue();
   }
 
-  <<Test('Db')>>
-  public function downgradeByFirstName(Assert $assert): void {
-    \HH\Asio\join($this->migrator->upgrade());
+  <<DataProvider('provide')>>
+  public function testDowngradeByFirstName(
+    Connection $conn,
+    Migrator $migrator,
+    DryRunMigrator $dryRunMigrator,
+  ): void {
+    \HH\Asio\join($migrator->upgrade());
     $result = \HH\Asio\join(
-      $this->dryRunMigrator->downgradeTo('20150825102100-create-posts'),
+      $dryRunMigrator->downgradeTo('20150825102100-create-posts'),
     );
 
-    $assert->int($result->resultCount())->eq(1);
+    expect($result->resultCount())->toBeSame(1);
 
     $posts = $result->at('20150825102100-create-posts');
-    $assert->bool($posts->containsKey(0))->is(true);
+    expect($posts->containsKey(0))->toBeTrue();
 
-    $assert->bool($result->containsKey('20150824010439-create-users'))
-      ->is(false);
+    expect($result->containsKey('20150824010439-create-users'))
+      ->toBeFalse();
   }
 
-  <<Test('Db')>>
-  public function downgradeAll(Assert $assert): void {
-    \HH\Asio\join($this->migrator->upgrade());
-    $result = \HH\Asio\join($this->dryRunMigrator->downgrade());
+  <<DataProvider('provide')>>
+  public function testDowngradeAll(
+    Connection $conn,
+    Migrator $migrator,
+    DryRunMigrator $dryRunMigrator,
+  ): void {
+    \HH\Asio\join($migrator->upgrade());
+    $result = \HH\Asio\join($dryRunMigrator->downgrade());
 
-    $assert->int($result->resultCount())->eq(2);
+    expect($result->resultCount())->toBeSame(2);
 
     $posts = $result->at('20150825102100-create-posts');
-    $assert->bool($posts->containsKey(0))->is(true);
+    expect($posts->containsKey(0))->toBeTrue();
 
     $users = $result->at('20150824010439-create-users');
-    $assert->bool($users->containsKey(0))->is(true);
+    expect($users->containsKey(0))->toBeTrue();
   }
 }

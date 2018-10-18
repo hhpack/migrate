@@ -35,8 +35,7 @@ final class MigratorBuilder {
     $loader = $this->loaderFrom($this->context->migration());
 
     if ($this->druRun) {
-      return
-        new DryRunMigrator($loader, $connection, $this->context->logger());
+      return new DryRunMigrator($loader, $connection, $this->context->logger());
     } else {
       return new Migrator($loader, $connection, $this->context->logger());
     }

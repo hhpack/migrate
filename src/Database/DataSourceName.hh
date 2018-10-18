@@ -55,7 +55,7 @@ final class DataSourceName {
       } else if ($name === 'host') {
         $dbhost = $value;
       } else if ($name === 'port') {
-        $dbport = (int) $value;
+        $dbport = (int)$value;
       }
     }
     $dbtype = DataSourceType::assert($parts[0]);

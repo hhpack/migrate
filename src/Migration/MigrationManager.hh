@@ -17,7 +17,7 @@ use HHPack\Migrate\Database\Query\{
   CreateMigrationsTableQuery,
   SelectMigrationsQuery,
   SaveMigrationQuery,
-  RemoveMigrationQuery
+  RemoveMigrationQuery,
 };
 
 final class MigrationManager {
@@ -34,7 +34,7 @@ final class MigrationManager {
   public async function loadMigrations(): Awaitable<ImmSet<MigrationName>> {
     $result = await $this->connection
       ->query(new SelectMigrationsQuery(static::TABLE_NAME));
-    $migrations = $result->pluck('name', ($v) ==> (string) $v);
+    $migrations = $result->pluck('name', ($v) ==> (string)$v);
     return $migrations;
   }
 
@@ -56,9 +56,8 @@ final class MigrationManager {
   }
 
   public async function remove(Migration $migration): Awaitable<QueryResult> {
-    return await $this->connection->query(
-      new RemoveMigrationQuery(static::TABLE_NAME, $migration->name()),
-    );
+    return await $this->connection
+      ->query(new RemoveMigrationQuery(static::TABLE_NAME, $migration->name()));
   }
 
 }

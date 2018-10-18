@@ -20,7 +20,7 @@ use HHPack\Migrate\Application\Command\{
   UpCommand,
   DownCommand,
   ResetCommand,
-  GenerateMigrationCommand
+  GenerateMigrationCommand,
 };
 use HHPack\Migrate\Logger\{PlainLogger, ColoredLogger};
 
@@ -148,7 +148,7 @@ final class MigrateApplication {
 
   private function displayCommands(): void {
     $keys = $this->commands->keys()->toValuesArray();
-    $maxLength = (int) \array_reduce(
+    $maxLength = (int)\array_reduce(
       $keys,
       (int $max, string $key) ==> {
         return ($max < \strlen($key)) ? \strlen($key) : $max;

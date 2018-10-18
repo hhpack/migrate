@@ -12,11 +12,7 @@
 namespace HHPack\Migrate\Application;
 
 use HHPack\Migrate\{Logger};
-use HHPack\Migrate\Application\Configuration\{
-  Configuration,
-  Migration,
-  Server
-};
+use HHPack\Migrate\Application\Configuration\{Configuration, Migration, Server};
 use HHPack\Migrate\Migration\{MigrationType, MigrationLoader};
 use HHPack\Migrate\Database\{Connection};
 

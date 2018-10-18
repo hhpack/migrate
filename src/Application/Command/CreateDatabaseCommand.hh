@@ -17,11 +17,11 @@ use HHPack\Migrate\Database\{
   Connection,
   DatabaseClient,
   DatabaseServer,
-  DatabaseAlreadyExistsException
+  DatabaseAlreadyExistsException,
 };
 use HHPack\Migrate\Database\Query\{
   CreateDatabaseQuery,
-  DatabaseAlreadyExistsQuery
+  DatabaseAlreadyExistsQuery,
 };
 use HHPack\Migrate\Application\{Context, Command};
 use HHPack\Migrate\Application\Configuration\{Server};
@@ -62,9 +62,8 @@ final class CreateDatabaseCommand extends DatabaseCommand implements Command {
 
   private async function createDatabase(Server $server): Awaitable<void> {
     $connection = await $this->connectToServer($server);
-    $result = await $connection->query(
-      new DatabaseAlreadyExistsQuery($server->name()),
-    );
+    $result =
+      await $connection->query(new DatabaseAlreadyExistsQuery($server->name()));
 
     if (!$result->isEmpty()) {
       throw new DatabaseAlreadyExistsException(

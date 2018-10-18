@@ -15,11 +15,7 @@ use HHPack\Migrate\{Logger};
 use HHPack\Migrate\Migration\{MigrationLoader};
 use HHPack\Migrate\Migration\Loader\{SqlMigrationLoader};
 use HHPack\Migrate\Database\{Connection, DatabaseClient, DatabaseServer};
-use HHPack\Migrate\Application\Configuration\{
-  Configuration,
-  Migration,
-  Server
-};
+use HHPack\Migrate\Application\Configuration\{Configuration, Migration, Server};
 
 final class MigrateContext implements Context {
 

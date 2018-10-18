@@ -5,60 +5,62 @@ namespace HHPack\Migrate\Test\Migration;
 use HHPack\Migrate\Test\Helper\{Db};
 use HHPack\Migrate\Migration\{MigrationManager};
 use HHPack\Migrate\Database\{Connection};
-use HackPack\HackUnit\Contract\Assert;
 
-final class MigrationManagerTest {
-  public function __construct(
-    private Connection $conn,
-    private MigrationManager $manager,
-  ) {}
+use type Facebook\HackTest\{HackTest,DataProvider};
+use function Facebook\FBExpect\expect;
 
-  <<SuiteProvider('Db')>>
-  public static function create(): this {
-    $conn = Db\connect();
+final class MigrationManagerTest extends HackTest {
+  <<__Memoize>>
+  public function currentConnection(): Connection {
+    return Db\connect();
+  }
+
+  public async function beforeEachTestAsync(): Awaitable<void> {
+    $conn = $this->currentConnection();
+
+    \HH\Asio\join($conn->rawQuery('DROP TABLE IF EXISTS scheme_migrations'));
+  }
+
+  public function provideManager(): vec<(MigrationManager, Connection)> {
+    $conn = $this->currentConnection();
     $manager = new MigrationManager($conn);
 
-    return new static($conn, $manager);
+    return vec[tuple($manager, $conn)];
   }
 
-  <<Setup('test')>>
-  public function setUpTest(): void {
-    \HH\Asio\join(
-      $this->conn->rawQuery('DROP TABLE IF EXISTS scheme_migrations'),
-    );
-  }
-
-  <<Test('Db')>>
-  public function setup(Assert $assert): void {
-    \HH\Asio\join($this->manager->setUp());
-    $result = \HH\Asio\join(
-      $this->conn->rawQuery('SHOW CREATE TABLE scheme_migrations'),
-    );
+  <<DataProvider('provideManager')>>
+  public function testSetup(MigrationManager $manager, Connection $conn): void {
+    \HH\Asio\join($manager->setUp());
+    $result =
+      \HH\Asio\join($conn->rawQuery('SHOW CREATE TABLE scheme_migrations'));
 
     $rows = $result->rows();
-    $assert->int($rows->count())->eq(1);
+    expect($rows->count())->toBeSame(1);
   }
 
-  <<Test('Db')>>
-  public function loadMigrations(Assert $assert): void {
-    \HH\Asio\join($this->manager->setUp());
+  <<DataProvider('provideManager')>>
+  public function testLoadMigrations(
+    MigrationManager $manager,
+    Connection $conn,
+  ): void {
+    \HH\Asio\join($manager->setUp());
     \HH\Asio\join(
-      $this->conn
+      $conn
         ->rawQuery(
           "INSERT INTO scheme_migrations (name, run_at) VALUES ('20150824010439.up.sql', CURRENT_TIMESTAMP)",
         ),
     );
     \HH\Asio\join(
-      $this->conn
+      $conn
         ->rawQuery(
           "INSERT INTO scheme_migrations (name, run_at) VALUES ('20150825102100.up.sql', CURRENT_TIMESTAMP)",
         ),
     );
 
-    $result = \HH\Asio\join($this->manager->loadMigrations());
+    $result = \HH\Asio\join($manager->loadMigrations());
 
-    \HH\Asio\join($this->conn->rawQuery("DELETE FROM scheme_migrations"));
+    \HH\Asio\join($conn->rawQuery("DELETE FROM scheme_migrations"));
 
-    $assert->int($result->count())->eq(2);
+    expect($result->count())->toBeSame(2);
   }
 }

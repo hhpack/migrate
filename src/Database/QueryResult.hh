@@ -47,13 +47,10 @@ final class QueryResult {
     return $this->rows->map($selector)->toImmSet();
   }
 
-  public static function fromAsyncResult(
-    \AsyncMysqlQueryResult $result,
-  ): this {
-    $rows =
-      $result->mapRowsTyped()
-        ->map(($row) ==> $row->toImmMap())
-        ->toImmVector();
+  public static function fromAsyncResult(\AsyncMysqlQueryResult $result): this {
+    $rows = $result->mapRowsTyped()
+      ->map(($row) ==> $row->toImmMap())
+      ->toImmVector();
 
     return new static($rows, $result->startTime(), $result->endTime());
   }

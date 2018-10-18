@@ -3,15 +3,15 @@
 namespace HHPack\Migrate\Test\Database;
 
 use HHPack\Migrate\Database\{DataSourceName};
-use HackPack\HackUnit\Contract\Assert;
+use type Facebook\HackTest\HackTest;
+use function Facebook\FBExpect\expect;
 
-final class DataSourceNameTest {
-  <<Test>>
-  public function create(Assert $assert): void {
+final class DataSourceNameTest extends HackTest {
+  public function testCreate(): void {
     $dns = DataSourceName::fromString('mysql:dbname=test;port=10000');
 
-    $assert->int($dns->port())->eq(10000);
-    $assert->string((string) $dns->type())->is('mysql');
-    $assert->string($dns->name())->is('test');
+    expect($dns->port())->toBeSame(10000);
+    expect((string)$dns->type())->toBeSame('mysql');
+    expect($dns->name())->toBeSame('test');
   }
 }

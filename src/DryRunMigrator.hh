@@ -16,7 +16,7 @@ use HHPack\Migrate\Migration\{
   MigrationLoader,
   MigrationLogger,
   MigrationResult,
-  MigrationNotFoundException
+  MigrationNotFoundException,
 };
 use HHPack\Migrate\Database\{Connection, QueryResult};
 
@@ -104,12 +104,11 @@ final class DryRunMigrator implements Migratable {
     $results = Map {};
 
     foreach ($migrations->items() as $migration) {
-      $queryResults =
-        $migration->queries()->toImmVector()->map(
-          ($query) ==> {
-            return new QueryResult([ImmMap {"query" => $query}], 0.0, 0.0);
-          },
-        );
+      $queryResults = $migration->queries()->toImmVector()->map(
+        ($query) ==> {
+          return new QueryResult([ImmMap {"query" => $query}], 0.0, 0.0);
+        },
+      );
       $results->set($migration->name(), $queryResults);
     }
 
