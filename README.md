@@ -1,6 +1,6 @@
 # migrate
 
-[![Build Status](https://travis-ci.org/hhpack/migrate.svg?branch=master)](https://travis-ci.org/hhpack/migrate)
+[![CircleCI](https://circleci.com/gh/hhpack/migrate/tree/master.svg?style=svg)](https://circleci.com/gh/hhpack/migrate/tree/master)
 
 ## Basic usage
 
