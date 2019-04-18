@@ -3,11 +3,11 @@
   "path": "db/migrate",
   "enviroments": {
     "development": {
-      "host": "localhost",
+      "host": "127.0.0.1",
       "port": 3306,
       "name": "migrate",
-      "user": "root",
-      "password": ""
+      "user": "migrate",
+      "password": "migrate"
     },
     "staging": {
       "host": "localhost",
@@ -24,7 +24,7 @@
       "password": { "ENV": "DB_PASSWORD" }
     },
     "test": {
-      "host": "localhost",
+      "host": "127.0.0.1",
       "port": 3306,
       "name": "migrate",
       "user": "migrate",
