@@ -15,6 +15,5 @@ ADD test test
 ADD composer.json composer.json
 ADD hh_autoload.json hh_autoload.json
 ADD .hhconfig .hhconfig
-ADD docker/web/wait-for-mysql.sh wait-for-mysql.sh
+ADD docker/web/wait-for-it.sh wait-for-it.sh
 RUN composer install --no-interaction
-
