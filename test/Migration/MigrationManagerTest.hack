@@ -1,6 +1,6 @@
 namespace HHPack\Migrate\Test\Migration;
 
-use HHPack\Migrate\Test\Helper\{Db};
+use HHPack\Migrate\Test\Helper\Db\{WithDbName};
 use HHPack\Migrate\Migration\{MigrationManager};
 use HHPack\Migrate\Database\{Connection};
 
@@ -8,10 +8,7 @@ use type Facebook\HackTest\{HackTest, DataProvider};
 use function Facebook\FBExpect\expect;
 
 final class MigrationManagerTest extends HackTest {
-  <<__Memoize>>
-  public function currentConnection(): Connection {
-    return Db\connect();
-  }
+  use WithDbName;
 
   public async function beforeEachTestAsync(): Awaitable<void> {
     $conn = $this->currentConnection();

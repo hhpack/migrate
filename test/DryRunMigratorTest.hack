@@ -1,6 +1,6 @@
 namespace HHPack\Migrate\Test;
 
-use HHPack\Migrate\Test\Helper\{Db};
+use HHPack\Migrate\Test\Helper\Db\{WithDbName};
 use HHPack\Migrate\{File, Migrator, DryRunMigrator};
 use HHPack\Migrate\Migration\{MigrationNotFoundException};
 use HHPack\Migrate\Migration\Loader\{SqlMigrationLoader};
@@ -11,15 +11,17 @@ use type Facebook\HackTest\{HackTest, DataProvider};
 use function Facebook\FBExpect\expect;
 
 final class DryRunMigratorTest extends HackTest {
+  use WithDbName;
+
   public async function beforeEachTestAsync(): Awaitable<void> {
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
     \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations"));
     \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS users"));
     \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS posts"));
   }
 
   public function provide(): vec<(Connection, Migrator, DryRunMigrator)> {
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
     $path = File\absolute_path(__DIR__.'/sql/migrations');
 
     $loader = new SqlMigrationLoader($path);

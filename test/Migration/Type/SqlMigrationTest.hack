@@ -1,6 +1,6 @@
 namespace HHPack\Migrate\Test\Migration;
 
-use HHPack\Migrate\Test\Helper\{Db};
+use HHPack\Migrate\Test\Helper\Db\{WithDbName};
 use HHPack\Migrate\{File, MigratorAgent, FileNotFoundException};
 use HHPack\Migrate\Event\{EventPublisher};
 use HHPack\Migrate\Migration\Type\{SqlMigration};
@@ -10,9 +10,10 @@ use type Facebook\HackTest\{HackTest, DataProvider};
 use function Facebook\FBExpect\expect;
 
 final class SqlMigrationTest extends HackTest {
+  use WithDbName;
 
   public function provideAgent(): vec<(MigratorAgent)> {
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
     $agent = new MigratorAgent($conn, new EventPublisher());
 
     return vec[tuple($agent)];

@@ -1,5 +1,3 @@
-<?hh //strict
-
 namespace HHPack\Migrate\Test\Helper\Db;
 
 use type HHPack\Migrate\Database\{Connection, DatabaseClient};
@@ -10,7 +8,7 @@ trait WithDbName {
 
   public static ?Connection $connection = null;
 
-  public function currentConnection() : Connection {
+  public function currentConnection(): Connection {
     $host = (string)\getenv('DB_HOSTNAME');
     $name = (string)\getenv('DB_DATABASE');
     $port = (string)\getenv('DB_PORT');

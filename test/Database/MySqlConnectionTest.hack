@@ -1,13 +1,15 @@
 namespace HHPack\Migrate\Test\Database;
 
-use HHPack\Migrate\Test\Helper\{Db};
+use HHPack\Migrate\Test\Helper\Db\{WithDbName};
 use HHPack\Migrate\Database\{Connection, MySqlConnection};
 use type Facebook\HackTest\{HackTest, DataProvider};
 use function Facebook\FBExpect\expect;
 
 final class MySqlConnectionTest extends HackTest {
+  use WithDbName;
+
   public function provideConnection(): vec<(Connection)> {
-    return vec[tuple(Db\connect())];
+    return vec[tuple($this->currentConnection())];
   }
 
   <<DataProvider('provideConnection')>>

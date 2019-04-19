@@ -5,15 +5,16 @@ use HHPack\Migrate\Application\{Context};
 use HHPack\Migrate\Application\Command\{UpCommand, DownCommand};
 use HHPack\Migrate\Database\{DataSourceName, Connection};
 use HHPack\Migrate\Test\Mock\{MigrateContext};
-use HHPack\Migrate\Test\Helper\{Db};
+use HHPack\Migrate\Test\Helper\Db\{WithDbName};
 
 use type Facebook\HackTest\{HackTest, DataProvider};
 use function Facebook\FBExpect\expect;
 
 final class DownCommandTest extends HackTest {
+  use WithDbName;
 
   public async function beforeEachTestAsync(): Awaitable<void> {
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
 
     \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations"));
     \HH\Asio\join($conn->rawQuery("DROP TABLE IF EXISTS users"));
@@ -23,7 +24,7 @@ final class DownCommandTest extends HackTest {
   public function provideContext(): vec<(Context, Context, Connection)> {
     $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
     $upContext = new MigrateContext($path, []);
     $downContext = new MigrateContext($path, ['20150824010439-create-users']);
 

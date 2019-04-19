@@ -5,15 +5,16 @@ use HHPack\Migrate\Application\{Context};
 use HHPack\Migrate\Application\Command\{UpCommand, ResetCommand};
 use HHPack\Migrate\Database\{DataSourceName, Connection};
 use HHPack\Migrate\Test\Mock\{MigrateContext};
-use HHPack\Migrate\Test\Helper\{Db};
+use HHPack\Migrate\Test\Helper\Db\{WithDbName};
 
 use type Facebook\HackTest\{HackTest, DataProvider};
 use function Facebook\FBExpect\expect;
 
 final class ResetCommandTest extends HackTest {
+  use WithDbName;
 
   public async function beforeEachTestAsync(): Awaitable<void> {
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
     await $conn->rawQuery("DROP TABLE IF EXISTS scheme_migrations");
     await $conn->rawQuery("DROP TABLE IF EXISTS users");
     await $conn->rawQuery("DROP TABLE IF EXISTS posts");
@@ -22,7 +23,7 @@ final class ResetCommandTest extends HackTest {
   public function provideContext(): vec<(Connection, Context, Context)> {
     $path = File\absolute_path(__DIR__.'/../../sql/migrations/');
 
-    $conn = Db\connect();
+    $conn = $this->currentConnection();
     $upContext = new MigrateContext($path, []);
     $resetContext = new MigrateContext($path, []);
 
