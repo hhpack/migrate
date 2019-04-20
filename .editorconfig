@@ -1,16 +1,16 @@
-[bin/**/*.hh]
+[bin/**/*.hack]
 indent_style = space
 indent_size = 2
 
-[src/**/*.hh]
+[src/**/*.hack]
 indent_style = space
 indent_size = 2
 
-[test/**/*Test.hh]
+[test/**/*Test.hack]
 indent_style = space
 indent_size = 2
 
-[example/**/*.hh]
+[example/**/*.hack]
 indent_style = space
 indent_size = 2
 

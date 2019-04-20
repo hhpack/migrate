@@ -3,7 +3,7 @@
 SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 
 # Script path for package
-VENDOR_SCRIPT=$SCRIPT_DIR/migrate.hh
+VENDOR_SCRIPT=$SCRIPT_DIR/migrate.hack
 
 # Script path for composer
 INSTALLED_SCRIPT=$SCRIPT_DIR/../hhpack/migrate/bin/migrate.hh

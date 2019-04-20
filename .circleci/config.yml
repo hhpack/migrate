@@ -1,0 +1,30 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: export environment variables
+          command: printenv | awk -F= '{if ($1 ~ /^(CI|GITHUB)/) print $1"="$2}' > .env
+      - run:
+          name: replace docker-compose.yml
+          command: cp -f docker-compose.test.yml docker-compose.yml
+      - run:
+          name: build docker images
+          command: docker-compose build
+      - run:
+          name: container startup
+          command: docker-compose up -d
+      - run:
+          name: typecheck by typesafety-cli
+          command: docker-compose run web typesafety --review
+      - run:
+          name: test
+          command: docker-compose run web ./wait-for-it.sh db:3306 -t 30 -- composer test
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: github

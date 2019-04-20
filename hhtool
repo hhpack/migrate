@@ -5,11 +5,11 @@
 #
 format() {
   echo "Start formatting the source code."
-  FILES=`find src test bin -name "*.hh"`
+  FILES=`find src test bin -name "*.hack"`
 
   for FILE in $FILES
   do
-    hh_format $FILE -i
+    hackfmt $FILE -i
     echo $FILE
   done
   echo "Source code formatting is complete"
